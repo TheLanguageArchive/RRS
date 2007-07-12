@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+    <description>Resource Request System Version 1</description>
+    <display-name>RRS_V1</display-name>
+    <context-param>
+        <description>default imap mail host</description>
+        <param-name>EMAIL_HOST</param-name>
+        <param-value>mailhost.mpi.nl</param-value>
+    </context-param>
+    <context-param>
+        <description>Corpus DB hostname</description>
+        <param-name>CORPUS_SERVER_HOSTNAME</param-name>
+        <param-value>lux16</param-value>
+    </context-param>
+    <context-param>
+        <description>Corpus DB connection string</description>
+        <param-name>RRS_V1_CORPUS_SERVER_JDBC_URL</param-name>
+        <param-value>jdbc:postgresql://lux16.mpi.nl:5432/corpusstructure</param-value>
+    </context-param>
+    <context-param>
+        <description>Corpus DB username</description>
+        <param-name>RRS_V1_CORPUS_SERVER_DB_USER</param-name>
+        <param-value>webuser</param-value>
+    </context-param>
+    <context-param>
+        <description>Corpus DB webuser password</description>
+        <param-name>RRS_V1_CORPUS_SERVER_DB_PASS</param-name>
+        <param-value>start1a</param-value>
+    </context-param>
+    <context-param>
+        <description>AMS DB connection string</description>
+        <param-name>RRS_V1_AMS_SERVER_JDBC_URL</param-name>
+        <param-value>jdbc:postgresql://lux16.mpi.nl:5432/ams</param-value>
+    </context-param>
+    <context-param>
+        <description>AMS DB hostname</description>
+        <param-name>AMS_SERVER_HOSTNAME</param-name>
+        <param-value>lux16</param-value>
+    </context-param>
+    <context-param>
+        <description>AMS DB username</description>
+        <param-name>RRS_V1_AMS_SERVER_DB_USER</param-name>
+        <param-value>webuser</param-value>
+    </context-param>
+    <context-param>
+        <description>AMS DB webuser password</description>
+        <param-name>RRS_V1_AMS_SERVER_DB_PASS</param-name>
+        <param-value>start1a</param-value>
+    </context-param>
+    <context-param>
+        <description>Corpus DB hostname</description>
+        <param-name>TEST_CORPUS_SERVER_HOSTNAME</param-name>
+        <param-value>lux16</param-value>
+    </context-param>
+    <context-param>
+        <description>Corpus DB connection string</description>
+        <param-name>TEST_CORPUS_SERVER_JDBC_URL</param-name>
+        <param-value>jdbc:postgresql://lux16.mpi.nl:5432/corpusstructure</param-value>
+    </context-param>
+    <context-param>
+        <description>Corpus DB username</description>
+        <param-name>TEST_CORPUS_SERVER_DB_USER</param-name>
+        <param-value>webuser</param-value>
+    </context-param>
+    <context-param>
+        <description>Corpus DB webuser password</description>
+        <param-name>TEST_CORPUS_SERVER_DB_PASS</param-name>
+        <param-value>start1a</param-value>
+    </context-param>
+    <context-param>
+    <context-param>
+        <description>AMS DB hostname</description>
+        <param-name>TEST_AMS_SERVER_HOSTNAME</param-name>
+        <param-value>lux16</param-value>
+    </context-param>
+        <description>AMS DB connection string</description>
+        <param-name>TEST_AMS_SERVER_JDBC_URL</param-name>
+        <param-value>jdbc:postgresql://lux16.mpi.nl:5432/ams</param-value>
+    </context-param>
+    <context-param>
+        <description>AMS DB username</description>
+        <param-name>TEST_AMS_SERVER_DB_USER</param-name>
+        <param-value>webuser</param-value>
+    </context-param>
+    <context-param>
+        <description>AMS DB webuser password</description>
+        <param-name>TEST_AMS_SERVER_DB_PASS</param-name>
+        <param-value>start1a</param-value>
+    </context-param>
+    <context-param>
+        <description>email address of user corpman</description>
+        <param-name>EMAIL_ADDRESS_CORPMAN</param-name>
+        <param-value>corpman@mpi.nl</param-value>
+    </context-param>
+    <context-param>
+        <description>properties for the Log4j Logger</description>
+        <param-name>LOG4J_PROPERTIES_FILE</param-name>
+        <param-value>WEB-INF/properties1/log4j.properties</param-value>
+    </context-param>
+    <context-param>
+        <description>Maximum number of node ids that a user
+  can enter in the request form if request form 
+ is not called from imdi browser</description>
+        <param-name>MAX_FORM_NODE_IDS</param-name>
+        <param-value>5</param-value>
+    </context-param>
+    <context-param>
+        <description>Prefix for http link to nodeId e.g.:
+/corpus1.mpi.nl/ds/imdi_browser?openpath=MPI177915%23</description>
+        <param-name>OPENPATH_PREFIX</param-name>
+        <param-value>http://corpus1.mpi.nl/ds/imdi_browser?openpath=</param-value>
+    </context-param>
+    <listener>
+        <description>Context listener</description>
+        <listener-class>mpi.rrs.RrsContextListener</listener-class>
+    </listener>
+    <servlet>
+        <servlet-name>RRSServlet</servlet-name>
+        <servlet-class>mpi.rrs.controller.RrsServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <description>Test Context listener</description>
+        <servlet-name>RrsContextListener</servlet-name>
+        <servlet-class>mpi.rrs.RrsContextListenerTester</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>RrsIndex</servlet-name>
+        <servlet-class>mpi.rrs.controller.RrsIndex</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RRSServlet</servlet-name>
+        <url-pattern>/Rrs.do</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RrsContextListener</servlet-name>
+        <url-pattern>/RrsContextListener.do</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RrsIndex</servlet-name>
+        <url-pattern>/RrsIndex</url-pattern>
+    </servlet-mapping>
+    <session-config>
+        <session-timeout>
+            30
+        </session-timeout>
+    </session-config>
+    <error-page>
+        <exception-type>mpi.rrs.model.errors.RrsGeneralException</exception-type>
+        <location>/view/error/error.jsp</location>
+    </error-page>
+    <error-page>
+        <exception-type>java.lang.Throwable</exception-type>
+        <location>/view/error/errorUnknown.jsp</location>
+    </error-page>
+</web-app>
