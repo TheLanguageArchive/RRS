@@ -14,12 +14,9 @@ package mpi.rrs.model;
  * @author kees
  */
 
-import java.util.ArrayList;
-import mpi.rrs.*;
 import mpi.rrs.model.corpusdb.ImdiNodes;
 import mpi.rrs.model.date.RrsDate;
 import mpi.rrs.model.user.User;
-import mpi.rrs.model.utilities.RrsUtil;
 
 public class RrsRequest {
     
