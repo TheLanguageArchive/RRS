@@ -6,14 +6,20 @@
 
 package mpi.rrs;
 
-import java.io.*;
-import java.net.*;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
-import mpi.corpusstructure.*;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-import java.sql.*;
+import mpi.corpusstructure.CorpusStructureDBImpl;
+import mpi.corpusstructure.NodeIdUtils;
 
 /**
  *
