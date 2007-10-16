@@ -14,17 +14,18 @@ package mpi.rrs;
  * @author kees
  */
 
-import javax.servlet.*;
-import mpi.corpusstructure.*;
-import mpi.rrs.model.utilities.RrsUtil;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
-import java.net.MalformedURLException;
-import java.util.*;
-import java.io.*;
-import java.sql.*;
-import org.apache.log4j.*;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
 
-import mpi.rrs.model.RrsRequest;
+import mpi.corpusstructure.CorpusStructureDBImpl;
+
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 
 public class RrsContextListener implements ServletContextListener {
     
@@ -80,6 +81,8 @@ public class RrsContextListener implements ServletContextListener {
         corpusJdbcURL = sc.getInitParameter("defaultIMDIDB");
         logger.debug("corpusJdbcURL: " + corpusJdbcURL);
         
+        // TODO: still necessary?!
+        // <=> replace by ams2 config parameter!?
         amsJdbcURL = sc.getInitParameter("RRS_AMS_SERVER_JDBC_URL");
         amsUser = sc.getInitParameter("RRS_AMS_SERVER_DB_USER");
         amsPass = sc.getInitParameter("RRS_AMS_SERVER_DB_PASS");
