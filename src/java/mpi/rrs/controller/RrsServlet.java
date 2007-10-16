@@ -6,32 +6,40 @@
 
 package mpi.rrs.controller;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
-import java.util.regex.*;
-import java.sql.*;
-import org.apache.log4j.*;
+import java.io.IOException;
+import java.sql.Connection;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
-import javax.mail.SendFailedException;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import mpi.corpusstructure.CorpusStructureDBImpl;
+import mpi.corpusstructure.UnknownNodeException;
 import mpi.rrs.model.RrsRequest;
-import mpi.rrs.model.user.User;
-import mpi.rrs.model.date.RrsDate;
-import mpi.rrs.model.errors.*;
-import mpi.rrs.model.utilities.RrsUtil;
-
 import mpi.rrs.model.corpusdb.ImdiNode;
 import mpi.rrs.model.corpusdb.ImdiNodes;
-import mpi.rrs.model.corpusdb.*;
-import mpi.rrs.model.user.UserGenerator;
+import mpi.rrs.model.date.RrsDate;
 import mpi.rrs.model.email.EmailBean;
+import mpi.rrs.model.errors.ErrorRequest;
+import mpi.rrs.model.errors.ErrorsRequest;
+import mpi.rrs.model.errors.RrsGeneralException;
+import mpi.rrs.model.user.User;
+import mpi.rrs.model.user.UserGenerator;
+import mpi.rrs.model.user.UserGenerator1;
+import mpi.rrs.model.user.UserGenerator2;
+import mpi.rrs.model.utilities.RrsUtil;
+import nl.mpi.common.util.Text;
+import nl.mpi.common.util.spring.SpringContextLoader;
+import nl.mpi.lat.ams.Constants;
+import nl.mpi.lat.auth.authentication.AuthenticationService;
+import nl.mpi.lat.auth.principal.PrincipalService;
 
-import mpi.corpusstructure.*;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 
 
@@ -41,7 +49,11 @@ import mpi.corpusstructure.*;
  * @version
  */
 public class RrsServlet extends HttpServlet {
-    static Logger logger = Logger.getLogger(RrsServlet.class);
+    private static Log	logger = LogFactory.getLog(RrsServlet.class);
+    
+    /** user-data provider and authentication service */
+    private UserGenerator	mUserGenerator;
+    
     
     /** Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
@@ -55,7 +67,7 @@ public class RrsServlet extends HttpServlet {
         RrsRequest rrsRequest = new RrsRequest();
         ErrorsRequest errorsRequest = new ErrorsRequest();
         
-        String openPathPrefix = (String) this.getServletContext().getInitParameter("OPENPATH_PREFIX");
+        String openPathPrefix = this.getServletContext().getInitParameter("OPENPATH_PREFIX");
         ImdiNode.setOpenPathPrefix(openPathPrefix);
         logger.debug("openPathPrefix: " + openPathPrefix);
         
@@ -91,6 +103,7 @@ public class RrsServlet extends HttpServlet {
         user.setUserName(request.getParameter("paramUserOldUserName"));
         String userName = user.getUserName();
         
+        // TODO: check and init user-generator properly
         if (RrsUtil.isNotEmpty(userName)) {
             rrsRequest.setUserStatus("Existing user");
             Connection amsDbConnection = (Connection) this.getServletContext().getAttribute("amsDbConnection");
@@ -111,7 +124,11 @@ public class RrsServlet extends HttpServlet {
                 return;
                 
             } else {
-                UserGenerator ug = new UserGenerator(amsDbConnection);
+            		// TODO:  SWITCH ams1 or ams2
+                UserGenerator ug = this.getUserGenerator(amsDbConnection);	// ams1
+                // TODO: make ams2 setup parameter configurable
+                ug = this.getUserGenerator(null, null, null);	// ams2 : using defaults
+                
                 
                 user.setPassword(request.getParameter("paramUserOldPassword"));
                 String passWord = user.getPassword();
@@ -488,4 +505,64 @@ public class RrsServlet extends HttpServlet {
         return "Resource Request System Controller Servlet";
     }
     // </editor-fold>
+
+	/**
+	 * @return the userGenerator
+	 */
+	private UserGenerator getUserGenerator(Connection ams1) {
+		if(mUserGenerator != null)
+			return mUserGenerator;
+		// else:
+		logger.info("initialize new AMS1 user-generator");
+		mUserGenerator = new UserGenerator1(ams1);
+		return mUserGenerator;
+	}
+	
+	/**
+	 * @return the userGenerator
+	 */
+	/**
+	 * initializes utilized services and their configuration (springConfig files).
+	 * note:  all parameters can be null, 
+	 * 	if no value is given (null), the default config is used.
+	 * 
+	 * spring-ams2-auth.xml is used as default config
+	 * you can overwrite/extend... this config
+	 * by adding further spring-servlets (comma-separated) to the springConfigPaths
+	 * the actual beans which will be instantiated are the ones which have been defined in the LATEST given file
+	 * => by this way you can also easily overwrite some settings e.g. datasource strings etc...
+	 * (just define same bean with adapted settings in a new config file and add this file to this list)
+	 * 
+	 * @param springConfigPath commaseparated relative paths to multiple spring-config files defining the utilized services
+	 * @param principalSrv NAME of the (spring-bean) service which implements {@link PrincipalService}
+	 * @param authenticationSrv NAME of the (spring-bean) service which implements {@link AuthenticationService}
+	 */
+	private UserGenerator getUserGenerator(String springConfigPaths, String principalSrv, String authenticationSrv) {
+		if(mUserGenerator == null)
+			return mUserGenerator;
+		
+		SpringContextLoader spring = new SpringContextLoader();
+		spring.init(Text.notEmpty(springConfigPaths) 
+				? springConfigPaths 
+				: "spring-ams2-auth.xml");
+		UserGenerator2 ug2 = new UserGenerator2(
+				(PrincipalService) spring.getBean(
+						Text.notEmpty(principalSrv) 
+							? principalSrv 
+							: Constants.BEAN_PRINCIPAL_SRV),
+				(AuthenticationService) spring.getBean(
+						Text.notEmpty(authenticationSrv) 
+							? authenticationSrv 
+							: Constants.BEAN_INTEGRATED_AUTHENTICATION_SRV)
+			);
+		mUserGenerator = ug2;
+		return mUserGenerator;
+	}
+	
+	/**
+	 * @param userGenerator the userGenerator to set
+	 */
+	private void setUserGenerator(UserGenerator userGenerator) {
+		mUserGenerator = userGenerator;
+	}
 }
