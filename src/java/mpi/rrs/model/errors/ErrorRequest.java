@@ -14,7 +14,6 @@ package mpi.rrs.model.errors;
  * @author kees
  */
 
-import java.lang.Exception;
 
 
 public class ErrorRequest {

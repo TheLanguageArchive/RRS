@@ -13,12 +13,13 @@ package mpi.rrs.model.date;
  *
  * @author kees
  */
-import org.apache.log4j.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Calendar;
 import java.util.Date;
+
 import mpi.rrs.model.utilities.RrsUtil;
+
+import org.apache.log4j.Logger;
 
 public class RrsDate {
     static Logger logger = Logger.getLogger(RrsDate.class);

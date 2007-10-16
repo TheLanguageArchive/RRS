@@ -15,7 +15,7 @@ package mpi.rrs.model.corpusdb;
  */
 
 import java.util.ArrayList;
-import mpi.rrs.model.*;
+
 import mpi.rrs.model.utilities.RrsUtil;
 
 public class ImdiNodes {

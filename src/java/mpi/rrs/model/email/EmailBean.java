@@ -1,16 +1,17 @@
 package mpi.rrs.model.email;
 
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Properties;
 
-import javax.mail.*;
-import javax.mail.internet.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
-import org.apache.log4j.*;
 import mpi.rrs.model.utilities.RrsUtil;
+
+import org.apache.log4j.Logger;
 
 public class EmailBean  {
     static Logger logger = Logger.getLogger(EmailBean.class);

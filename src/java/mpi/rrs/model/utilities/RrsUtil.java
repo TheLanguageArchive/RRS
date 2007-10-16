@@ -14,7 +14,6 @@ package mpi.rrs.model.utilities;
  * @author kees
  */
 import org.apache.log4j.Logger;
-import org.apache.log4j.Level;
 
 public class RrsUtil {
     static Logger logger = Logger.getLogger(RrsUtil.class);

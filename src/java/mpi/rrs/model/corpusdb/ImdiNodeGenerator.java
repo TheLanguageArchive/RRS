@@ -13,17 +13,12 @@ package mpi.rrs.model.corpusdb;
  *
  * @author kees
  */
-import mpi.corpusstructure.*;
-import mpi.corpusstructure.NodeIdUtils;
-
-import java.net.MalformedURLException;
-import java.util.*;
-import java.io.*;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import org.apache.log4j.Logger;
-import org.apache.log4j.Level;
-import org.apache.log4j.BasicConfigurator;
 
 public class ImdiNodeGenerator {
     static Logger logger = Logger.getLogger(ImdiNodeGenerator.class);

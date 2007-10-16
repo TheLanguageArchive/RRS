@@ -14,10 +14,6 @@ package mpi.rrs.model.date;
  * @author kees
  */
 import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
-
-import java.text.DateFormatSymbols;
 
 public class PulldownGenerator {
     private int yearRange = 10;

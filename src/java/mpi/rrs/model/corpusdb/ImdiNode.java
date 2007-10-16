@@ -15,8 +15,8 @@ package mpi.rrs.model.corpusdb;
  */
 import mpi.corpusstructure.NodeIdUtils;
 import mpi.corpusstructure.UnknownNodeException;
+
 import org.apache.log4j.Logger;
-import org.apache.log4j.Level;
 
 public class ImdiNode {
     static Logger logger = Logger.getLogger(ImdiNode.class);
