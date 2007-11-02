@@ -31,5 +31,12 @@ public interface UserGenerator {
 	 * @see mpi.rrs.model.user.UserGeneratorIF#getUserInfoByUserName(java.lang.String)
 	 */
     public User getUserInfoByUserName(String userName);
+    
+    
+    /**
+     * provides a simple string describing this object
+     * @return
+     */
+	public String getInfo();
 
 }

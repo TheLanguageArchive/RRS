@@ -118,4 +118,8 @@ public class UserGenerator2 implements UserGenerator {
 	 */
 //	public boolean isValidUserName(String userName) {
 //	}
+	
+	public String getInfo() {
+		return "ams2 user generator";
+	}
 }

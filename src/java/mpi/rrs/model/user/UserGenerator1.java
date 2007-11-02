@@ -23,7 +23,7 @@ import mpi.lana.auth.UnixCrypt;
 
 public class UserGenerator1 implements UserGenerator {
     
-    private static Connection con;
+    private Connection mConn;
     
     /** Creates a new instance of UserGenerator */
     public UserGenerator1(Connection con) {
@@ -34,10 +34,8 @@ public class UserGenerator1 implements UserGenerator {
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
-            
-            this.con = con;
+            this.mConn = con;
         }
-        
     }
     
     /**
@@ -48,7 +46,7 @@ public class UserGenerator1 implements UserGenerator {
         
         PreparedStatement statement;
         try {
-            statement = con.prepareStatement(sql);
+            statement = mConn.prepareStatement(sql);
             statement.setString(1, userName);
             statement.execute();
             
@@ -115,7 +113,7 @@ public class UserGenerator1 implements UserGenerator {
         
         PreparedStatement statement;
         try {
-            statement = con.prepareStatement(sql);
+            statement = mConn.prepareStatement(sql);
             statement.setString(1, userName);
             statement.execute();
             
@@ -140,6 +138,7 @@ public class UserGenerator1 implements UserGenerator {
         
     }
     
-    
-    
+	public String getInfo() {
+		return "ams1 (sql/jdbc based) user generator";
+	}
 }
