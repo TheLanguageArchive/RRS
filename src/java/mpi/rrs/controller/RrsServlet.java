@@ -124,11 +124,11 @@ public class RrsServlet extends HttpServlet {
                 return;
                 
             } else {
-            		// TODO:  SWITCH ams1 or ams2
+            		// TODO:  SWITCH ams1 OR ams2
                 UserGenerator ug = this.getUserGenerator(amsDbConnection);	// ams1
                 // TODO: make ams2 setup parameter configurable
                 ug = this.getUserGenerator(null, null, null);	// ams2 : using defaults
-                
+        		    logger.info("using UserGenerator " + ug.getInfo());
                 
                 user.setPassword(request.getParameter("paramUserOldPassword"));
                 String passWord = user.getPassword();
@@ -513,7 +513,7 @@ public class RrsServlet extends HttpServlet {
 		if(mUserGenerator != null)
 			return mUserGenerator;
 		// else:
-		logger.info("initialize new AMS1 user-generator");
+		logger.info("initializing new (ams1)user-generator");
 		mUserGenerator = new UserGenerator1(ams1);
 		return mUserGenerator;
 	}
@@ -541,6 +541,7 @@ public class RrsServlet extends HttpServlet {
 		if(mUserGenerator == null)
 			return mUserGenerator;
 		
+		logger.info("initializing new (ams2)user-generator...");
 		SpringContextLoader spring = new SpringContextLoader();
 		spring.init(Text.notEmpty(springConfigPaths) 
 				? springConfigPaths 
