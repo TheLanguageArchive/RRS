@@ -1,0 +1,134 @@
+<?xml version="1.0"?>
+
+<project name="rrs" default="all" >
+	<description>Single-Sign-On module for nl.mpi.lat (web)applications</description>
+	
+	
+	<!-- ** general environment settings **
+		(could also be placed in ${user.home}/build.properties -->
+<!--
+	<property name="mpi.base.dir"	location="${user.home}/LAT" />
+	<property name="mpi.lib.dir"	location="${mpi.base.dir}/webapps/lib" />
+-->
+	<property file="${user.home}/.ant.properties" />
+	<property file="${user.home}/build.properties" />
+	
+	
+	<!-- ** project settings ** -->
+	<property name="project.group"				value="mpi.lat" />
+	<property name="project.name"				value="rrs" />
+	<property name="project.version"				value="1.0" />
+	<!-- project (dir)structure -->
+	<property name="project.src.dir"				location="${basedir}/src" />
+	<property name="project.web.dir"				location="${basedir}/web" />
+	<property name="project.target.dir"			location="${basedir}/target" />
+	<property name="project.target.class.dir"	location="${project.target.dir}/WEB-INF/classes" />
+	<property name="project.target.lib.dir"		location="${project.target.dir}/WEB-INF/lib" />
+	
+	<!-- external mpi dependencies -->
+	<property name="dependency.ams2.build"		value="${mpi.base.dir}/webapps/ams2/build.xml" />
+	<available property="dependency.ams2.exist"	file="${dependency.ams2.build}" />
+	
+	
+	<target name="all" 
+		depends="info, clean, compile, web" 
+		description="builds project from scratch" >
+	</target>
+	
+	
+	<target name="compile" 
+		depends="prepare, lib" 
+		description="compiles the sources" >
+		<echo>compiling ${project.name} sources with java ${java.version}</echo>
+ 		<javac srcdir="${project.src.dir}"
+			destdir="${project.target.class.dir}"
+			classpathref="classpath"
+			debug="on"
+ 			excludes="src/**" />
+	</target>
+	<target name="prepare" 
+		description="prepares project setup (create dirs etc...)" >
+		<property name="lib.dir"	 location="${project.target.lib.dir}" />
+		<mkdir dir="${project.target.class.dir}" />
+		<mkdir dir="${lib.dir}" />
+		<path id="classpath" >
+			<fileset dir="${lib.dir}" >
+				<include name="*.jar"/>
+			</fileset>
+		</path>
+	</target>
+
+	
+	<target name="lib" depends="prepare"
+		description="copies project dependencies to lib directory" >
+		<echo>copying ${project.name} dependencies from ${mpi.lib.dir}</echo>
+		<fail unless="lib.dir" />
+		<!-- rrs' direct dependencies: commons & logging -->
+		<copy todir="${lib.dir}" >
+			<fileset dir="${mpi.lib.dir}" >
+				<include name="log4j-1.2.14.jar" />
+				<include name="commons-logging-1.1.jar" />
+				<include name="mail__V1.4.jar" />
+				<include name="servlet-api-2.4.jar" />
+				<include name="commons-codec-1.3.jar" />
+				<include name="lana_auth.jar" />
+				<include name="jstl.jar" />
+				<include name="standard.jar" />
+			</fileset>
+		</copy>
+		
+		<!-- ams2 & its dependecies -->
+		<echo>
+copying ${project.name}'s ams2 dependencies to ${lib.dir}
+**********************************************************************************************
+please ensure you have downloaded the LATEST VERSION (svn) of file
+	${dependency.ams2.build}
+**********************************************************************************************
+	  	</echo>
+	  	<fail unless="dependency.ams2.exist"
+		  	message="cannot find file ${dependency.ams2.build}" />
+		<ant antfile="${dependency.ams2.build}" 
+			target="authLibs" 
+			inheritall="false" >
+			<!-- pass through target directory -->
+			<property name="lib.dir"	 value="${lib.dir}" />
+			<!-- target version of ams2 to retrieve -->
+			<property name="ams2.version"	 value="1.0-rc1" />	
+	 	</ant>
+	</target>
+	
+	
+	<target name="web" depends="prepare"
+		description="copies rrs' static web content to target dir ${project.target.dir}" >
+		<echo>copying static project content</echo>
+		<copy todir="${project.target.dir}" >
+			<fileset dir="${project.web.dir}"
+				excludes="WEB-INF/properties1/**" />
+		</copy>
+		<copy todir="${project.target.class.dir}" >
+			<fileset dir="${project.web.dir}/WEB-INF/properties1/" />
+		</copy>
+	</target>
+	
+	
+	<target name="clean" 
+		description="cleans the target output directory" >
+	  <echo>cleaning the target directory: ${project.target.dir}</echo>
+		<delete dir="${project.target.dir}" />
+	</target>
+	
+	
+	<target name="info" 
+		depends=""
+	 	description="echos project- and environment information" >
+		<echo>project:	${project.name}</echo>
+		<echo>		version ${project.version}</echo>
+		<echo>		at ${basedir}</echo>
+		<echo>mpi base dir:  ${mpi.base.dir}</echo>
+		<echo>mpi lib dir:   ${mpi.lib.dir}</echo>
+		<echo>java	version ${java.version}</echo>
+		<echo>		at ${java.home}</echo>
+	</target>
+	
+
+</project>
