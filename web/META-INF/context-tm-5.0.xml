@@ -4,7 +4,7 @@
 
 <Context
 	path="/ds/RRS_V1" 
-	docBase="${user.home}/projects/RRS/RRS_V1/target"
+	docBase="/lat/webapps/RRS_V1"
 	debug="0" 
 	privileged="true" 
 	reloadable="true" 
@@ -83,7 +83,7 @@
 		</parameter>
 		<parameter>
 			<name>url</name>
-			<value>jdbc:postgresql://lux16.mpi.nl:5432/amsx</value>
+			<value>jdbc:postgresql://lux16.mpi.nl:5432/ams2</value>
 		</parameter>
 		<parameter>
 			<name>user</name>
