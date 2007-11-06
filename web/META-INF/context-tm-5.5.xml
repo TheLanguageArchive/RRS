@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!-- context configuration file for tomcat 5.5.x -->
+
 <Context
 	path="/ds/RRS_V1" 
 	docBase="${user.home}/projects/RRS/RRS_V1/target"
