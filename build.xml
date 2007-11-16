@@ -93,7 +93,7 @@ please ensure you have downloaded the LATEST VERSION (svn) of file
 			<!-- pass through target directory -->
 			<property name="lib.dir"	 value="${lib.dir}" />
 			<!-- target version of ams2 to retrieve -->
-			<property name="ams2.version"	 value="1.0-rc1" />	
+			<property name="ams2.version"	 value="1.0-rc2" />	
 	 	</ant>
 	</target>
 	
