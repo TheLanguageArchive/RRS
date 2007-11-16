@@ -16,12 +16,14 @@ import org.apache.log4j.Logger;
 public class EmailBean  {
     static Logger logger = Logger.getLogger(EmailBean.class);
     
+    
     //defaults
     private final static String DEFAULT_CONTENT = "Unknown content";
     private final static String DEFAULT_SUBJECT= "Unknown subject";
     private static String DEFAULT_SERVER = null;
     private static String DEFAULT_TO = null;
     private static String DEFAULT_FROM = null;
+    
     static{
         java.util.ResourceBundle bundle =
                 java.util.ResourceBundle.getBundle("mpi.rrs.model.email.mailDefaults");
@@ -30,8 +32,11 @@ public class EmailBean  {
         DEFAULT_TO = bundle.getString("DEFAULT_TO");
         DEFAULT_FROM = bundle.getString("DEFAULT_FROM");
         
-        logger.debug("DEFAULT_SERVER: " + DEFAULT_SERVER);
+        logger.info("DEFAULT_SERVER: " + DEFAULT_SERVER);        
+        
     }
+    
+    
     
     //JavaBean properties
     private String smtpHost;
@@ -163,11 +168,11 @@ public class EmailBean  {
             this.subject = EmailBean.DEFAULT_SUBJECT;
         }
     }//setSubject
-
+    
     public String getCc() {
         return cc;
     }
-
+    
     public void setCc(String cc) {
         if (RrsUtil.isNotEmpty(cc)){
             this.cc = cc;

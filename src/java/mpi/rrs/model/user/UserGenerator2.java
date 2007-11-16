@@ -54,7 +54,17 @@ public class UserGenerator2 implements UserGenerator {
 		LatUser latUser = this.getPcplSrv().getUser(uid);
 		User result = new User();
 		// TODO: transcribe latUser to rrsUser
+                result.setUserName(userName);
 		result.setEmail(latUser.getEmail());
+                result.setAddress(latUser.getAddress());
+                result.setAffiliation(latUser.getOrganisation());
+               
+                result.setFirstName(latUser.getFirstName());
+                result.setLastName(latUser.getName());
+                result.setPhone("");
+                result.setMiddleName("");
+                result.setStatus("");
+                result.setFax("");
 		// ...
 		return result;
 	}

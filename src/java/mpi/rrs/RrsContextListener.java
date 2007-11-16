@@ -35,12 +35,12 @@ public class RrsContextListener implements ServletContextListener {
     private String corpusUser;
     private String corpusPass;
     
-    private String amsJdbcURL;
-    private String amsUser;
-    private String amsPass;
+    //private String amsJdbcURL;
+    //private String amsUser;
+    //private String amsPass;
     
     private CorpusStructureDBImpl corpusDbConnection;
-    private Connection amsDbConnection;
+    //private Connection amsDbConnection;
     
     
     /** Creates a new instance of RrsContextListener */
@@ -57,6 +57,9 @@ public class RrsContextListener implements ServletContextListener {
         String emailAddressCorpman = sc.getInitParameter("EMAIL_ADDRESS_CORPMAN");
         sc.setAttribute("emailAddressCorpman", emailAddressCorpman);
         
+        String emailHost = sc.getInitParameter("EMAIL_HOST");
+        sc.setAttribute("emailHost", emailHost);
+        
         String prefix =  sc.getRealPath("/");
         String file = sc.getInitParameter("LOG4J_PROPERTIES_FILE");
         // if the log4j-init-file is not set, then no point in trying
@@ -70,59 +73,42 @@ public class RrsContextListener implements ServletContextListener {
         try {
             Class cl = Class.forName( "org.postgresql.Driver" );
         } catch (ClassNotFoundException ex) {
-            logger.error("contextInitialized: No org.postgresql.Driver", ex);
+            logger.error("RRS_V1 ***** contextInitialized: No org.postgresql.Driver", ex);
             //ex.printStackTrace();
         }
         
-        String testServer = sc.getInitParameter("TEST_CORPUS_SERVER_HOSTNAME");
-        String prodServer = sc.getInitParameter("CORPUS_SERVER_HOSTNAME");
-        
-        
-        corpusJdbcURL = sc.getInitParameter("defaultIMDIDB");
-        logger.debug("corpusJdbcURL: " + corpusJdbcURL);
         
         // TODO: still necessary?!
         // <=> replace by ams2 config parameter!?
-        amsJdbcURL = sc.getInitParameter("RRS_AMS_SERVER_JDBC_URL");
-        amsUser = sc.getInitParameter("RRS_AMS_SERVER_DB_USER");
-        amsPass = sc.getInitParameter("RRS_AMS_SERVER_DB_PASS");
+        //amsJdbcURL = sc.getInitParameter("RRS_AMS_SERVER_JDBC_URL");
+        //amsUser = sc.getInitParameter("RRS_AMS_SERVER_DB_USER");
+        //amsPass = sc.getInitParameter("RRS_AMS_SERVER_DB_PASS");
         
-        corpusJdbcURL = sc.getInitParameter("RRS_CORPUS_SERVER_JDBC_URL");
-        corpusUser = sc.getInitParameter("RRS_CORPUS_SERVER_DB_USER");
-        corpusPass = sc.getInitParameter("RRS_CORPUS_SERVER_DB_PASS");
+        corpusJdbcURL = sc.getInitParameter("RRS_V1_CORPUS_SERVER_JDBC_URL");
+        corpusUser = sc.getInitParameter("RRS_V1_CORPUS_SERVER_DB_USER");
+        corpusPass = sc.getInitParameter("RRS_V1_CORPUS_SERVER_DB_PASS");
         
-        if (corpusJdbcURL == null) {
-            // get local context params
-            logger.debug("RRS_CORPUS_SERVER_JDBC_URL == null");
-            corpusJdbcURL = sc.getInitParameter("TEST_CORPUS_SERVER_JDBC_URL");
-            corpusUser = sc.getInitParameter("TEST_CORPUS_SERVER_DB_USER");
-            corpusPass = sc.getInitParameter("TEST_CORPUS_SERVER_DB_PASS");
-        } else {
-            logger.debug("RRS_CORPUS_SERVER_JDBC_URL != null");
-        }
         
-        if (amsJdbcURL == null) {
-            // get local context params
-            amsJdbcURL = sc.getInitParameter("RRS_V1_AMS_SERVER_JDBC_URL");
-            amsUser = sc.getInitParameter("RRS_V1_AMS_SERVER_DB_USER");
-            amsPass = sc.getInitParameter("RRS_V1_AMS_SERVER_DB_PASS");
-        }
-        
-        try {
+        //try {
             boolean bootstrapMode = false;
             corpusDbConnection = new CorpusStructureDBImpl(corpusJdbcURL, bootstrapMode, corpusUser, corpusPass);
+            if (corpusDbConnection == null) {
+                logger.fatal("************ corpusDbConnection is null");
+                logger.fatal("corpusJdbcURL: " + corpusJdbcURL);
+                logger.fatal("corpusUser: " + corpusUser);
+            }
             
-            amsDbConnection = DriverManager.getConnection(amsJdbcURL, amsUser, amsPass);
+            //amsDbConnection = DriverManager.getConnection(amsJdbcURL, amsUser, amsPass);
             
-        } catch (SQLException ex) {
-            corpusDbConnection = null;
-            amsDbConnection = null;
-            logger.error("contextInitialized: No db connection", ex);
+        //} catch (SQLException ex) {
+            //corpusDbConnection = null;
+            //amsDbConnection = null;
+            //logger.error("contextInitialized: No db connection", ex);
             
-        } finally {
-            sc.setAttribute("amsDbConnection", amsDbConnection);
+        //} finally {
+            //sc.setAttribute("amsDbConnection", amsDbConnection);
             sc.setAttribute("corpusDbConnection", corpusDbConnection);
-        }
+        //}
     }
     
     public void contextDestroyed(ServletContextEvent sce) {
@@ -132,6 +118,7 @@ public class RrsContextListener implements ServletContextListener {
             corpusDbConnection.close();      
         }
         
+        /*
         try {
             if (amsDbConnection != null) {
                 logger.info("Closing Ams DB");
@@ -141,5 +128,6 @@ public class RrsContextListener implements ServletContextListener {
             logger.error("contextDestroyed: unable to close AMS db", ex);
             //ex.printStackTrace();
         }
+         */
     }
 }

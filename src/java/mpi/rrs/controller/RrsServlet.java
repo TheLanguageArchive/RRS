@@ -96,6 +96,9 @@ public class RrsServlet extends HttpServlet {
         String emailAddressCorpman = (String) this.getServletContext().getAttribute("emailAddressCorpman");
         request.setAttribute("emailAddressCorpman",emailAddressCorpman);
         
+        String emailHost = (String) this.getServletContext().getAttribute("emailHost");
+        request.setAttribute("emailHost",emailHost);
+        
         ImdiNodes imdiNodes = new ImdiNodes();
         User userInfo = null;
         User user = new User();
@@ -106,6 +109,7 @@ public class RrsServlet extends HttpServlet {
         // TODO: check and init user-generator properly
         if (RrsUtil.isNotEmpty(userName)) {
             rrsRequest.setUserStatus("Existing user");
+            /*
             Connection amsDbConnection = (Connection) this.getServletContext().getAttribute("amsDbConnection");
             if (amsDbConnection == null) {
                 ErrorRequest errorRequest = new ErrorRequest();
@@ -124,10 +128,11 @@ public class RrsServlet extends HttpServlet {
                 return;
                 
             } else {
+             */
             		// TODO:  SWITCH ams1 OR ams2
-                UserGenerator ug = this.getUserGenerator(amsDbConnection);	// ams1
+                //UserGenerator ug = this.getUserGenerator(amsDbConnection);	// ams1
                 // TODO: make ams2 setup parameter configurable
-                ug = this.getUserGenerator(null, null, null);	// ams2 : using defaults
+                UserGenerator ug = this.getUserGenerator(null, null, null);	// ams2 : using defaults
         		    logger.info("using UserGenerator " + ug.getInfo());
                 
                 user.setPassword(request.getParameter("paramUserOldPassword"));
@@ -135,6 +140,10 @@ public class RrsServlet extends HttpServlet {
                 
                 if (ug.isValidPasswordForUsername(userName, passWord)) {
                     userInfo = ug.getUserInfoByUserName(userName);
+                    logger.info("** Got AMS2 connection for user: " + userInfo.getFullName());
+                    logger.debug("** name: " + userInfo.getLastName());
+                    logger.info("** email address: " + userInfo.getEmail());
+                    
                 } else {
                     ErrorRequest errorRequest = new ErrorRequest();
                     
@@ -147,9 +156,9 @@ public class RrsServlet extends HttpServlet {
                     
                     errorsRequest.addError(errorRequest);
                     
-                    logger.debug("Invalid username/password: " + userName + "/" + passWord);
+                    logger.debug("Invalid username/password: " + userName + "/ xxxxxx" );
                 }
-            }
+            //}
             
         } else {
             InternetAddress[] addresses = null;
@@ -405,12 +414,14 @@ public class RrsServlet extends HttpServlet {
             
             emailer.setContent(rrsRequest.getEmailContent());
             String corpmanEmail = (String) this.getServletContext().getAttribute("emailAddressCorpman");
+            String emailHost = (String) this.getServletContext().getAttribute("emailHost");
             String userEmail = rrsRequest.getUser().getEmail();
             
             emailer.setTo(corpmanEmail);
             emailer.setCc(userEmail);
             emailer.setFrom(corpmanEmail);
-            emailer.setSmtpHost("smtphost.mpi.nl");
+            //emailer.setSmtpHost("smtphost.mpi.nl");
+            emailer.setSmtpHost(emailHost);
             logger.info("From: " + corpmanEmail);
             
             
@@ -538,7 +549,7 @@ public class RrsServlet extends HttpServlet {
 	 * @param authenticationSrv NAME of the (spring-bean) service which implements {@link AuthenticationService}
 	 */
 	private UserGenerator getUserGenerator(String springConfigPaths, String principalSrv, String authenticationSrv) {
-		if(mUserGenerator == null)
+		if(mUserGenerator != null)
 			return mUserGenerator;
 		
 		logger.info("initializing new (ams2)user-generator...");

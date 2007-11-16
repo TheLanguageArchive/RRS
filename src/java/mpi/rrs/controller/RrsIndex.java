@@ -23,6 +23,7 @@ import mpi.rrs.model.errors.ErrorRequest;
 import mpi.rrs.model.errors.ErrorsRequest;
 
 import org.apache.log4j.Logger;
+import org.apache.log4j.Level;
 /**
  *
  * @author kees
@@ -38,6 +39,9 @@ public class RrsIndex extends HttpServlet {
     throws ServletException, IOException {
         
         Logger logger = Logger.getLogger("RrsIndex");
+        logger.setLevel(Level.INFO);
+        
+        logger.info("RrsIndex: *************** start *****************");
         
         ErrorsRequest errorsRequest = new ErrorsRequest();
         String htmlSelectedNodesTable = "";
@@ -51,6 +55,9 @@ public class RrsIndex extends HttpServlet {
                 CorpusStructureDBImpl corpusDbConnection = (CorpusStructureDBImpl) this.getServletContext().getAttribute("corpusDbConnection");
                 
                 if (corpusDbConnection == null) {
+                    
+                    logger.info("RrsIndex: *************** corpusDbConnection == null ");
+                    
                     ErrorRequest errorRequest = new ErrorRequest();
                     
                     errorRequest.setErrorFormFieldLabel("Corpus Database");
@@ -68,6 +75,9 @@ public class RrsIndex extends HttpServlet {
                 
                 for (int i = 0; i < values.length; i++) {
                     if (values[i] != null && !(values[i].equalsIgnoreCase(""))) {
+                        
+                        logger.info("RrsIndex: *************** Param nodeId: " + values[i]);
+                        
                         ImdiNode imdiNode = new ImdiNode();
                         imdiNode.setImdiNodeIdWithPrefix(values[i]);
                         String nodeIdWithPrefix = imdiNode.getImdiNodeIdWithPrefix();
