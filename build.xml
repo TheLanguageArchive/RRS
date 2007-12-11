@@ -14,7 +14,7 @@
     
     <property name="tomcat.username"				value="ide" />
     <property name="tomcat.password"				value="El8ohd1j" />
-    <property name="tomcat.url"				        value="http://localhost:8084" />
+    <property name="tomcat.url"					value="http://localhost:8084" />
     <property name="project.context"				value="/RRS_V1" />
     
     <property file="${user.home}/.ant.properties" />
@@ -104,7 +104,7 @@
             <!-- pass through target directory -->
             <property name="lib.dir"	 value="${lib.dir}" />
             <!-- target version of ams2 to retrieve -->
-            <property name="ams2.version"	 value="1.0-rc2" />	
+            <property name="ams2.version"	 value="1.0" />	
         </ant>
     </target>
     
