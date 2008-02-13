@@ -7,7 +7,7 @@
 	<classpathentry kind="var" path="MPI_WEBAPPS_LIB/log4j-1.2.14.jar"/>
 	<classpathentry kind="var" path="MPI_WEBAPPS_LIB/servlet-api-2.4.jar"/>
 	<classpathentry kind="var" path="MPI_WEBAPPS_LIB/lana_auth.jar" sourcepath="/PROJECTS/_util"/>
-	<classpathentry kind="var" path="MPI_WEBAPPS_LIB/ams2-0.9.12.jar" sourcepath="/PROJECTS/ams2"/>
+	<classpathentry kind="var" path="MPI_WEBAPPS_LIB/ams2-1.1.jar"/>
 	<classpathentry kind="var" path="MPI_WEBAPPS_LIB/commons-logging-1.1.jar"/>
 	<classpathentry kind="output" path="target/WEB-INF/classes"/>
 </classpath>
