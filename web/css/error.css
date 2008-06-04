@@ -1,0 +1,78 @@
+/* 
+    Document   : error
+    Created on : May 30, 2008, 11:39:51 AM
+    Author     : kees
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+/* 
+   TODO customize this sample style
+   Syntax recommendation http://www.w3.org/TR/REC-CSS2/
+*/
+
+root { 
+    display: block;
+}
+
+body {
+    background-color: #FDFDDA;
+    font-family: Arial, Verdana, Helvetica, sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    color: #0D1940;
+}
+
+h1 {
+    font-size: 16px;
+    font-style: normal;
+    font-weight: bold;
+    color: #0D1940;
+    text-align: left;
+    
+}
+
+h2 {	
+    font-size: 18px;
+    font-style: normal;
+    font-weight: bold;
+    color: #0D1940;
+    text-align: center;
+}
+
+h2.normal {	
+    font-size: 16px;
+    font-style: normal;
+    font-weight: normal;
+    color: #0D1940;
+    text-align: center;
+}
+
+h3 {	
+    font-size: 16px;
+    font-style: italic;
+    font-weight: bold;
+    color: #0D1940;
+    text-align: left;
+}
+
+
+table, td, th {
+    font-size: 16px;
+    font-style: normal;
+    color: #0D1940;
+    border: 1px solid;
+    border-collapse: collapse;
+    padding: 4px;
+}
+
+.strong {    
+    font-weight: bold;
+}
+
+#contents-erroremailcheck {
+    width: 50%;
+    margin-left: 100px;
+}
+
+
