@@ -10,10 +10,13 @@
     <property name="mpi.base.dir"	location="/data1/svn/trunk" />
     <property name="mpi.lib.dir"	location="${mpi.base.dir}/webapps/lib" />
     
-    <property name="tomcat.home"	location="/home/kees/netbeans-5.5/enterprise3/apache-tomcat-5.5.17" />
+    
+    <!--  <property name="tomcat.home"	location="/home/kees/netbeans-5.5/enterprise3/apache-tomcat-5.5.17" /> -->
+    <property name="tomcat.home"	location="/home/kees/apache-tomcat-6.0.14" />
     
     <property name="tomcat.username"				value="ide" />
-    <property name="tomcat.password"				value="El8ohd1j" />
+    <!-- <property name="tomcat.password"				value="El8ohd1j" /> -->
+    <property name="tomcat.password"				value="mYbUzXou" />
     <property name="tomcat.url"					value="http://localhost:8084" />
     <property name="project.context"				value="/RRS_V1" />
     
@@ -55,6 +58,7 @@
                debug="on"
                excludes="src/**" />
     </target>
+    
     <target name="prepare" 
             description="prepares project setup (create dirs etc...)" >
         <property name="lib.dir"	 location="${project.target.lib.dir}" />
@@ -99,7 +103,7 @@
         <fail unless="dependency.ams2.exist"
               message="cannot find file ${dependency.ams2.build}" />
         <ant antfile="${dependency.ams2.build}" 
-             target="authLibs" 
+             target="ams2Libs" 
              inheritall="true" >
             <!-- pass through target directory -->
             <property name="lib.dir"	 value="${lib.dir}" />
@@ -156,10 +160,10 @@
             description="packages project to war" >
         <war destfile="${project.target.war}"
              basedir="${project.target.dir}"
-             webxml="web/WEB-INF/web.xml" />
+             webxml="target/WEB-INF/web.xml" />
     </target>
     
-    
+    <!-- classpath="${tomcat.home}/server/lib/catalina-ant.jar"/> 
     <target name="deploy" depends="clean,war" >
         <echo message="Deploying ${project.target.war} to ${project.context} by ${tomcat.home}"/>
         <copy 
@@ -175,11 +179,43 @@
         <property name="deploy.ant.client.url" value="${tomcat.url}${project.context}}"/>
     </target>
     
-    
     <target name="undeploy" >
         <echo message="Undeploying ${project.context}"/>
         <taskdef name="undeploy"  classname="org.apache.catalina.ant.UndeployTask"
                  classpath="${tomcat.home}/server/lib/catalina-ant.jar"/>
+        <undeploy url="${tomcat.url}/manager" username="${tomcat.username}"
+                  password="${tomcat.password}" path="${project.context}"/>
+    </target>
+    
+    <target name="war" 
+            depends="compile,web"
+            description="packages project to war" >
+        <war destfile="${project.target.war}"
+             basedir="${project.target.dir}"
+             webxml="web/WEB-INF/web.xml" />
+    </target>
+    
+    -->
+    
+    <target name="deploy" depends="clean,war" >
+        <echo message="Deploying ${project.target.war} to ${project.context} by ${tomcat.home}"/>
+        <copy 
+            file="${project.target.war}" 
+            tofile="/home/kees/.netbeans/6.0/apache-tomcat-6.0.14_base/webapps/RRS_V1.war" />
+        
+        <taskdef name="deploy" classname="org.apache.catalina.ant.DeployTask"
+                 classpath="${tomcat.home}/lib/catalina-ant.jar"/>
+        
+        <deploy url="${tomcat.url}/manager" username="${tomcat.username}"
+                password="${tomcat.password}" path="${project.context}"
+                war="${project.target.war}"/>
+        <property name="deploy.ant.client.url" value="${tomcat.url}${project.context}}"/>
+    </target>
+    
+    <target name="undeploy" >
+        <echo message="Undeploying ${project.context}"/>
+        <taskdef name="undeploy"  classname="org.apache.catalina.ant.UndeployTask"
+                 classpath="${tomcat.home}/lib/catalina-ant.jar"/>
         <undeploy url="${tomcat.url}/manager" username="${tomcat.username}"
                   password="${tomcat.password}" path="${project.context}"/>
     </target>
