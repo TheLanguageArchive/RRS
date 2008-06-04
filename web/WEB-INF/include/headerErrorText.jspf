@@ -13,8 +13,8 @@
 
 <%-- any content can be specified here e.g.: --%>
 
-<h2>Max Planck Institute for Psycholinguistics</h2> 
-<h2>Resource Request System</h2>
+<%@include file="/WEB-INF/include/titleMax.jspf" %>
+<%@include file="/WEB-INF/include/titleRrs.jspf" %>
 <h2>Error Page</h2>
 
-<hr>
+<hr />

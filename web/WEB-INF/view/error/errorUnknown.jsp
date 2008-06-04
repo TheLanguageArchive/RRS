@@ -4,18 +4,27 @@
 
 <%@ taglib uri="http://java.sun.com/jstl/core" prefix="c" %>
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-"http://www.w3.org/TR/html4/loose.dtd">
-
-<html>
-    <%@include file="/WEB-INF/include/header.jspf" %>
+<%@include file="/WEB-INF/include/doctypeStrict.jspf" %>
+<html <%@include file="/WEB-INF/include/xhtmlNamespaceAttr.jspf" %> >
+    
+    <head>
+    <%@include file="/WEB-INF/include/headMeta.jspf" %>
+    <link rel="stylesheet" type="text/css" href="css/error.css" />
+    <title>Error page</title>
+    </head>
+    
     
     <body>
         <%@include file="/WEB-INF/include/headerErrorText.jspf" %>
         
-        <h2>Sorry, <br>
-            Resource Request System is out of order! <h2>
+        <h2>Sorry, <br />
+            Resource Request System is out of order! 
+        </h2>
+        
+        <p>
             ${pageContext.exception}
+        </p>
+        
         <br />
         
     </body>

@@ -1,225 +1,198 @@
 /* CSS Document */
 
 
+body {
+    background-color: #FDFDDA;
+    font-family: Arial, Verdana, Helvetica, sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    color: #0D1940;
+}
+
 .RedBorder {
-	border: 1px solid #7C0525;
-	}
-	
+    border: 1px solid #7C0525;
+}
+
 .BlueBorder {
-	border: 1px solid #0D1940;
-	}
-	
-/*.shortinfo_title {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 13px;
-	font-style: normal;
-	line-height: 17px;
-	font-weight: normal;
-	color: #B60020;
-	text-decoration: none;
-	text-align: left;
-	vertical-align: top;
-	padding-left: 4px;
-	padding-right: 4px;
-	padding-bottom: 1px;
-	}
-	
-.shortinfo {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 12px;
-	font-style: normal;
-	line-height: 14px;
-	font-weight: normal;
-	color: #B60020;
-	text-decoration: none;
-	text-align: left;
-	vertical-align: top;
-	padding-top: 4px;
-	padding-left: 4px;
-	}
-*/
+    border: 1px solid #0D1940;
+}
+
 a {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 14px;
-	font-style: normal;
-	line-height: normal;
-	font-weight: normal;
-	color: #B60020;
-	text-decoration: underline;
+    font-size: 14px;
+    font-style: normal;
+    line-height: normal;
+    font-weight: normal;
+    color: #B60020;
+    text-decoration: underline;
 }
 
 a:hover {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 14px;
-	font-style: normal;
-	line-height: normal;
-	font-weight: normsl;
-	color: #B60020;
-	text-decoration: none;
+    font-size: 14px;
+    font-style: normal;
+    line-height: normal;
+    font-weight: normal;
+    color: #B60020;
+    text-decoration: none;
 }
 
 a.leftFrame {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 12px;
-	font-style: normal;
-	line-height: normal;
-	font-weight: bold;
-	color: #B60020;
-	text-decoration: underline;
+    font-size: 12px;
+    font-style: normal;
+    line-height: normal;
+    font-weight: bold;
+    color: #B60020;
+    text-decoration: underline;
 }		
 
 a.leftFrame:hover {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 12px;
-	font-style: normal;
-	line-height: normal;
-	font-weight: bold;
-	color: #0D1940;
-	text-decoration: none;
+    font-size: 12px;
+    font-style: normal;
+    line-height: normal;
+    font-weight: bold;
+    color: #0D1940;
+    text-decoration: none;
 }
 
-/*a.aContent {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 11px;
-	font-style: normal;
-	line-height: normal;
-	font-weight: normal;
-	color: #FFFFFF;
-	text-decoration: none;
-		}
-
-a.aContent:hover {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 11px;
-	font-style: normal;
-	line-height: normal;
-	font-weight: normal;
-	color: #FFFFFF;
-	text-decoration: underline;
-}
-
-a.aNavi {
-    font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 10px;
-	font-style: normal;
-	line-height: 16px;
-	font-weight: normal;
-	color: #B60020;
-	text-decoration: underline;
-	}
-
-a.aNavi:hover {
-    font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 10px;
-	font-style: normal;
-	line-height: 16px;
-	font-weight: normal;
-	color: #B60020;
-	text-decoration: none;
-	}
-*/
-	
 h1 {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 16px;
-	font-style: normal;
-	font-weight: bold;
-	color: #0D1940;
-	text-align: left;
-	
+    font-size: 16px;
+    font-style: normal;
+    font-weight: bold;
+    color: #0D1940;
+    text-align: left;
+    
 }
 
 h2 {	
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 18px;
-	font-style: normal;
-	font-weight: bold;
-	color: #0D1940;
-	text-align: center;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: bold;
+    color: #0D1940;
+    text-align: center;
 }
 
 h2.normal {	
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 16px;
-	font-style: normal;
-	font-weight: normal;
-	color: #0D1940;
-	text-align: center;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: normal;
+    color: #0D1940;
+    text-align: center;
 }
 
 h3 {	
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 16px;
-	font-style: italic;
-	font-weight: bold;
-	color: #0D1940;
-	text-align: left;
+    font-size: 16px;
+    font-style: italic;
+    font-weight: bold;
+    color: #0D1940;
+    text-align: left;
 }
 
 p.bold {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 16px;
-	font-style: normal;
-	font-weight: bold;
-	color: #0D1940;
-	text-align: justify;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: bold;
+    color: #0D1940;
+    text-align: justify;
 }
 
 p {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 16px;
-	font-style: normal;
-	color: #0D1940;
-	text-align: justify;
+    font-size: 16px;
+    font-style: normal;
+    color: #0D1940;
+    text-align: justify;
 }
 
 p.small {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 12px;
-	font-style: normal;
-	color: #0D1940;
-	text-align: left;
+    font-size: 12px;
+    font-style: normal;
+    color: #0D1940;
+    text-align: left;
 }
 
 ul.none {
-	list-style-type: none
+    list-style-type: none
 }
 
 ul.disc {
-	list-style-type: disc
+    list-style-type: disc
 }
 
 
 ol.decimal {
-	list-style-type: decimal
+    list-style-type: decimal
 }
 
 .form {
-	background-color: #555E71;
-	border: 1px solid #0D1940;
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 11px;
-	font-style: normal;
-	color: #0D1940;
+    background-color: #555E71;
+    border: 1px solid #0D1940;
+    font-size: 11px;
+    font-style: normal;
+    color: #0D1940;
 }
-	
 
-body {
-	scrollbar-base-color: #B60020;
-	scrollbar-face-color: #FDFDDA;
-	scrollbar-highlight-color: #D3D3D3;
-	background-color: #FDFDDA;
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 16px;
-	font-style: normal;
-	color: #0D1940;
-	align: justify;
+.strong {    
+    font-weight: bold;
 }
+
+.align-center {
+    text-align: center;
+}
+
+
+
 
 table {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 16px;
-	font-style: normal;
-	color: #0D1940;
-	align: justify;
+    font-size: 16px;
+    font-style: normal;
+    color: #0D1940;
+    border: 0px;
 }
+
+
+
+
+/* ******************* registration ******************* */
+
+td.align-left {
+    text-align: left;
+}
+
+td.align-right {
+    text-align: right;
+}
+
+table#regis {
+    width: 85%;
+    border: 0px;
+    margin-left:auto;
+    margin-right:auto;
+}
+
+#dobesCoc {
+    background-color: white;
+    width: 98%;
+    height: 500px;
+}
+
+#i-agree {
+    text-align: center;  
+    font-weight: bold;
+    
+    font-size: 18px;
+}
+
+#buttons {   
+    text-align: center;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+#dobes-coc-reply {  
+    margin-left: 100px;
+    width: 60%;
+}
+
+#contents-emailcheck {
+    width: 60%;
+    margin-left: 100px;
+}
+

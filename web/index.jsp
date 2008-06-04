@@ -12,6 +12,7 @@
     <body>     
         <%@include file="/WEB-INF/include/headerText.jspf" %>
         
+        
         <h1>You don't have access to this application!</h1>
     </body>
 </html>

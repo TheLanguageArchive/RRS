@@ -1,27 +1,35 @@
 <%@page isErrorPage="true" %>
-<%@page contentType="text/html"%>
-<%@page pageEncoding="UTF-8"%>
 
 <%@ taglib uri="http://java.sun.com/jstl/core" prefix="c" %>
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-"http://www.w3.org/TR/html4/loose.dtd">
-
-<html>
-    <%@include file="/WEB-INF/include/header.jspf" %>
+<%@include file="/WEB-INF/include/doctypeStrict.jspf" %>
+<html <%@include file="/WEB-INF/include/xhtmlNamespaceAttr.jspf" %> >
+    
+    <head>
+    <%@include file="/WEB-INF/include/headMeta.jspf" %>
+    <link rel="stylesheet" type="text/css" href="css/error.css" />
+    <title>Error page</title>
+    </head>
     
     <body>
         <%@include file="/WEB-INF/include/headerErrorText.jspf" %>
         
-        <strong>Information about the error(s):</strong>
+        <div class="strong">
+            Information about the error(s):
+        </div>
         
-        <br><br>
+        <table>
+            <tr>
+                <th>Where</th>
+                <th>Message</th>
+                <th>Error</th>
+            </tr>     
+            ${htmlErrorTable}
+        </table>
         
-        ${htmlErrorTable}
-        
-        <br><br>
-        Try again from the IMDI browser!
-        
+        <p>
+            Try again from the IMDI browser!
+        </p>       
         
     </body>
 </html>
