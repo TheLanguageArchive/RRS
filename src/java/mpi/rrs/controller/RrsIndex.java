@@ -42,11 +42,31 @@ public class RrsIndex extends HttpServlet {
         logger.setLevel(Level.INFO);
         
         logger.info("RrsIndex: *************** start *****************");
+        logger.info("getContextPath :" + request.getContextPath());
+        logger.info("getPathInfo :" + request.getPathInfo());
+        logger.info("getPathTranslated :" + request.getPathTranslated());
+        logger.info("getRequestURI :" + request.getRequestURI());
+        logger.info("getRequestURL :" + request.getRequestURL());
+        logger.info("getServletPath :" + request.getServletPath());
+        
+        String checkEmailLinkBase = "";
+        String urlFields[] = request.getRequestURL().toString().split("/");
+
+        for (int i = 0; i < urlFields.length - 1; i++) {
+            checkEmailLinkBase += urlFields[i];
+            checkEmailLinkBase += "/";
+        }
+        
+        checkEmailLinkBase += "RrsRegistration";
+        
+        logger.info("Url RrsRegistration: " + checkEmailLinkBase);
+        request.setAttribute("RrsRegistration", checkEmailLinkBase);
+        
+        String urlRrsRegistration = this.getServletContext() + "/RrsRegistration";
+        request.setAttribute("urlRrsRegistration",urlRrsRegistration);        
         
         ErrorsRequest errorsRequest = new ErrorsRequest();
         String htmlSelectedNodesTable = "";
-        String htmlInputNodesTable = "";
-        String htmlErrorTable = "";
         
         String[] values = request.getParameterValues("nodeid");
         if (values != null) {
@@ -92,9 +112,9 @@ public class RrsIndex extends HttpServlet {
                                 String nodeIdValue = values[i];
                                 
                                 htmlSelectedNodesTable += "<tr>";
-                                htmlSelectedNodesTable += "    <td valign=\"top\"> <input type=\"text\" name=" + nodeIdHtml + "  value = " + nodeIdValue + " readonly size=\"30\"> ";
+                                htmlSelectedNodesTable += "    <td> <input type=\"text\" name=\"" + nodeIdHtml + "\"  value = \"" + nodeIdValue + "\" readonly=\"readonly\" size=\"30\" /> ";
                                 htmlSelectedNodesTable += "    </td> ";
-                                htmlSelectedNodesTable += "    <td valign=\"top\"> <input type=\"text\" name=" + nodeNameHtml + "  value = " + nodeNameValue + " readonly size=\"50\"> ";
+                                htmlSelectedNodesTable += "    <td> <input type=\"text\" name=\"" + nodeNameHtml + "\"  value = \"" + nodeNameValue + "\" readonly=\"readonly\" size=\"50\" /> ";
                                 htmlSelectedNodesTable += "    </td> ";
                                 htmlSelectedNodesTable += " </tr> ";
                                 
@@ -130,25 +150,7 @@ public class RrsIndex extends HttpServlet {
                     }
                 }
             }
-        } else {
-            
-            int maxFormNodeIds = 10;
-            String maxFormNodeIdsString = (String) getServletContext().getAttribute("maxFormNodeIds");
-            
-            if (maxFormNodeIdsString != null) {
-                maxFormNodeIds = Integer.parseInt(maxFormNodeIdsString);
-            }
-            
-            for (int i = 0; i < maxFormNodeIds; i++) {
-                String name = "paramNodeId_" + i;
-                
-                htmlInputNodesTable += "<tr> ";
-                htmlInputNodesTable += "    <td valign=\"top\"> <input type=\"text\" name=\"" + name + " size=\"30\"> ";
-                htmlInputNodesTable += "    </td> ";
-                htmlInputNodesTable += "</tr> ";
-            }
-            
-        }
+        } 
         
         Calendar cal = Calendar.getInstance();
         
@@ -175,7 +177,6 @@ public class RrsIndex extends HttpServlet {
         request.setAttribute("pulldownMonthOfYearEnd",pulldownMonthOfYearEnd);
         request.setAttribute("pulldownYearEnd",pulldownYearEnd);
         
-        request.setAttribute("htmlInputNodesTable", htmlInputNodesTable);
         request.setAttribute("htmlSelectedNodesTable", htmlSelectedNodesTable);
         
         dispatchServlet(request, response, errorsRequest);

@@ -25,7 +25,6 @@ public class ErrorsRequest {
     }
     
     private ArrayList<ErrorRequest> errors;
-    private int size;
     private String errorsHtmlTable;
     private boolean errorRecoverable;
     private boolean errorFromBrowser;
@@ -60,28 +59,21 @@ public class ErrorsRequest {
     }
     
     public void setErrorsHtmlTable() {
-        String htmlTable = "<table border=1>";
-        htmlTable += "<tr>";
-        htmlTable += "  <th>Where</th>";
-        htmlTable += "  <th>Message</th>";
-        htmlTable += "  <th>Error</th>";
-        htmlTable += "</tr>";
+        String htmlTable = "";
         
         for (int i=0; i< this.getSize(); i++) {
-            htmlTable += "<tr>";
+            htmlTable += "<tr>\n";
             htmlTable += "  <td>";
             htmlTable +=      this.getError(i).getErrorFormFieldLabel();
-            htmlTable += "  </td>";
+            htmlTable += "  </td>\n";
             htmlTable += "  <td>";
             htmlTable +=      this.getError(i).getErrorMessage();
-            htmlTable += "  </td>";
+            htmlTable += "  </td>\n";
             htmlTable += "  <td>";
             htmlTable +=      this.getError(i).getErrorValue();
-            htmlTable += "  </td>";
-            htmlTable += "</tr>";
+            htmlTable += "  </td>\n";
+            htmlTable += "</tr>\n";
         }
-        
-        htmlTable += "</table>";
         
         this.errorsHtmlTable = htmlTable;
     }

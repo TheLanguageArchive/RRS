@@ -15,7 +15,7 @@ package mpi.rrs.model.date;
  */
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
+//import java.util.Date;
 
 import mpi.rrs.model.utilities.RrsUtil;
 
@@ -172,7 +172,7 @@ public class RrsDate {
             
             try {
                 cal.set(yearInt,monthInt-1,dayInt);
-                Date test = cal.getTime();
+                //Date test = cal.getTime();
                 
             }  catch (IllegalArgumentException ex) {
                 logger.debug("illegal date: " + year + ", " + month + " " + day);

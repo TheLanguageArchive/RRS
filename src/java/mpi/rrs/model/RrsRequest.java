@@ -16,6 +16,7 @@ package mpi.rrs.model;
 
 import mpi.rrs.model.corpusdb.ImdiNodes;
 import mpi.rrs.model.date.RrsDate;
+import mpi.rrs.model.user.RequestUser;
 import mpi.rrs.model.user.User;
 
 public class RrsRequest {
@@ -27,7 +28,7 @@ public class RrsRequest {
     
     private boolean valid;
     
-    private User user;
+    private RequestUser user;
     private String userStatus;
     
     private ImdiNodes imdiNodes;
@@ -48,7 +49,7 @@ public class RrsRequest {
         return user;
     }
     
-    public void setUser(User user) {
+    public void setUser(RequestUser user) {
         this.user = user;
     }
     
@@ -149,16 +150,14 @@ public class RrsRequest {
         this.imdiNodes.setImdiNodesInfo();
         String imdiNodesInfo = this.imdiNodes.getImdiNodesInfo();
         
-        String result = "User status: " + this.getUserStatus() + newLine;
-        result += "============" + newLine;
-        result += newLine;
+        String result = "";
         result += "User info:" + newLine;
         result += "==========" + newLine;
         result += userInfo + newLine;
         result += newLine;
         result += "Nodes requested:" + newLine;
         result += "================" + newLine;
-        result += imdiNodesInfo + newLine;
+        result += imdiNodesInfo;
         result += newLine;
         result += "Usage aim:" + newLine;
         result += "==========" + newLine;

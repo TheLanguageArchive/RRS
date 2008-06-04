@@ -60,7 +60,7 @@ public class PulldownGenerator {
         for (int i=1; i<=31; i++) {
             String option = "<option>";
             if (i == dayOfMonth) {
-                option = "<option selected>";
+                option = "<option selected=\"selected\">";
             }
 
             dayPullDown += option + i + "</option>" + "\n";
@@ -93,7 +93,7 @@ public class PulldownGenerator {
         for (int i=0; i<=11; i++) {
             String option = "<option>";
             if (i == monthOfYear) {
-                option = "<option selected>";
+                option = "<option selected=\"selected\">";
             }
 
             monthPullDown += option + shortMonths[i] + "</option>" + "\n";
@@ -126,7 +126,7 @@ public class PulldownGenerator {
         for (int i=fromYear; i<=toYear; i++) {
             String option = "<option>";
             if (i == year) {
-                option = "<option selected>";
+                option = "<option selected=\"selected\">";
             }
 
             yearPullDown += option + i + "</option>" + "\n";
