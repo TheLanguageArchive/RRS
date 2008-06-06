@@ -68,8 +68,8 @@ function checkPassword (password) {
     }    
     
     var illegalChars = /[\W_]/; // allow only letters and numbers
-    if ((password.length < 6) || (password.length > 8)) {
-        alert("The password should have a length of 6-8 characters.");
+    if ((password.length < 6) || (password.length > 20)) {
+        alert("The password should have a length of 6-20 characters.");
         return false;
     } 
     else if (illegalChars.test(password)) {

@@ -25,8 +25,6 @@
             ${pageContext.exception}
         </p>
         
-        <br />
-        
     </body>
 </html>
 

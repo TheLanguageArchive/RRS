@@ -19,8 +19,7 @@
         <div class="strong">
             Information about the error(s):
         </div>
-        
-        
+                
         <table>
                 <tr>
                     <th>Where</th>

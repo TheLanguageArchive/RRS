@@ -42,7 +42,7 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
             </c:if>
             
             <p>&nbsp;</p>
-            <p class="strong">Login: (if you don't have a 'User Id' and 'Password' please register <a href="${RrsRegistration}" onclick="window.open(this.href); return false;">here</a>)</p>            
+            <p class="strong">Login: (if you don't have a &quot;User Id&quot; and &quot;Password&quot; please register <a href="${urlRrsRegistration}" onclick="window.open(this.href); return false;">here</a>)</p>            
             
             <table>
                 <tr> 

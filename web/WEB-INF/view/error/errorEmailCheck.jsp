@@ -48,7 +48,7 @@
             <br />
             <br />
             <p>
-                If you don't have a 'User Id' and 'Password' please register <a href="/RRS_V1/RrsRegistration" target="_blank">here</a> 
+                If you don't have a &quot;User Id&quot; and &quot;Password&quot; please register <a href="${urlRrsRegistration}" onclick="window.open(this.href); return false;">here</a> 
             </p>
         </div>     
         
