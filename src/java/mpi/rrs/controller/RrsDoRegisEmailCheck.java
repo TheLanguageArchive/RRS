@@ -28,7 +28,6 @@ import org.apache.commons.logging.LogFactory;
  */
 public class RrsDoRegisEmailCheck extends HttpServlet {
 
-    
     private static Log logger = LogFactory.getLog(RrsDoRegisEmailCheck.class);
 
     /** 
@@ -136,6 +135,32 @@ public class RrsDoRegisEmailCheck extends HttpServlet {
 
                 UserGenerator2 ug = (UserGenerator2) this.getServletContext().getAttribute("ams2DbConnection");
 
+                if (ug.isExistingUserName(userInfo.getUserName())) {
+                    ErrorRequest errorRequest = new ErrorRequest();
+
+                    errorRequest.setErrorFormFieldLabel("Registration Email Check");
+                    errorRequest.setErrorMessage("User: " + userInfo.getUserName() + " exists already");
+                    errorRequest.setErrorValue("Please registrate again.");
+                    errorRequest.setErrorException(null);
+                    errorRequest.setErrorType("USER_EXISTS_IN_AMS_DATABASE");
+                    errorRequest.setErrorRecoverable(false);
+
+                    errorsRequest.addError(errorRequest);
+
+                    errorsRequest.setErrorsHtmlTable();
+
+                    String htmlErrorTable = errorsRequest.getErrorsHtmlTable();
+
+                    request.setAttribute("htmlErrorTable", htmlErrorTable);
+
+                    logger.error("Email check; User: " + userInfo.getUserName() + " exists already in AMS database.");
+
+                    RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/error/errorOther.jsp");
+                    view.forward(request, response);
+                    return;
+
+                }
+
                 boolean success = ug.addNewUser(userInfo);
                 if (success) {
                     logger.info("User: " + userName + " successfuly added to AMS2 DB.");
@@ -151,16 +176,15 @@ public class RrsDoRegisEmailCheck extends HttpServlet {
                     logger.info("users in group registered: \n");
                     String members = ug.getMembersOfGroup("registered");
                     logger.info(members);
-
                     if (!ug.isMemberOfGroup(userInfo.getUserName(), "registered")) {
-                        success = ug.addMemberToGroup(userInfo.getUserName(), "registered");
-                        if (success) {
-                            logger.info("User: " + userInfo.getUserName() + " has been successfuly added to group: registered");
-                        } else {
-                            logger.info("User: " + userInfo.getUserName() + " has not been successfuly added to group: registered");
-                        }
+                    success = ug.addMemberToGroup(userInfo.getUserName(), "registered");
+                    if (success) {
+                    logger.info("User: " + userInfo.getUserName() + " has been successfuly added to group: registered");
                     } else {
-                        logger.info("User: " + userInfo.getUserName() + " is already member of group: registered");
+                    logger.info("User: " + userInfo.getUserName() + " has not been successfuly added to group: registered");
+                    }
+                    } else {
+                    logger.info("User: " + userInfo.getUserName() + " is already member of group: registered");
                     }
                      */
 
@@ -169,14 +193,14 @@ public class RrsDoRegisEmailCheck extends HttpServlet {
                     logger.info(al.getLicenseInfo(userInfo.getUserName(), null));
 
                     NodeID targetNodeID = null;
-                    
+
                     String dobesCodeOfConductLicenseName = this.getServletContext().getInitParameter("DOBES_COC_LICENSE_NAME");
                     logger.info("dobesCodeOfConductLicenseName: " + dobesCodeOfConductLicenseName);
                     al.acceptLicenseInfo(userInfo.getUserName(), targetNodeID, dobesCodeOfConductLicenseName);
-                    
+
                     logger.info("*** END OF REGISTRATION for user: " + userInfo.getUserName());
                     logger.info("");
-                    
+
                     RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/page/emailCheckOk.jsp");
                     view.forward(request, response);
                     return;
@@ -219,6 +243,9 @@ public class RrsDoRegisEmailCheck extends HttpServlet {
             String htmlErrorTable = errorsRequest.getErrorsHtmlTable();
 
             request.setAttribute("htmlErrorTable", htmlErrorTable);
+
+            String urlRrsRegistration = request.getContextPath() + "/RrsRegistration";
+            request.setAttribute("urlRrsRegistration", urlRrsRegistration);
 
             RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/error/errorEmailCheck.jsp");
             view.forward(request, response);

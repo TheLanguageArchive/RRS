@@ -159,7 +159,7 @@ public class UserGenerator2 implements UserGenerator {
             user.setName(userinfo.getLastName());
             user.setEmail(userinfo.getEmail());
             user.setOrganisation(userinfo.getOrganization());
-            user.setPasswd(userinfo.getPassword());
+            //user.setPasswd(userinfo.getPassword()); (deprecated; sets passwords unencrypted)
 
             // note: update (new) datasets' creator-/last-modifier-fields:
             // use the current user
@@ -168,8 +168,8 @@ public class UserGenerator2 implements UserGenerator {
             LatUser modifier = pcplSrv.getSystemUser();
             user.setModifier(modifier);
 
-            // ...and save new data
-            pcplSrv.save(user);  // throws DataSourceException (unchecked)
+            // ...and save new data and store plain text password encrypted in DB
+            pcplSrv.save(user, userinfo.getPassword());  // throws DataSourceException (unchecked)
         } catch (DataSourceException aE) {
             result = false;
             _log.info("addNewUser: failed adding to ANMS DB for userName: " + userName);

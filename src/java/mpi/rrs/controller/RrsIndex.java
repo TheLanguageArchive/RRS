@@ -62,7 +62,7 @@ public class RrsIndex extends HttpServlet {
         logger.info("Url RrsRegistration: " + checkEmailLinkBase);
         request.setAttribute("RrsRegistration", checkEmailLinkBase);
         
-        String urlRrsRegistration = this.getServletContext() + "/RrsRegistration";
+        String urlRrsRegistration = request.getContextPath() + "/RrsRegistration";
         request.setAttribute("urlRrsRegistration",urlRrsRegistration);        
         
         ErrorsRequest errorsRequest = new ErrorsRequest();
