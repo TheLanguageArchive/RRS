@@ -32,7 +32,7 @@
                 To modify your account details, please go to the page below, log in and select <br />
                 &quot;My Account&quot; -> &quot;My UserAccount&quot; from the menu: <br />
                 <br />
-                <a href="${initParam.AMS_INTERFACE_LINK}" onclick="window.open(this.href); return false;">Account Management System</a>
+                <a href="${initParam.AMS_INTERFACE_LINK}" onclick="window.open(this.href); return false;">Access Management System</a>
             </p>
         </div>
         

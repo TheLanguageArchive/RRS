@@ -10,7 +10,7 @@
     <context-param>
         <description>URL AMS lat access management system</description>
         <param-name>AMS_INTERFACE_LINK</param-name>
-        <param-value>http://lux16.mpi.nl/ds/ams2/index.face</param-value>
+        <param-value>http://lux16.mpi.nl/am/ams2/index.face?nodeid=MPI0%23</param-value>
     </context-param>
     <context-param>
         <description>Corpus DB connection string</description>

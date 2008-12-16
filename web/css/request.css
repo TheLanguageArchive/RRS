@@ -108,6 +108,13 @@ p.small {
     text-align: left;
 }
 
+pre {
+    font-size: 12px;
+    font-style: normal;
+    color: #0D1940;
+    text-align: left;
+}
+
 ul.none {
     list-style-type: none
 }

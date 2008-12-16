@@ -7,10 +7,9 @@
 "http://www.w3.org/TR/html4/loose.dtd">
 
 <html>
-    <%@include file="/WEB-INF/include/header.jspf" %>
     
     <body>     
-        <%@include file="/WEB-INF/include/headerText.jspf" %>
+        <%@include file="/WEB-INF/include/titleMax.jspf" %>
         
         
         <h1>You don't have access to this application!</h1>
