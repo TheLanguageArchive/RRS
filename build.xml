@@ -27,7 +27,7 @@
     <!-- ** project settings ** -->
     <property name="project.group"				value="mpi.lat" />
     <property name="project.name"				value="rrs" />
-    <property name="project.version"				value="1.0" />
+    <property name="project.version"				value="1.2" />
     <!-- project (dir)structure -->
     <property name="project.src.dir"				location="${basedir}/src" />
     <property name="project.web.dir"				location="${basedir}/web" />
@@ -108,7 +108,7 @@
             <!-- pass through target directory -->
             <property name="lib.dir"	 value="${lib.dir}" />
             <!-- target version of ams2 to retrieve -->
-            <property name="ams2.version"	 value="1.2.1" />
+            <property name="ams2.version"	 value="1.3.1" />
         </ant>
     </target>
     
