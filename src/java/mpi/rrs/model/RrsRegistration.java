@@ -25,6 +25,7 @@ public class RrsRegistration {
     private String emailAddressCheckContent;
     private String emailAccountDetailsContent;
     private RegistrationUser user;
+    private String amsInterfaceLink;
     
     public RegistrationUser getUser() {
         return user;
@@ -75,8 +76,13 @@ public class RrsRegistration {
         String result = "Dear " + user.getFullName() + "," + newLine + newLine; 
         result += "you have registered for a LAT user account." + newLine + newLine;
         result += "Your account details are: " + newLine;
-        result += this.user.getUserInfo() + newLine;
+        result += this.user.getUserInfo() + newLine + newLine;
         
+        result += "To modify your account details, please go to the page below, log in and select " + newLine;
+        result += "My Account -> My User Account" + newLine;
+        result += "from the menu: " + newLine + newLine;
+        result += this.getAmsInterfaceLink() + newLine;        
+                       
         this.emailAccountDetailsContent = result;
     }
 
@@ -125,6 +131,14 @@ public class RrsRegistration {
     public void setBaseUrl(String baseUrl) {
         //this.baseUrl = baseUrl;
         this.baseUrl = baseUrl.replace("localhost", "172.16.24.160");
+    }
+
+    public String getAmsInterfaceLink() {
+        return amsInterfaceLink;
+    }
+
+    public void setAmsInterfaceLink(String amsInterfaceLink) {
+        this.amsInterfaceLink = amsInterfaceLink;
     }
 
     

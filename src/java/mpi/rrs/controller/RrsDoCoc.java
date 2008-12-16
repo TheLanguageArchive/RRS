@@ -21,7 +21,13 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- *
+ * Verify that Dobes Code of Conduct has been signed
+ * Send verification link to user
+ * 
+ * Point in registration workflow:
+ * Show Dobes Code of Conduct -> 
+ * User gets email with link to verify email address
+ * 
  * @author kees
  */
 public class RrsDoCoc extends HttpServlet {

@@ -10,7 +10,9 @@ import java.net.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 //import javax.servlet.RequestDispatcher;
+
 /**
+ * Show User Registration Form
  *
  * @author kees
  */
@@ -36,7 +38,7 @@ public class RrsRegis extends HttpServlet {
      */
     public void dispatchServlet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/page/regis.jsp");
+        RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/page/regis2.jsp");
         view.forward(request, response);
 
     }

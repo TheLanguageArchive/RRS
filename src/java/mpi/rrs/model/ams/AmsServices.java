@@ -6,6 +6,7 @@ package mpi.rrs.model.ams;
 
 import nl.mpi.common.util.spring.SpringContextLoader;
 import nl.mpi.lat.ams.Constants;
+import nl.mpi.lat.auth.authentication.AuthenticationService;
 import nl.mpi.lat.auth.authorization.AdvAuthorizationService;
 import nl.mpi.lat.auth.principal.PrincipalService;
 import nl.mpi.lat.fabric.FabricService;
@@ -22,6 +23,7 @@ public class AmsServices {
     private PrincipalService pcplSrv;
     private AdvAuthorizationService authzSrv;
     private FabricService fabricSrv;
+    private AuthenticationService authSrv;
 
     public AmsServices() {
         this.loadAms2Services();
@@ -59,6 +61,10 @@ public class AmsServices {
         // load the needed service: FabricService (designed to wrap further functionality arround corpusstructure api)
         fabricSrv =  (FabricService) spring.getBean(Constants.BEAN_FABRIC_SRV);
 
+        SpringContextLoader springAuth = new SpringContextLoader();
+        springAuth.init("spring-ams2-auth.xml");
+        authSrv = (AuthenticationService) springAuth.getBean(Constants.BEAN_INTEGRATED_AUTHENTICATION_SRV);
+        
     }
 
     public PrincipalService getPcplSrv() {
@@ -72,4 +78,9 @@ public class AmsServices {
     public FabricService getFabricSrv() {
         return fabricSrv;
     }
+
+    public AuthenticationService getAuthSrv() {
+        return authSrv;
+    }
+
 }

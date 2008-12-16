@@ -22,7 +22,14 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
+ * Verify user registration form
+ * Show Dobes Code of Conduct license
+ * 
+ * Point in registration workflow:
+ * User registration -> 
+ * Show Dobes Code of Conduct
  *
+ * 
  * @author kees
  */
 public class RrsDoRegis extends HttpServlet {
@@ -90,7 +97,7 @@ public class RrsDoRegis extends HttpServlet {
             errorsRequest.addError(errorRequest);
 
             logger.debug("User ID is already taken: " + userId);
-            RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/page/regis.jsp");
+            RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/page/regis2.jsp");
             view.forward(request, response);
 
         } else if (regisFileIO.isRegistrationInFile(userInfo)) {
@@ -108,7 +115,7 @@ public class RrsDoRegis extends HttpServlet {
             errorsRequest.addError(errorRequest);
 
             logger.debug("User ID is already reserved: " + userId);
-            RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/page/regis.jsp");
+            RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/page/regis2.jsp");
             view.forward(request, response);
 
         } else {
@@ -120,7 +127,7 @@ public class RrsDoRegis extends HttpServlet {
 
             if (!success) {
                 request.setAttribute("rrsRegisErrorMessage", "Error adding  user to registration file: " + rrsRegistrationFileName);
-                RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/page/regis.jsp");
+                RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/page/regis2.jsp");
                 view.forward(request, response);
             } else {
                 String urlRrsDobesCoc = this.getServletContext().getInitParameter("DOBES_COC_LINK");

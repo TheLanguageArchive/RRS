@@ -24,8 +24,9 @@ import mpi.rrs.model.errors.ErrorsRequest;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.Level;
+
 /**
- *
+ * Show Resource Request Form
  * @author kees
  * @version
  */

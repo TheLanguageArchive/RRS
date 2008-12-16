@@ -23,7 +23,14 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- *
+ * saves user to ams DB
+ * 
+ * Point in registration workflow:
+ * User registration -> 
+ * Show Dobes Code of Conduct -> 
+ * User gets email with link to verify email address -> 
+ * User clicks on link
+ *  
  * @author kees
  */
 public class RrsDoRegisEmailCheck extends HttpServlet {
@@ -40,6 +47,7 @@ public class RrsDoRegisEmailCheck extends HttpServlet {
         ErrorsRequest errorsRequest = new ErrorsRequest();
 
         RegisFileIO regisFileIO = (RegisFileIO) this.getServletContext().getAttribute("regisFileIO");
+        String amsInterfaceLink = (String) this.getServletContext().getAttribute("amsInterfaceLink");
 
         String userName = request.getParameter("RrsRegisUserName");
         String userRegisIdStr = request.getParameter("RrsRegisId");
@@ -56,6 +64,7 @@ public class RrsDoRegisEmailCheck extends HttpServlet {
             RrsRegistration rrsRegistration = new RrsRegistration();
             RegistrationUser userInfo = regisFileIO.getRegistrationFromFile(userName);
             rrsRegistration.setUser(userInfo);
+            rrsRegistration.setAmsInterfaceLink(amsInterfaceLink);
             request.setAttribute("userFirstName", userInfo.getFirstName());
             request.setAttribute("userLastName", userInfo.getLastName());
             request.setAttribute("userEmail", userInfo.getEmail());
@@ -196,16 +205,42 @@ public class RrsDoRegisEmailCheck extends HttpServlet {
 
                     String dobesCodeOfConductLicenseName = this.getServletContext().getInitParameter("DOBES_COC_LICENSE_NAME");
                     logger.info("dobesCodeOfConductLicenseName: " + dobesCodeOfConductLicenseName);
-                    al.acceptLicenseInfo(userInfo.getUserName(), targetNodeID, dobesCodeOfConductLicenseName);
+                    if (al.acceptLicenseInfo(userInfo.getUserName(), targetNodeID, dobesCodeOfConductLicenseName)) {
 
-                    logger.info("*** END OF REGISTRATION for user: " + userInfo.getUserName());
-                    logger.info("");
+                        logger.info("*** END OF REGISTRATION for user: " + userInfo.getUserName());
+                        logger.info("");
 
-                    RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/page/emailCheckOk.jsp");
-                    view.forward(request, response);
-                    return;
+                        RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/page/emailCheckOk.jsp");
+                        view.forward(request, response);
+                        return;
+                    } else {
+                        ErrorRequest errorRequest = new ErrorRequest();
+
+                        errorRequest.setErrorFormFieldLabel("Licence " + dobesCodeOfConductLicenseName);
+                        errorRequest.setErrorMessage("Can't accept license");
+                        errorRequest.setErrorValue(userRegisIdStr);
+                        errorRequest.setErrorException(null);
+                        errorRequest.setErrorType("CANNOT_ACCEPT_LICENSE");
+                        errorRequest.setErrorRecoverable(false);
+
+                        errorsRequest.addError(errorRequest);
+                        errorsRequest.setErrorRecoverable(false);
+
+                        logger.error("Can't accept license: " + dobesCodeOfConductLicenseName + " for " + userName + " to AMS2 DB.");
+                    }
 
                 } else {
+                    ErrorRequest errorRequest = new ErrorRequest();
+
+                        errorRequest.setErrorFormFieldLabel("Add user");
+                        errorRequest.setErrorMessage("Can't add user");
+                        errorRequest.setErrorValue(userRegisIdStr);
+                        errorRequest.setErrorException(null);
+                        errorRequest.setErrorType("CANNOT_ADD_USER");
+                        errorRequest.setErrorRecoverable(false);
+
+                        errorsRequest.addError(errorRequest);
+                        errorsRequest.setErrorRecoverable(false);
                     logger.error("Can't add user: " + userName + " to AMS2 DB.");
                 }
 

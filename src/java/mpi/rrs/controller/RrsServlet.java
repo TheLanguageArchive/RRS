@@ -29,13 +29,19 @@ import mpi.rrs.model.user.RequestUser;
 import mpi.rrs.model.user.User;
 import mpi.rrs.model.user.UserGenerator2;
 import mpi.rrs.model.utilities.RrsUtil;
+import mpi.rrs.model.ams.AmsServicesSingleton;
+import mpi.rrs.model.ams.AmsLicense;
+import nl.mpi.lat.fabric.Node;
+import nl.mpi.lat.fabric.NodeID;
 
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- *
+ * Verify Resource Request Form
+ * Send email to user and corpman
+ * 
  * @author kees
  * @version
  */
@@ -265,14 +271,19 @@ public class RrsServlet extends HttpServlet {
 
         String[] values = request.getParameterValues("nodeid");
 
-
+        AmsLicense amsLicence = new AmsLicense();
         if (values != null) {
             rrsRequest.setNodesEnteredInForm(false);
             if (values.length > 0) {
                 for (int i = 0; i < values.length; i++) {
                     if (values[i] != null && !(values[i].equalsIgnoreCase(""))) {
+                        logger.info("Param values: " + values[i]);
                         ImdiNode imdiNode = new ImdiNode();
                         imdiNode.setImdiNodeIdWithPrefix(values[i]);
+                        
+                        NodeID nodeId = AmsServicesSingleton.getInstance().getFabricSrv().newNodeID(imdiNode.getImdiNodeIdWithPrefix());
+                        logger.info(amsLicence.getLicenseInfo(userName, nodeId));
+                        
                         //imdiNode.setImdiNodeName(corpusDbConnection.getNode(values[i]).getName());
                         //imdiNode.setImdiNodeFormat(corpusDbConnection.getNode(values[i]).getFormat());
 

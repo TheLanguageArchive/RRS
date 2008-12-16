@@ -53,10 +53,13 @@ public class RrsContextListener implements ServletContextListener {
 
         String maxFormNodeIds = sc.getInitParameter("MAX_FORM_NODE_IDS");
         sc.setAttribute("maxFormNodeIds", maxFormNodeIds);
+        
+        String amsInterfaceLink = sc.getInitParameter("AMS_INTERFACE_LINK");
+        sc.setAttribute("amsInterfaceLink", amsInterfaceLink);
 
         String emailAddressCorpman = sc.getInitParameter("EMAIL_ADDRESS_CORPMAN");
-        sc.setAttribute("emailAddressCorpman", emailAddressCorpman);
-
+        sc.setAttribute("emailAddressCorpman", emailAddressCorpman);        
+        
         String emailHost = sc.getInitParameter("EMAIL_HOST");
         sc.setAttribute("emailHost", emailHost);
 
