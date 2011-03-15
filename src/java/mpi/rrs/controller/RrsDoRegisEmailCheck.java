@@ -79,9 +79,7 @@ public class RrsDoRegisEmailCheck extends HttpServlet {
         RegistrationUser user = new RegistrationUser();
         user.setUserName(userName);
         if (regisFileIO.isRegistrationInFile(user)) {
-            if (processNewUserIfValid(request, response, errorsRequest, userName, userRegisId)) {
-                return true;
-            }
+            return processNewUserIfValid(request, response, errorsRequest, userName, userRegisId);
         } else {
             ErrorRequest errorRequest = new ErrorRequest();
             errorRequest.setErrorFormFieldLabel("Registration username");
@@ -105,9 +103,7 @@ public class RrsDoRegisEmailCheck extends HttpServlet {
         request.setAttribute("userLastName", userInfo.getLastName());
         request.setAttribute("userEmail", userInfo.getEmail());
         if (rrsRegistration.getRegisId() == userRegisId) {
-            if (processNewUser(request, response, rrsRegistration, errorsRequest, userInfo, userRegisId)) {
-                return true;
-            }
+            return processNewUser(request, response, errorsRequest, rrsRegistration, userInfo);
         } else {
             ErrorRequest errorRequest = new ErrorRequest();
             errorRequest.setErrorFormFieldLabel("Registration Id");
@@ -122,7 +118,7 @@ public class RrsDoRegisEmailCheck extends HttpServlet {
         return false;
     }
 
-    private boolean processNewUser(HttpServletRequest request, HttpServletResponse response, RrsRegistration rrsRegistration, ErrorsRequest errorsRequest, RegistrationUser userInfo, int userRegisId) throws IOException, ServletException {
+    private boolean processNewUser(HttpServletRequest request, HttpServletResponse response, ErrorsRequest errorsRequest, RrsRegistration rrsRegistration, RegistrationUser userInfo) throws IOException, ServletException {
         String userName = userInfo.getUserName();
 
         if (sendRegistrationEmail(request, response, rrsRegistration)) {
@@ -133,12 +129,12 @@ public class RrsDoRegisEmailCheck extends HttpServlet {
                 } else {
                     logger.error("User: " + userName + " can't be removed from registration file.");
                 }
-                return acceptLicenseForUser(request, response, errorsRequest, userInfo, userRegisId);
+                return acceptLicenseForUser(request, response, errorsRequest, userInfo, rrsRegistration.getRegisId());
             } else {
                 ErrorRequest errorRequest = new ErrorRequest();
                 errorRequest.setErrorFormFieldLabel("Add user");
                 errorRequest.setErrorMessage("Can't add user");
-                errorRequest.setErrorValue(Integer.toString(userRegisId));
+                errorRequest.setErrorValue(Integer.toString(rrsRegistration.getRegisId()));
                 errorRequest.setErrorException(null);
                 errorRequest.setErrorType("CANNOT_ADD_USER");
                 errorRequest.setErrorRecoverable(false);
