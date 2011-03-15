@@ -20,7 +20,7 @@ import mpi.corpusstructure.CorpusStructureDBImpl;
 
 import mpi.rrs.model.registrations.RegisFileIO;
 import mpi.rrs.model.user.UserGenerator;
-import mpi.rrs.model.user.UserGenerator2;
+import mpi.rrs.model.user.Ams2UserGenerator;
 import nl.mpi.common.util.Text;
 import nl.mpi.common.util.spring.SpringContextLoader;
 import nl.mpi.lat.ams.Constants;
@@ -142,7 +142,7 @@ public class RrsContextListener implements ServletContextListener {
         spring.init(Text.notEmpty(springConfigPaths)
                 ? springConfigPaths
                 : "spring-ams2-auth.xml");
-        UserGenerator2 ug2 = new UserGenerator2(
+        Ams2UserGenerator userGenerator = new Ams2UserGenerator(
                 (PrincipalService) spring.getBean(
                 Text.notEmpty(principalSrv)
                 ? principalSrv
@@ -152,7 +152,7 @@ public class RrsContextListener implements ServletContextListener {
                 ? authenticationSrv
                 : Constants.BEAN_INTEGRATED_AUTHENTICATION_SRV));
 
-        this.setUserGenerator(ug2);
+        this.setUserGenerator(userGenerator);
         //mUserGenerator = ug2;
         return mUserGenerator;
     }

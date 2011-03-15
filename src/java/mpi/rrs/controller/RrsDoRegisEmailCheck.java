@@ -16,7 +16,7 @@ import mpi.rrs.model.errors.ErrorRequest;
 import mpi.rrs.model.errors.ErrorsRequest;
 import mpi.rrs.model.registrations.RegisFileIO;
 import mpi.rrs.model.user.RegistrationUser;
-import mpi.rrs.model.user.UserGenerator2;
+import mpi.rrs.model.user.UserGenerator;
 import nl.mpi.lat.fabric.NodeID;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -175,7 +175,7 @@ public class RrsDoRegisEmailCheck extends HttpServlet {
     }
 
     private boolean addUser(HttpServletRequest request, HttpServletResponse response, ErrorsRequest errorsRequest, RegistrationUser userInfo) throws ServletException, IOException {
-        UserGenerator2 ug = (UserGenerator2) this.getServletContext().getAttribute("ams2DbConnection");
+        UserGenerator ug = (UserGenerator) this.getServletContext().getAttribute("ams2DbConnection");
         if (ug.isExistingUserName(userInfo.getUserName())) {
             ErrorRequest errorRequest = new ErrorRequest();
             errorRequest.setErrorFormFieldLabel("Registration Email Check");

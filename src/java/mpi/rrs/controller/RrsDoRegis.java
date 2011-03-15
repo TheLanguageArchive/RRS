@@ -10,12 +10,12 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 
 import mpi.rrs.model.RrsRegistration;
-import mpi.rrs.model.user.UserGenerator2;
 import mpi.rrs.model.errors.ErrorRequest;
 import mpi.rrs.model.errors.ErrorsRequest;
 
 import mpi.rrs.model.registrations.RegisFileIO;
 import mpi.rrs.model.user.RegistrationUser;
+import mpi.rrs.model.user.UserGenerator;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -57,7 +57,7 @@ public class RrsDoRegis extends HttpServlet {
             regisFileIO = new RegisFileIO(rrsRegistrationFileName);
         }
 
-        UserGenerator2 ug = (UserGenerator2) this.getServletContext().getAttribute("ams2DbConnection");
+        UserGenerator ug = (UserGenerator) this.getServletContext().getAttribute("ams2DbConnection");
 
         RegistrationUser userInfo = new RegistrationUser();
         userInfo.setUserName(request.getParameter("paramUserNewUserName"));
@@ -76,7 +76,7 @@ public class RrsDoRegis extends HttpServlet {
         request.setAttribute("paramUserNewPassword_1", request.getParameter("paramUserNewPassword_1"));
         request.setAttribute("paramUserNewPassword_2", request.getParameter("paramUserNewPassword_2"));
 
-        ug = (UserGenerator2) this.getServletContext().getAttribute("ams2DbConnection");
+        // ug = (Ams2UserGenerator) this.getServletContext().getAttribute("ams2DbConnection");
 
         String userId = userInfo.getUserName();
 

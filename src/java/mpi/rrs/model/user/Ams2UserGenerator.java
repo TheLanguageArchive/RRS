@@ -23,15 +23,15 @@ import org.apache.commons.logging.LogFactory;
  * @author	last modified by $Author$, created by mategg
  * @version	$Revision$
  */
-public class UserGenerator2 implements UserGenerator {
+public class Ams2UserGenerator implements UserGenerator {
 
-    private static Log _log = LogFactory.getLog(UserGenerator2.class);
+    private static Log _log = LogFactory.getLog(Ams2UserGenerator.class);
     /** provides access to principals' data */
     private PrincipalService mPcplSrv;
     /** handles authentication */
     private AuthenticationService mAuthSrv;
 
-    public UserGenerator2(PrincipalService pcplSrv, AuthenticationService authSrv) {
+    public Ams2UserGenerator(PrincipalService pcplSrv, AuthenticationService authSrv) {
         this.setPcplSrv(pcplSrv);
         this.setAuthSrv(authSrv);
     }
