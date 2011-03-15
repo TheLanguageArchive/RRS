@@ -30,7 +30,7 @@
     <context-param>
         <description>email address of user corpman corpman@mpi.nl</description>
         <param-name>EMAIL_ADDRESS_CORPMAN</param-name>
-        <param-value>kees@mpi.nl</param-value>
+        <param-value>twan.goosen@mpi.nl</param-value>
     </context-param>
     <!-- context-param>
         <description>properties for the Log4j Logger</description>
@@ -45,7 +45,8 @@
     </context-param>
     <context-param>
         <description>Link to location of file with DoBES Code of Conduct. /ds/RRS_V1/dobes_coc_v2.html</description>
-        <param-name>DOBES_COC_LINK</param-name><param-value>default</param-value>
+        <param-name>DOBES_COC_LINK</param-name>
+        <param-value>default</param-value>
     </context-param>
     <context-param>
         <description>For saving RRS registrations temporarily</description>
@@ -131,8 +132,6 @@
         <exception-type>java.lang.Throwable</exception-type>
         <location>/view/error/errorUnknown.jsp</location>
     </error-page>
-    
-    
     <!-- ***** DATA SOURCEs ***** -->
     <resource-ref>
         <description>CSDB Datasource</description>
@@ -165,4 +164,5 @@
         <res-ref-name>kdc/MPI-NL</res-ref-name>
         <res-type>nl.mpi.common.catalina.KerberosJndiResource</res-type>
         <res-auth>Container</res-auth>
-</resource-ref></web-app>
+    </resource-ref>
+</web-app>
