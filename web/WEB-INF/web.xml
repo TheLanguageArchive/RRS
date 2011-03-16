@@ -58,6 +58,8 @@
         <param-name>DOBES_COC_LICENSE_NAME</param-name>
         <param-value>Dobes Code of Conduct v2</param-value>
     </context-param>
+
+    <!-- Begin SHHAA authentication filter -->
     <context-param>
         <description>Location shhaa.xml for SHIB</description>
         <param-name>ShhaaConfigLocation</param-name>
@@ -72,6 +74,8 @@
         <filter-name>AAIFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
+    <!-- End SHHAA authentication filter -->
+
     <listener>
         <description>Context listener</description>
         <listener-class>nl.mpi.rrs.RrsContextListener</listener-class>
