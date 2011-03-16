@@ -60,36 +60,36 @@
     </context-param>
     <listener>
         <description>Context listener</description>
-        <listener-class>mpi.rrs.RrsContextListener</listener-class>
+        <listener-class>nl.mpi.rrs.RrsContextListener</listener-class>
     </listener>
     <servlet>
         <servlet-name>RRSServlet</servlet-name>
-        <servlet-class>mpi.rrs.controller.RrsServlet</servlet-class>
+        <servlet-class>nl.mpi.rrs.controller.RrsServlet</servlet-class>
     </servlet>
     <servlet>
         <description>Test Context listener</description>
         <servlet-name>RrsContextListener</servlet-name>
-        <servlet-class>mpi.rrs.RrsContextListenerTester</servlet-class>
+        <servlet-class>nl.mpi.rrs.RrsContextListenerTester</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>RrsIndex</servlet-name>
-        <servlet-class>mpi.rrs.controller.RrsIndex</servlet-class>
+        <servlet-class>nl.mpi.rrs.controller.RrsIndex</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>RrsRegis</servlet-name>
-        <servlet-class>mpi.rrs.controller.RrsRegis</servlet-class>
+        <servlet-class>nl.mpi.rrs.controller.RrsRegis</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>RrsDoRegis</servlet-name>
-        <servlet-class>mpi.rrs.controller.RrsDoRegis</servlet-class>
+        <servlet-class>nl.mpi.rrs.controller.RrsDoRegis</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>RrsDoCoc</servlet-name>
-        <servlet-class>mpi.rrs.controller.RrsDoCoc</servlet-class>
+        <servlet-class>nl.mpi.rrs.controller.RrsDoCoc</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>RrsDoRegisEmailCheck</servlet-name>
-        <servlet-class>mpi.rrs.controller.RrsDoRegisEmailCheck</servlet-class>
+        <servlet-class>nl.mpi.rrs.controller.RrsDoRegisEmailCheck</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>RRSServlet</servlet-name>
@@ -125,7 +125,7 @@
         </session-timeout>
     </session-config>
     <error-page>
-        <exception-type>mpi.rrs.model.errors.RrsGeneralException</exception-type>
+        <exception-type>nl.mpi.rrs.model.errors.RrsGeneralException</exception-type>
         <location>/view/error/error.jsp</location>
     </error-page>
     <error-page>
