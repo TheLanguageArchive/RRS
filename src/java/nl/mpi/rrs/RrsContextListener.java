@@ -93,13 +93,13 @@ public class RrsContextListener implements ServletContextListener {
             logger.fatal("corpusJdbcURL: " + corpusJdbcURL);
             logger.fatal("corpusUser: " + corpusUser);
         }
-        
+
         RegisFileIO rfio = this.getRegisFileIO();
         sc.setAttribute("regisFileIO", rfio);
 
         UserGenerator ug = this.getUserGenerator(null, null, null);	// ams2 : using defaults
         logger.info("using UserGenerator " + ug.getInfo());
-        
+
         sc.setAttribute("ams2DbConnection", ug);
         sc.setAttribute("corpusDbConnection", corpusDbConnection);
     }

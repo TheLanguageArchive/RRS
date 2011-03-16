@@ -7,6 +7,8 @@ package nl.mpi.rrs.controller;
 
 import java.io.IOException;
 
+//import javax.mail.internet.AddressException;
+//import javax.mail.internet.InternetAddress;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -29,6 +31,7 @@ import nl.mpi.rrs.model.utilities.RrsUtil;
 import nl.mpi.rrs.model.ams.AmsServicesSingleton;
 import nl.mpi.rrs.model.ams.AmsLicense;
 import nl.mpi.rrs.model.user.UserGenerator;
+import nl.mpi.lat.fabric.Node;
 import nl.mpi.lat.fabric.NodeID;
 
 
@@ -92,8 +95,21 @@ public class RrsServlet extends HttpServlet {
         RequestUser userInfo = new RequestUser();
         RequestUser user = new RequestUser();
 
-        user.setUserName(request.getParameter("paramUserOldUserName"));
-        String userName = user.getUserName();
+        // user.setUserName(request.getParameter("paramUserOldUserName"));
+        String uidFromShib = request.getRemoteUser();
+        logger.info("SHIB: uidFromShib: " + uidFromShib);
+        /*
+        if (uidFromShib.indexOf("@") != -1) {
+            uidFromShib = uidFromShib.substring(0, uidFromShib.indexOf("@"));
+            logger.info("SHIB: uidFromShib translated to: " + uidFromShib);
+        }
+         */
+        
+        String userName = uidFromShib;
+        logger.info("Username: " + userName);
+        user.setUserName(userName);
+        userName = user.getUserName();
+        logger.info("Username: " + userName);
 
         // TODO: check and init user-generator properly
         if (RrsUtil.isNotEmpty(userName)) {
@@ -119,11 +135,12 @@ public class RrsServlet extends HttpServlet {
 
                 logger.info("using UserGenerator " + ug.getInfo());
 
+                /*
                 user.setPassword(request.getParameter("paramUserOldPassword"));
                 String passWord = user.getPassword();
 
                 if (ug.isValidPasswordForUsername(userName, passWord)) {
-
+                */
                     User userDB = ug.getUserInfoByUserName(userName);
                     if (userDB != null) {
                         userInfo.setFirstName(userDB.getFirstName());
@@ -147,7 +164,7 @@ public class RrsServlet extends HttpServlet {
                         logger.debug("Invalid AMS username: " + userName);
                     }
 
-
+                    /*
                 } else {
                     ErrorRequest errorRequest = new ErrorRequest();
 
@@ -162,6 +179,7 @@ public class RrsServlet extends HttpServlet {
 
                     logger.debug("Invalid username/password: " + userName + "/ xxxxxx");
                 }
+                     */
             }
 
         }
@@ -412,7 +430,7 @@ public class RrsServlet extends HttpServlet {
                 return;
             }
 
-        //throw new mpi.rrs.model.errors.RrsGeneralException(errorsRequest.getErrorsHtmlTable());
+        //throw new nl.mpi.rrs.model.errors.RrsGeneralException(errorsRequest.getErrorsHtmlTable());
         } else {
 
             EmailBean emailer = new EmailBean();

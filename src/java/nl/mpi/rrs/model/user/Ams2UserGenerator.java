@@ -48,7 +48,7 @@ public class Ams2UserGenerator implements UserGenerator {
     }
 
     /**
-     * @see mpi.rrs.model.user.UserGenerator#getUserInfoByUserName(java.lang.String)
+     * @see nl.mpi.rrs.model.user.UserGenerator#getUserInfoByUserName(java.lang.String)
      */
     public User getUserInfoByUserName(String userName) {
         User result = new User();
@@ -121,7 +121,7 @@ public class Ams2UserGenerator implements UserGenerator {
     }
 
     /**
-     * @see mpi.rrs.model.user.UserGenerator#isValidPasswordForUsername(java.lang.String, java.lang.String)
+     * @see nl.mpi.rrs.model.user.UserGenerator#isValidPasswordForUsername(java.lang.String, java.lang.String)
      */
     public boolean isValidPasswordForUsername(String userName, String passWord) {
         try {
@@ -219,7 +219,7 @@ public class Ams2UserGenerator implements UserGenerator {
         return true;
 
     }
-    
+
     /**
      * example: modify GROUP-MEMBERSHIPs
      * @throws DataSourceException if save fails
@@ -235,7 +235,7 @@ public class Ams2UserGenerator implements UserGenerator {
             return null;
         }
 
-        
+
         Set<LatPrincipal> members = group.getMembers();
         for (Iterator<LatPrincipal> iter = members.iterator(); iter.hasNext();) {
             LatPrincipal npl = iter.next();
@@ -251,7 +251,7 @@ public class Ams2UserGenerator implements UserGenerator {
      * @throws DataSourceException if save fails
      */
     public boolean isMemberOfGroup(String userName, String groupName) {
-        
+
         LatPrincipal user;
         LatGroup group;
 
@@ -313,7 +313,7 @@ public class Ams2UserGenerator implements UserGenerator {
     }
 
     /**
-     * @see mpi.rrs.model.user.UserGenerator#isValidUserName(java.lang.String)
+     * @see nl.mpi.rrs.model.user.UserGenerator#isValidUserName(java.lang.String)
      */
 //	public boolean isValidUserName(String userName) {
 //	}

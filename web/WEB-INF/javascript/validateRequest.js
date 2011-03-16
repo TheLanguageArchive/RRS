@@ -5,15 +5,11 @@ validateRequest.js
 <script type="text/javascript">
 <!-- 
 
-     requiredFields = new Array( "paramUserOldUserName",
-                                 "paramUserOldPassword",
-                                 "paramRequestResearchProject",
+     requiredFields = new Array( "paramRequestResearchProject",
                                  "paramRequestPublicationAim");
                                   
-     requiredText   = new Array(  "User ID",
-                                  "Password",
-                                  "Research Project",
-                                  "Publication Aim");
+     requiredText   = new Array( "Research Project",
+                                 "Publication Aim");
                                   
                      
 
@@ -28,7 +24,7 @@ validateRequest.js
            form[element].focus();
            return false;
         }
-     }
+     } 
     
      if (document.resource_request_form.paramRequestFromDateDay.options[document.resource_request_form.paramRequestFromDateDay.selectedIndex].value == 'Choose') {
         alert( "Please enter a value for '" + "From Date Day" + "'." );

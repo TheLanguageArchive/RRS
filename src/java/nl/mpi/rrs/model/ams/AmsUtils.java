@@ -36,7 +36,7 @@ public class AmsUtils {
     }
     
     /**
-     * @see mpi.rrs.model.user.UserGenerator#isValidPasswordForUsername(java.lang.String, java.lang.String)
+     * @see nl.mpi.rrs.model.user.UserGenerator#isValidPasswordForUsername(java.lang.String, java.lang.String)
      */
     public boolean isValidPasswordForUsername(String userName, String passWord) {
         try {
