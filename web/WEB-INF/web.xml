@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
     <description>Resource Request System Version 1</description>
-    <display-name>RRS_V1</display-name>
+    <display-name>RRS</display-name>
     <context-param>
         <description>default imap mail host</description>
         <param-name>EMAIL_HOST</param-name>
@@ -45,8 +45,7 @@
     </context-param>
     <context-param>
         <description>Link to location of file with DoBES Code of Conduct. /ds/RRS_V1/dobes_coc_v2.html</description>
-        <param-name>DOBES_COC_LINK</param-name>
-        <param-value>default</param-value>
+        <param-name>DOBES_COC_LINK</param-name><param-value>default</param-value>
     </context-param>
     <context-param>
         <description>For saving RRS registrations temporarily</description>
@@ -58,9 +57,27 @@
         <param-name>DOBES_COC_LICENSE_NAME</param-name>
         <param-value>Dobes Code of Conduct v2</param-value>
     </context-param>
+    <context-param>
+        <description>Location shhaa.xml for SHIB</description>
+        <param-name>ShhaaConfigLocation</param-name>
+        <param-value>/WEB-INF/shhaa.xml</param-value>
+    </context-param>
+    <filter>
+        <description>SHIB filter</description>
+        <filter-name>AAIFilter</filter-name>
+        <filter-class>de.mpg.aai.shhaa.AuthFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AAIFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
     <listener>
         <description>Context listener</description>
         <listener-class>mpi.rrs.RrsContextListener</listener-class>
+    </listener>
+    <listener>
+        <description>SHIB Listener</description>
+        <listener-class>de.mpg.aai.shhaa.config.ConfigContextListener</listener-class>
     </listener>
     <servlet>
         <servlet-name>RRSServlet</servlet-name>
@@ -74,6 +91,10 @@
     <servlet>
         <servlet-name>RrsIndex</servlet-name>
         <servlet-class>mpi.rrs.controller.RrsIndex</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>RrsIndex2</servlet-name>
+        <servlet-class>mpi.rrs.controller.RrsIndex2</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>RrsRegis</servlet-name>
@@ -104,6 +125,10 @@
         <url-pattern>/RrsIndex</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+        <servlet-name>RrsIndex2</servlet-name>
+        <url-pattern>/RrsIndex2</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>RrsRegis</servlet-name>
         <url-pattern>/RrsRegistration</url-pattern>
     </servlet-mapping>
@@ -132,6 +157,8 @@
         <exception-type>java.lang.Throwable</exception-type>
         <location>/view/error/errorUnknown.jsp</location>
     </error-page>
+    
+    
     <!-- ***** DATA SOURCEs ***** -->
     <resource-ref>
         <description>CSDB Datasource</description>
@@ -164,5 +191,4 @@
         <res-ref-name>kdc/MPI-NL</res-ref-name>
         <res-type>nl.mpi.common.catalina.KerberosJndiResource</res-type>
         <res-auth>Container</res-auth>
-    </resource-ref>
-</web-app>
+</resource-ref></web-app>

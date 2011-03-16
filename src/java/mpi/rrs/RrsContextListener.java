@@ -20,7 +20,7 @@ import mpi.corpusstructure.CorpusStructureDBImpl;
 
 import mpi.rrs.model.registrations.RegisFileIO;
 import mpi.rrs.model.user.UserGenerator;
-import mpi.rrs.model.user.Ams2UserGenerator;
+import mpi.rrs.model.user.UserGenerator2;
 import nl.mpi.common.util.Text;
 import nl.mpi.common.util.spring.SpringContextLoader;
 import nl.mpi.lat.ams.Constants;
@@ -93,15 +93,17 @@ public class RrsContextListener implements ServletContextListener {
             logger.fatal("corpusJdbcURL: " + corpusJdbcURL);
             logger.fatal("corpusUser: " + corpusUser);
         }
+
+        sc.setAttribute("corpusDbConnection", corpusDbConnection);
+
+        UserGenerator ug = this.getUserGenerator(null, null, null);	// ams2 : using defaults
+        logger.info("using UserGenerator " + ug.getInfo());
+
+        sc.setAttribute("ams2DbConnection", ug);
         
         RegisFileIO rfio = this.getRegisFileIO();
         sc.setAttribute("regisFileIO", rfio);
 
-        UserGenerator ug = this.getUserGenerator(null, null, null);	// ams2 : using defaults
-        logger.info("using UserGenerator " + ug.getInfo());
-        
-        sc.setAttribute("ams2DbConnection", ug);
-        sc.setAttribute("corpusDbConnection", corpusDbConnection);
     }
 
     public void contextDestroyed(ServletContextEvent sce) {
@@ -142,7 +144,7 @@ public class RrsContextListener implements ServletContextListener {
         spring.init(Text.notEmpty(springConfigPaths)
                 ? springConfigPaths
                 : "spring-ams2-auth.xml");
-        Ams2UserGenerator userGenerator = new Ams2UserGenerator(
+        UserGenerator2 ug2 = new UserGenerator2(
                 (PrincipalService) spring.getBean(
                 Text.notEmpty(principalSrv)
                 ? principalSrv
@@ -152,7 +154,7 @@ public class RrsContextListener implements ServletContextListener {
                 ? authenticationSrv
                 : Constants.BEAN_INTEGRATED_AUTHENTICATION_SRV));
 
-        this.setUserGenerator(userGenerator);
+        this.setUserGenerator(ug2);
         //mUserGenerator = ug2;
         return mUserGenerator;
     }

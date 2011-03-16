@@ -21,7 +21,7 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
         <%@include file="/WEB-INF/include/headerTextRequest.jspf" %>
         <hr />
         
-        <form id="resource_request_form_0" method="post" action="RrsIndex2">
+        <form id="resource_request_form" method="post" action="Rrs.do" onsubmit="return validateForm( this )">
             
             <c:if test="${htmlSelectedNodesTable ne ''}">
                 <p class="strong">Your selected Nodes:</p>
@@ -41,22 +41,13 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
                 <hr />
             </c:if>
             
-            
+            <%--
             <p>&nbsp;</p>
             
-            <p class="strong">
-               Only registered users with username and password can request resource access.<br />
-               If you don't have a &quot;User Id&quot; and &quot;Password&quot; 
-              please register <a href="${urlRrsRegistration}" onclick="window.open(this.href); return false;">here</a>
-              <br />
-              Tick the "Continue" button to login.
-            </p> 
-            
-            <input type="hidden" name="fromFirstPage" value="1" />
-            
-            <%--
+            <p class="strong">Login: (if you don't have a &quot;User Id&quot; and &quot;Password&quot; please register <a href="${urlRrsRegistration}" onclick="window.open(this.href); return false;">here</a>)</p>            
+            --%>
             <table>
-                
+                <%--
                 <tr> 
                     <td>User Id:</td>
                     <td><input type="text" name="paramUserOldUserName" size="90" /></td>
@@ -65,7 +56,7 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
                     <td>Password</td>
                     <td><input type="password" name="paramUserOldPassword" size="90" /></td>
                 </tr>   
-                
+                --%>
                 
                 <tr> 
                     <td colspan="2" class="align-left"><p class="strong">Indicate the aim of the usage:</p></td>
@@ -104,9 +95,9 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
                     </td>
                 </tr>
             </table>
-            --%>
+            
             <p>
-                <input type="submit" value="Continue" />
+                <input type="submit" value="Submit request" />
             </p>
             
         </form>

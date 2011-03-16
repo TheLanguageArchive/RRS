@@ -7,6 +7,8 @@ package mpi.rrs.controller;
 
 import java.io.IOException;
 
+//import javax.mail.internet.AddressException;
+//import javax.mail.internet.InternetAddress;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -25,10 +27,11 @@ import mpi.rrs.model.errors.ErrorsRequest;
 import mpi.rrs.model.errors.RrsGeneralException;
 import mpi.rrs.model.user.RequestUser;
 import mpi.rrs.model.user.User;
+import mpi.rrs.model.user.UserGenerator2;
 import mpi.rrs.model.utilities.RrsUtil;
 import mpi.rrs.model.ams.AmsServicesSingleton;
 import mpi.rrs.model.ams.AmsLicense;
-import mpi.rrs.model.user.UserGenerator;
+import nl.mpi.lat.fabric.Node;
 import nl.mpi.lat.fabric.NodeID;
 
 
@@ -92,15 +95,28 @@ public class RrsServlet extends HttpServlet {
         RequestUser userInfo = new RequestUser();
         RequestUser user = new RequestUser();
 
-        user.setUserName(request.getParameter("paramUserOldUserName"));
-        String userName = user.getUserName();
+        // user.setUserName(request.getParameter("paramUserOldUserName"));
+        String uidFromShib = request.getRemoteUser();
+        logger.info("SHIB: uidFromShib: " + uidFromShib);
+        /*
+        if (uidFromShib.indexOf("@") != -1) {
+            uidFromShib = uidFromShib.substring(0, uidFromShib.indexOf("@"));
+            logger.info("SHIB: uidFromShib translated to: " + uidFromShib);
+        }
+         */
+        
+        String userName = uidFromShib;
+        logger.info("Username: " + userName);
+        user.setUserName(userName);
+        userName = user.getUserName();
+        logger.info("Username: " + userName);
 
         // TODO: check and init user-generator properly
         if (RrsUtil.isNotEmpty(userName)) {
             rrsRequest.setUserStatus("Existing user");
 
             // ams2 : using defaults : user-data provider and authentication service 
-            UserGenerator ug = (UserGenerator) this.getServletContext().getAttribute("ams2DbConnection");
+            UserGenerator2 ug = (UserGenerator2) this.getServletContext().getAttribute("ams2DbConnection");
             
             if (ug == null) {
                 ErrorRequest errorRequest = new ErrorRequest();
@@ -119,11 +135,12 @@ public class RrsServlet extends HttpServlet {
 
                 logger.info("using UserGenerator " + ug.getInfo());
 
+                /*
                 user.setPassword(request.getParameter("paramUserOldPassword"));
                 String passWord = user.getPassword();
 
                 if (ug.isValidPasswordForUsername(userName, passWord)) {
-
+                */
                     User userDB = ug.getUserInfoByUserName(userName);
                     if (userDB != null) {
                         userInfo.setFirstName(userDB.getFirstName());
@@ -147,7 +164,7 @@ public class RrsServlet extends HttpServlet {
                         logger.debug("Invalid AMS username: " + userName);
                     }
 
-
+                    /*
                 } else {
                     ErrorRequest errorRequest = new ErrorRequest();
 
@@ -162,6 +179,7 @@ public class RrsServlet extends HttpServlet {
 
                     logger.debug("Invalid username/password: " + userName + "/ xxxxxx");
                 }
+                     */
             }
 
         }

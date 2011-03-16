@@ -1,5 +1,5 @@
 /*
- * RrsIndex.java
+ * RrsIndex2.java
  *
  * Created on March 7, 2007, 12:17 PM
  */
@@ -31,7 +31,7 @@ import org.apache.log4j.Level;
  * @author kees
  * @version
  */
-public class RrsIndex extends HttpServlet {
+public class RrsIndex2 extends HttpServlet {
 
     /** Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
@@ -40,10 +40,10 @@ public class RrsIndex extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        Logger logger = Logger.getLogger("RrsIndex");
+        Logger logger = Logger.getLogger("RrsIndex2");
         logger.setLevel(Level.INFO);
 
-        logger.info("RrsIndex: *************** start *****************");
+        logger.info("RrsIndex2: *************** start *****************");
         logger.info("getContextPath :" + request.getContextPath());
         logger.info("getPathInfo :" + request.getPathInfo());
         logger.info("getPathTranslated :" + request.getPathTranslated());
@@ -51,8 +51,15 @@ public class RrsIndex extends HttpServlet {
         logger.info("getRequestURL :" + request.getRequestURL());
         logger.info("getServletPath :" + request.getServletPath());
 
-
-
+        String htmlSelectedNodesTable;
+        //String htmlSelectedNodesTable = (String) request.getAttribute("htmlSelectedNodesTable");
+        //logger.info("RrsIndex2: htmlSelectedNodesTable:" + htmlSelectedNodesTable);
+        
+        //htmlSelectedNodesTable = (String) this.getServletContext().getAttribute("htmlSelectedNodesTable");
+        HttpSession session = request.getSession();
+        htmlSelectedNodesTable = (String) session.getAttribute("htmlSelectedNodesTable");
+        logger.info("RrsIndex2 Context: htmlSelectedNodesTable:" + htmlSelectedNodesTable);
+        
         String checkEmailLinkBase = "";
         String urlFields[] = request.getRequestURL().toString().split("/");
 
@@ -70,17 +77,18 @@ public class RrsIndex extends HttpServlet {
         request.setAttribute("urlRrsRegistration", urlRrsRegistration);
 
         ErrorsRequest errorsRequest = new ErrorsRequest();
-        String htmlSelectedNodesTable = "";
+        
 
         String[] values = request.getParameterValues("nodeid");
         if (values != null) {
             if (values.length > 0) {
+                
 
                 CorpusStructureDBImpl corpusDbConnection = (CorpusStructureDBImpl) this.getServletContext().getAttribute("corpusDbConnection");
 
                 if (corpusDbConnection == null) {
 
-                    logger.info("RrsIndex: *************** corpusDbConnection == null ");
+                    logger.info("RrsIndex2: *************** corpusDbConnection == null ");
 
                     ErrorRequest errorRequest = new ErrorRequest();
 
@@ -98,9 +106,10 @@ public class RrsIndex extends HttpServlet {
                 }
 
                 for (int i = 0; i < values.length; i++) {
+                    
                     if (values[i] != null && !(values[i].equalsIgnoreCase(""))) {
 
-                        logger.info("RrsIndex: *************** Param nodeId: " + values[i]);
+                        logger.info("RrsIndex2: *************** Param nodeId: " + values[i]);
 
                         ImdiNode imdiNode = new ImdiNode();
                         imdiNode.setImdiNodeIdWithPrefix(values[i]);
@@ -118,10 +127,8 @@ public class RrsIndex extends HttpServlet {
                                 htmlSelectedNodesTable += "<tr>";
                                 htmlSelectedNodesTable += "    <td> <input type=\"text\" name=\"" + nodeIdHtml + "\"  value = \"" + nodeIdValue + "\" readonly=\"readonly\" size=\"30\" /> ";
                                 htmlSelectedNodesTable += "    </td> ";
-                                
                                 htmlSelectedNodesTable += "    <td> <input type=\"text\" name=\"" + nodeNameHtml + "\"  value = \"" + nodeNameValue + "\" readonly=\"readonly\" size=\"50\" /> ";
                                 htmlSelectedNodesTable += "    </td> ";
-                                
                                 htmlSelectedNodesTable += " </tr> ";
 
 
@@ -156,6 +163,8 @@ public class RrsIndex extends HttpServlet {
                     }
                 }
             }
+        } else {
+            logger.info("RrsIndex2: no nodeIds");
         }
 
         Calendar cal = Calendar.getInstance();
@@ -183,12 +192,11 @@ public class RrsIndex extends HttpServlet {
         request.setAttribute("pulldownMonthOfYearEnd", pulldownMonthOfYearEnd);
         request.setAttribute("pulldownYearEnd", pulldownYearEnd);
 
-        logger.info("RrsIndex: htmlSelectedNodesTable:" + htmlSelectedNodesTable);
+        //request.setAttribute("htmlSelectedNodesTable", request.getAttribute(htmlSelectedNodesTable));
         //request.setAttribute("htmlSelectedNodesTable", htmlSelectedNodesTable);
         //this.getServletContext().setAttribute("htmlSelectedNodesTable", htmlSelectedNodesTable);
-        HttpSession session = request.getSession();
+        //HttpSession session = request.getSession();
         session.setAttribute("htmlSelectedNodesTable", htmlSelectedNodesTable);
-        
 
         dispatchServlet(request, response, errorsRequest);
         return;
@@ -197,7 +205,7 @@ public class RrsIndex extends HttpServlet {
     public void dispatchServlet(HttpServletRequest request, HttpServletResponse response, ErrorsRequest errorsRequest)
             throws ServletException, IOException {
 
-        Logger logger = Logger.getLogger("RrsIndex");
+        Logger logger = Logger.getLogger("RrsIndex2");
         logger.setLevel(Level.INFO);
 
         if (errorsRequest.getSize() > 0) {
@@ -228,13 +236,10 @@ public class RrsIndex extends HttpServlet {
             String uidFromShib = request.getRemoteUser();
             //if (uidFromShib.equalsIgnoreCase("anonymous") && RrsUtil.isEmpty(fromFirstPage)) {
             if (uidFromShib.equalsIgnoreCase("anonymous")) {
-                logger.info("RrsIndex: call index.jsp");
 
                 RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/page/index.jsp");
                 view.forward(request, response);
             } else {
-                
-                logger.info("RrsIndex: call index_2.jsp");
 
                 RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/page/index_2.jsp");
                 view.forward(request, response);
