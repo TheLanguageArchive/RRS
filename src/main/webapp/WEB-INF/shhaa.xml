@@ -30,7 +30,7 @@ action="lO">http://lux16.mpi.nl/Shibboleth.sso/Logout</slo>
                 <shibheader>
                         <attribute>eduPersonAffiliation</attribute>
                         <attribute>eduPersonEntitlement</attribute>
-                        <attribute>email</attribute>
+                        <attribute>mail</attribute>
                         <attribute>ou</attribute>
                         <attribute>o</attribute>
                 </shibheader>

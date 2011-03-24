@@ -4,10 +4,14 @@
  */
 package nl.mpi.rrs.controller;
 
+import de.mpg.aai.shhaa.context.AuthenticationContext;
+import de.mpg.aai.shhaa.context.AuthenticationContextHolder;
+import de.mpg.aai.shhaa.model.AuthAttributes;
 import java.io.*;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
+import nl.mpi.rrs.model.user.UserGenerator;
 //import javax.servlet.RequestDispatcher;
 
 /**
@@ -26,8 +30,29 @@ public class RrsRegis extends HttpServlet {
             throws ServletException, IOException {
         //response.setContentType("text/html;charset=UTF-8");
 
-        dispatchServlet(request, response);
+        if (!checkCurrentUser(request, response)) {
+            dispatchServlet(request, response);
+        }
+    }
 
+    private boolean checkCurrentUser(HttpServletRequest request, HttpServletResponse response) {
+        String uidFromShib = request.getRemoteUser();
+        if (uidFromShib != null) {
+            // User already logged in
+            UserGenerator ug = (UserGenerator) this.getServletContext().getAttribute("ams2DbConnection");
+            if(false){ // (ug.isExistingUserName(uidFromShib)){
+                // User already logged in and registered
+                return true;
+            } else{
+                // Try to pre-fill the form
+                AuthenticationContext context =  AuthenticationContextHolder.get(request);
+                AuthAttributes attributes = context.getAuthPrincipal().getAttribues();
+                for(String id:attributes.getIDs()){
+                    request.setAttribute("att_"+id, attributes.get(id));
+                }
+            }
+        }
+        return false;
     }
 
     /** 

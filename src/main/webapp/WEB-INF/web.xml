@@ -74,15 +74,15 @@
         <filter-name>AAIFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
+    <listener>
+        <description>SHIB Listener</description>
+        <listener-class>de.mpg.aai.shhaa.config.ConfigContextListener</listener-class>
+    </listener>
     <!-- End SHHAA authentication filter -->
 
     <listener>
         <description>Context listener</description>
         <listener-class>nl.mpi.rrs.RrsContextListener</listener-class>
-    </listener>
-    <listener>
-        <description>SHIB Listener</description>
-        <listener-class>de.mpg.aai.shhaa.config.ConfigContextListener</listener-class>
     </listener>
     <servlet>
         <servlet-name>RRSServlet</servlet-name>
