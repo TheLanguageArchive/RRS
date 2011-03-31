@@ -17,13 +17,12 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import nl.mpi.rrs.model.registrations.RegisFileIO;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 //import org.apache.log4j.Logger;
 
 public class RrsUtil {
-    private static Log _log = LogFactory.getLog(RegisFileIO.class);
+    private static Log _log = LogFactory.getLog(RrsUtil.class);
     //static Logger logger = Logger.getLogger(RrsUtil.class);
     
     /** Creates a new instance of RrsUtil */

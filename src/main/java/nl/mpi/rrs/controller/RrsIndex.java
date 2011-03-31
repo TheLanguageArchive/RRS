@@ -20,6 +20,7 @@ import nl.mpi.rrs.model.corpusdb.ImdiNode;
 import nl.mpi.rrs.model.date.PulldownGenerator;
 import nl.mpi.rrs.model.errors.ErrorRequest;
 import nl.mpi.rrs.model.errors.ErrorsRequest;
+import nl.mpi.rrs.model.utilities.ShibbolethUtil;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.Level;
@@ -174,8 +175,7 @@ public class RrsIndex extends HttpServlet {
 
 
         } else {
-            String uidFromShib = request.getRemoteUser();
-            if (uidFromShib != null && uidFromShib.equalsIgnoreCase("anonymous")) {
+            if(ShibbolethUtil.isUserLoggedIn(request)){
                 logger.debug("RrsIndex: call index.jsp");
 
                 RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/page/index.jsp");
