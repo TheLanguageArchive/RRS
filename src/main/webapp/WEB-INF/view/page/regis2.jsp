@@ -56,9 +56,14 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
                         <hr />
                     </td>
                 </tr>
-                <tr> 
+                <tr>
+                    <% if(request.getAttribute("uid") == null) {%>
                     <td>User ID (choose one yourself):</td>
                     <td><input type="text" id="paramUserNewUserName" name="paramUserNewUserName" value="${paramUserNewUserName}" size="90" /></td>
+                    <% } else {%>
+                    <td>User ID:</td>
+                    <td>${uid}</td>
+                    <% } %>
                 </tr>
                 <tr> 
                     <td>First name:</td>
