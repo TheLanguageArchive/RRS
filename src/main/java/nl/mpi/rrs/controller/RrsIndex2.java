@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import mpi.corpusstructure.CorpusStructureDBImpl;
 import nl.mpi.rrs.model.errors.ErrorsRequest;
+import nl.mpi.rrs.model.utilities.AuthenticationUtility;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.Level;
@@ -26,6 +27,15 @@ import org.apache.log4j.Level;
 public class RrsIndex2 extends HttpServlet {
 
     private static Logger logger = Logger.getLogger(RrsIndex2.class);
+    private AuthenticationUtility authenticationUtility;
+
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        // Get authentication utility from servlet context. It is put there through
+        // spring configuration in spring-rrs-auth(-test).xml
+        authenticationUtility = (AuthenticationUtility) getServletContext().getAttribute("authenticationUtility");
+    }
 
     /** Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
@@ -50,14 +60,13 @@ public class RrsIndex2 extends HttpServlet {
         if (htmlSelectedNodesTable == null) {
             htmlSelectedNodesTable = "";
         }
-        
+
         if (RrsIndex.createNodesTable(request, response, corpusDbConnection, errorsRequest, htmlSelectedNodesTable)) {
             RrsIndex.createCalendarDropdowns(request);
         }
 
-        RrsIndex.dispatchServlet(request, response, errorsRequest);
+        RrsIndex.dispatchServlet(request, response, errorsRequest, authenticationUtility);
     }
-
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /** Handles the HTTP <code>GET</code> method.

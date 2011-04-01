@@ -4,19 +4,14 @@
  */
 package nl.mpi.rrs.controller;
 
-import de.mpg.aai.shhaa.context.AuthenticationContext;
-import de.mpg.aai.shhaa.context.AuthenticationContextHolder;
 import java.io.*;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
 import nl.mpi.rrs.model.errors.ErrorRequest;
 import nl.mpi.rrs.model.errors.ErrorsRequest;
-import nl.mpi.rrs.model.user.shibboleth.SihbbolethRegistrationUser;
 import nl.mpi.rrs.model.user.UserGenerator;
 import nl.mpi.rrs.model.utilities.AuthenticationUtility;
-import nl.mpi.rrs.model.utilities.ShibbolethUtil;
-//import javax.servlet.RequestDispatcher;
 
 /**
  * Show User Registration Form
@@ -25,6 +20,16 @@ import nl.mpi.rrs.model.utilities.ShibbolethUtil;
  */
 public class RrsRegis extends HttpServlet {
 
+    private AuthenticationUtility authenticationUtility;
+
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        // Get authentication utility from servlet context. It is put there through
+        // spring configuration in spring-rrs-auth(-test).xml
+        authenticationUtility = (AuthenticationUtility) getServletContext().getAttribute("authenticationUtility");
+    }
+
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
@@ -32,6 +37,7 @@ public class RrsRegis extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         //response.setContentType("text/html;charset=UTF-8");
 
         ErrorsRequest errorsRequest = new ErrorsRequest();
@@ -45,9 +51,8 @@ public class RrsRegis extends HttpServlet {
      * @param response Servlet response
      */
     private void checkCurrentUser(HttpServletRequest request, HttpServletResponse response, ErrorsRequest errorsRequest) {
-        AuthenticationUtility authUtil = new ShibbolethUtil();
-        if (authUtil.isUserLoggedIn(request)) {
-            String uidFromShib = authUtil.getLoggedInUser(request);
+        if (authenticationUtility.isUserLoggedIn(request)) {
+            String uidFromShib = authenticationUtility.getLoggedInUser(request);
             // User already logged in
             UserGenerator ug = (UserGenerator) this.getServletContext().getAttribute("ams2DbConnection");
             if (ug.isExistingUserName(uidFromShib)) {
@@ -67,7 +72,7 @@ public class RrsRegis extends HttpServlet {
 
                 request.setAttribute("uid", uidFromShib);
 
-                authUtil.createRegistrationUser(request);
+                authenticationUtility.createRegistrationUser(request);
             }
         }
     }

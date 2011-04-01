@@ -7,7 +7,7 @@ import nl.mpi.rrs.model.user.RegistrationUser;
 import nl.mpi.rrs.model.user.shibboleth.SihbbolethRegistrationUser;
 
 /**
- *
+ * Shibboleth implementation of AuthenticationUtility
  * @author Twan Goosen <twan.goosen@mpi.nl>
  */
 public class ShibbolethUtil implements AuthenticationUtility {

@@ -20,7 +20,7 @@ import nl.mpi.rrs.model.corpusdb.ImdiNode;
 import nl.mpi.rrs.model.date.PulldownGenerator;
 import nl.mpi.rrs.model.errors.ErrorRequest;
 import nl.mpi.rrs.model.errors.ErrorsRequest;
-import nl.mpi.rrs.model.utilities.ShibbolethUtil;
+import nl.mpi.rrs.model.utilities.AuthenticationUtility;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.Level;
@@ -34,6 +34,16 @@ public class RrsIndex extends HttpServlet {
 
     private static Logger logger = Logger.getLogger(RrsIndex.class);
 
+    private AuthenticationUtility authenticationUtility;
+
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        // Get authentication utility from servlet context. It is put there through
+        // spring configuration in spring-rrs-auth(-test).xml
+        authenticationUtility = (AuthenticationUtility) getServletContext().getAttribute("authenticationUtility");
+    }
+    
     /** Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
      * @param response servlet response
@@ -58,7 +68,7 @@ public class RrsIndex extends HttpServlet {
         if(createNodesTable(request, response, corpusDbConnection, errorsRequest, "")){
             createCalendarDropdowns(request);
         }
-        dispatchServlet(request, response, errorsRequest);
+        dispatchServlet(request, response, errorsRequest, authenticationUtility);
     }
 
     static boolean createNodesTable(HttpServletRequest request, HttpServletResponse response, CorpusStructureDBImpl corpusDbConnection, ErrorsRequest errorsRequest, String htmlSelectedNodesTable) throws IOException, ServletException {
@@ -149,7 +159,7 @@ public class RrsIndex extends HttpServlet {
         request.setAttribute("pulldownYearEnd", pulldownYearEnd);
     }
 
-    static void dispatchServlet(HttpServletRequest request, HttpServletResponse response, ErrorsRequest errorsRequest)
+    static void dispatchServlet(HttpServletRequest request, HttpServletResponse response, ErrorsRequest errorsRequest, AuthenticationUtility authUtil)
             throws ServletException, IOException {
         logger.setLevel(Level.INFO);
 
@@ -175,7 +185,7 @@ public class RrsIndex extends HttpServlet {
 
 
         } else {
-            if(new ShibbolethUtil().isUserLoggedIn(request)){
+            if(authUtil.isUserLoggedIn(request)){
                 logger.debug("RrsIndex: call index.jsp");
 
                 RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/page/index.jsp");
