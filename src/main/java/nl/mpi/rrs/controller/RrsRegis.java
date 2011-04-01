@@ -10,6 +10,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import nl.mpi.rrs.model.errors.ErrorRequest;
 import nl.mpi.rrs.model.errors.ErrorsRequest;
+import nl.mpi.rrs.model.user.RegistrationUser;
 import nl.mpi.rrs.model.user.UserGenerator;
 import nl.mpi.rrs.model.utilities.AuthenticationUtility;
 
@@ -72,7 +73,11 @@ public class RrsRegis extends HttpServlet {
 
                 request.setAttribute("uid", uidFromShib);
 
-                authenticationUtility.createRegistrationUser(request);
+                RegistrationUser user = authenticationUtility.createRegistrationUser(request);
+                request.setAttribute("paramUserNewFirstName", user.getFirstName());
+                request.setAttribute("paramUserNewLastName", user.getLastName());
+                request.setAttribute("paramUserNewEmail", user.getEmail());
+                request.setAttribute("paramUserNewOrganization", user.getOrganization());
             }
         }
     }
