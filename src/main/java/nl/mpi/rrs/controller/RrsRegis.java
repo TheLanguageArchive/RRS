@@ -6,12 +6,15 @@ package nl.mpi.rrs.controller;
 
 import de.mpg.aai.shhaa.context.AuthenticationContext;
 import de.mpg.aai.shhaa.context.AuthenticationContextHolder;
-import de.mpg.aai.shhaa.model.AuthAttributes;
 import java.io.*;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
+import nl.mpi.rrs.model.errors.ErrorRequest;
+import nl.mpi.rrs.model.errors.ErrorsRequest;
+import nl.mpi.rrs.model.user.SihbbolethRegistrationUser;
 import nl.mpi.rrs.model.user.UserGenerator;
+import nl.mpi.rrs.model.utilities.ShibbolethUtil;
 //import javax.servlet.RequestDispatcher;
 
 /**
@@ -30,29 +33,44 @@ public class RrsRegis extends HttpServlet {
             throws ServletException, IOException {
         //response.setContentType("text/html;charset=UTF-8");
 
-        if (!checkCurrentUser(request, response)) {
-            dispatchServlet(request, response);
-        }
+        ErrorsRequest errorsRequest = new ErrorsRequest();
+        checkCurrentUser(request, response, errorsRequest);
+        dispatchServlet(request, response, errorsRequest);
     }
 
-    private boolean checkCurrentUser(HttpServletRequest request, HttpServletResponse response) {
-        String uidFromShib = request.getRemoteUser();
-        if (uidFromShib != null) {
+    /**
+     * Checks the current user (if there is one), and sets response properties accordingly
+     * @param request Servlet request
+     * @param response Servlet response
+     */
+    private void checkCurrentUser(HttpServletRequest request, HttpServletResponse response, ErrorsRequest errorsRequest) {
+        
+        if (ShibbolethUtil.isUserLoggedIn(request)) {
+            String uidFromShib = ShibbolethUtil.getLoggedInUser(request);
             // User already logged in
             UserGenerator ug = (UserGenerator) this.getServletContext().getAttribute("ams2DbConnection");
-            if(false){ // (ug.isExistingUserName(uidFromShib)){
-                // User already logged in and registered
-                return true;
-            } else{
+            if (ug.isExistingUserName(uidFromShib)) {
+                // User already logged in and registered. Should not register again
+                ErrorRequest errorRequest = new ErrorRequest();
+                errorRequest.setErrorFormFieldLabel("Username");
+                errorRequest.setErrorMessage("User is already registered in database");
+                errorRequest.setErrorValue(uidFromShib);
+                errorRequest.setErrorException(null);
+                errorRequest.setErrorType("USER_REREGISTER");
+                errorRequest.setErrorRecoverable(true);
+                errorsRequest.setErrorFromBrowser(true);
+                errorsRequest.addError(errorRequest);
+                return;
+            } else {
                 // Try to pre-fill the form
-                AuthenticationContext context =  AuthenticationContextHolder.get(request);
-                AuthAttributes attributes = context.getAuthPrincipal().getAttribues();
-                for(String id:attributes.getIDs()){
-                    request.setAttribute("att_"+id, attributes.get(id));
-                }
+
+                request.setAttribute("uid", uidFromShib);
+
+                AuthenticationContext context = AuthenticationContextHolder.get(request);
+                SihbbolethRegistrationUser shibRegUser = new SihbbolethRegistrationUser(context);
+                shibRegUser.setAttributesFromShibbolethContext();
             }
         }
-        return false;
     }
 
     /** 
@@ -60,11 +78,21 @@ public class RrsRegis extends HttpServlet {
      * @param request servlet request
      * @param response servlet response
      */
-    public void dispatchServlet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/page/regis2.jsp");
-        view.forward(request, response);
+    public void dispatchServlet(HttpServletRequest request, HttpServletResponse response, ErrorsRequest errorsRequest) throws ServletException, IOException {
+        if (errorsRequest.getSize() <= 0) {
+            RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/page/regis2.jsp");
+            view.forward(request, response);
+        } else {
+            errorsRequest.setErrorsHtmlTable();
+            String htmlErrorTable = errorsRequest.getErrorsHtmlTable();
+            request.setAttribute("htmlErrorTable", htmlErrorTable);
 
+            RequestDispatcher view = request.getRequestDispatcher(
+                    errorsRequest.isErrorFromBrowser()
+                    ? "/WEB-INF/view/error/errorBrowser.jsp"
+                    : "/WEB-INF/view/error/errorUnknown.jsp");
+            view.forward(request, response);
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
