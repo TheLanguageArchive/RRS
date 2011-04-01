@@ -39,7 +39,8 @@
     </context-param -->
     <context-param>
         <description>Prefix for http link to nodeId e.g.:
-        /corpus1.mpi.nl/ds/imdi_browser?openpath=MPI177915%23</description>
+        /corpus1.mpi.nl/ds/imdi_browser?openpath=MPI177915%23
+        </description>
         <param-name>OPENPATH_PREFIX</param-name>
         <param-value>http://corpus1.mpi.nl/ds/imdi_browser?openpath=</param-value>
     </context-param>
@@ -80,10 +81,23 @@
     </listener>
     <!-- End SHHAA authentication filter -->
 
+
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>/WEB-INF/spring-rrs-auth.xml</param-value>
+    </context-param>
+
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
     <listener>
         <description>Context listener</description>
         <listener-class>nl.mpi.rrs.RrsContextListener</listener-class>
     </listener>
+
+
+
     <servlet>
         <servlet-name>RRSServlet</servlet-name>
         <servlet-class>nl.mpi.rrs.controller.RrsServlet</servlet-class>
