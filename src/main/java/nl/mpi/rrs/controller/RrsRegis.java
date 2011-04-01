@@ -12,8 +12,9 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import nl.mpi.rrs.model.errors.ErrorRequest;
 import nl.mpi.rrs.model.errors.ErrorsRequest;
-import nl.mpi.rrs.model.user.SihbbolethRegistrationUser;
+import nl.mpi.rrs.model.user.shibboleth.SihbbolethRegistrationUser;
 import nl.mpi.rrs.model.user.UserGenerator;
+import nl.mpi.rrs.model.utilities.AuthenticationUtility;
 import nl.mpi.rrs.model.utilities.ShibbolethUtil;
 //import javax.servlet.RequestDispatcher;
 
@@ -44,9 +45,9 @@ public class RrsRegis extends HttpServlet {
      * @param response Servlet response
      */
     private void checkCurrentUser(HttpServletRequest request, HttpServletResponse response, ErrorsRequest errorsRequest) {
-        
-        if (ShibbolethUtil.isUserLoggedIn(request)) {
-            String uidFromShib = ShibbolethUtil.getLoggedInUser(request);
+        AuthenticationUtility authUtil = new ShibbolethUtil();
+        if (authUtil.isUserLoggedIn(request)) {
+            String uidFromShib = authUtil.getLoggedInUser(request);
             // User already logged in
             UserGenerator ug = (UserGenerator) this.getServletContext().getAttribute("ams2DbConnection");
             if (ug.isExistingUserName(uidFromShib)) {
@@ -66,9 +67,7 @@ public class RrsRegis extends HttpServlet {
 
                 request.setAttribute("uid", uidFromShib);
 
-                AuthenticationContext context = AuthenticationContextHolder.get(request);
-                SihbbolethRegistrationUser shibRegUser = new SihbbolethRegistrationUser(context);
-                shibRegUser.setAttributesFromShibbolethContext();
+                authUtil.createRegistrationUser(request);
             }
         }
     }

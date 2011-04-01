@@ -2,10 +2,11 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package nl.mpi.rrs.model.user;
+package nl.mpi.rrs.model.user.shibboleth;
 
 import de.mpg.aai.shhaa.context.AuthenticationContext;
 import de.mpg.aai.shhaa.model.AuthAttributes;
+import nl.mpi.rrs.model.user.RegistrationUser;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 

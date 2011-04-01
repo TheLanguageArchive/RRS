@@ -19,6 +19,4 @@ public class RrsGeneralException extends RuntimeException{
     public RrsGeneralException(String message) {
         super(message);
     }
-
-    
 }

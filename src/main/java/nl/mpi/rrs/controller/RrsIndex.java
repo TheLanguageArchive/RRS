@@ -175,7 +175,7 @@ public class RrsIndex extends HttpServlet {
 
 
         } else {
-            if(ShibbolethUtil.isUserLoggedIn(request)){
+            if(new ShibbolethUtil().isUserLoggedIn(request)){
                 logger.debug("RrsIndex: call index.jsp");
 
                 RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/page/index.jsp");
