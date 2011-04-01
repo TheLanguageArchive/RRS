@@ -84,10 +84,11 @@
 
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>/WEB-INF/spring-rrs-auth.xml</param-value>
+        <param-value>/WEB-INF/spring-rrs-auth-test.xml</param-value>
     </context-param>
 
     <listener>
+        <description>Spring framework context loader listener</description>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
 
