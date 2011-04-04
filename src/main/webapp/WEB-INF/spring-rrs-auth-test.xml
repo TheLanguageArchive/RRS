@@ -6,7 +6,7 @@
 <beans>
 
     <bean id="authenticationUtility" class="nl.mpi.rrs.model.utilities.DummyAuthenticationUtility">
-        <property name="loggedIn" value="true" />
+        <property name="loggedIn" value="false" />
         <property name="firstName" value="John"/>
         <property name="lastName" value="Doe"/>
         <property name="userName" value="john.doe@example.com"/>

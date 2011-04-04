@@ -1,39 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <ROOT>
-<shhaa>
+    <shhaa>
 
         <!-- shib param you don't need to change -->
         <webapp>
-                <module>true</module>
+            <module>true</module>
         </webapp>
 
         <!-- shib param you don't need to change -->
         <authentication>
-                <shibheader>
-                        <username>eduPersonPrincipalName</username>
-                        <session>Shib-Session-ID</session>
-                        <idp>Shib-Identity-Provider</idp>
-                        <timestamp>Shib-Authentication-Instant</timestamp>
-                </shibheader>
-                <fallback>
-                        <username>anonymous</username>
-                </fallback>
-                <sso
-action="lI">http://lux16.mpi.nl/Shibboleth.sso/Login</sso>
-                <slo
-action="lO">http://lux16.mpi.nl/Shibboleth.sso/Logout</slo>
+            <shibheader>
+                <username>eduPersonPrincipalName</username>
+                <session>Shib-Session-ID</session>
+                <idp>Shib-Identity-Provider</idp>
+                <timestamp>Shib-Authentication-Instant</timestamp>
+            </shibheader>
+            <fallback>
+                <username>anonymous</username>
+            </fallback>
+            <sso action="lI">http://lux16.mpi.nl/Shibboleth.sso/DS</sso>
+            <slo action="lO">http://lux16.mpi.nl/Shibboleth.sso/Logout</slo>
         </authentication>
 
         <!-- shib params you don't need to change -->
         <composition action="rF">
-                <shibheader>
-                        <attribute>eduPersonAffiliation</attribute>
-                        <attribute>eduPersonEntitlement</attribute>
-                        <attribute>mail</attribute>
-                        <attribute>ou</attribute>
-                        <attribute>o</attribute>
-                </shibheader>
+            <shibheader>
+                <attribute>eduPersonAffiliation</attribute>
+                <attribute>eduPersonEntitlement</attribute>
+                <attribute>mail</attribute>
+                <attribute>ou</attribute>
+                <attribute>o</attribute>
+            </shibheader>
         </composition>
 
         <!-- pages that require log in 
@@ -43,27 +41,28 @@ action="lO">http://lux16.mpi.nl/Shibboleth.sso/Logout</slo>
         <location  target="/view/page/index_2.jsp" />
         <location  target="/WEB-INF/view/page/index_2.jsp" />
         -->
-        <authorization>                
-                <location  target="/RrsIndex2" />
+        <authorization>
+            <location  target="/RrsIndex2" />
+            <location  target="/RrsLogin" />
         </authorization>
 
 
         <handler>
-                <ignore> <!-- pages/resources that don't need a log in to be accessed -->
-                        <location target="/include/*" />
-                        <location target="/view/page/regis*.jsp" />
-                        <location target="/view/page/email*.jsp" />
-                        <location target="/view/page/dobes*.jsp" />
-                        <location target="/view/error/*.jsp" />
-                        <location target="/view/page/index.jsp" />
-                </ignore>
+            <ignore> <!-- pages/resources that don't need a log in to be accessed -->
+                <location target="/include/*" />
+                <location target="/view/page/regis*.jsp" />
+                <location target="/view/page/email*.jsp" />
+                <location target="/view/page/dobes*.jsp" />
+                <location target="/view/error/*.jsp" />
+                <location target="/view/page/index.jsp" />
+            </ignore>
 
         <!-- configures the view-control targets -->
-        <pages>
-            <denied action="dD">/index.jsp</denied> <!-- error page for log in denied/erroneous -->
-        </pages>
+            <pages>
+                <denied action="dD">/index.jsp</denied> <!-- error page for log in denied/erroneous -->
+            </pages>
 
         </handler>
 
-</shhaa>
+    </shhaa>
 </ROOT>

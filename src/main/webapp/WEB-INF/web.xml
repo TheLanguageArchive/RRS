@@ -132,6 +132,10 @@
         <servlet-name>RrsDoRegisEmailCheck</servlet-name>
         <servlet-class>nl.mpi.rrs.controller.RrsDoRegisEmailCheck</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>RrsLogin</servlet-name>
+        <servlet-class>nl.mpi.rrs.controller.RrsLogin</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>RRSServlet</servlet-name>
         <url-pattern>/Rrs.do</url-pattern>
@@ -163,6 +167,10 @@
     <servlet-mapping>
         <servlet-name>RrsDoRegisEmailCheck</servlet-name>
         <url-pattern>/RrsRegisEmailCheck.do</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RrsLogin</servlet-name>
+        <url-pattern>/RrsLogin</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
