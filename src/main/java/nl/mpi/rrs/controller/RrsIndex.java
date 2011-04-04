@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.Calendar;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -20,6 +21,7 @@ import nl.mpi.rrs.model.corpusdb.ImdiNode;
 import nl.mpi.rrs.model.date.PulldownGenerator;
 import nl.mpi.rrs.model.errors.ErrorRequest;
 import nl.mpi.rrs.model.errors.ErrorsRequest;
+import nl.mpi.rrs.model.user.UserGenerator;
 import nl.mpi.rrs.model.utilities.AuthenticationUtility;
 
 import org.apache.log4j.Logger;
@@ -33,7 +35,6 @@ import org.apache.log4j.Level;
 public class RrsIndex extends HttpServlet {
 
     private static Logger logger = Logger.getLogger(RrsIndex.class);
-
     private AuthenticationUtility authenticationUtility;
 
     @Override
@@ -43,7 +44,7 @@ public class RrsIndex extends HttpServlet {
         // spring configuration in spring-rrs-auth(-test).xml
         authenticationUtility = (AuthenticationUtility) getServletContext().getAttribute("authenticationUtility");
     }
-    
+
     /** Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
      * @param response servlet response
@@ -65,10 +66,10 @@ public class RrsIndex extends HttpServlet {
 
         ErrorsRequest errorsRequest = new ErrorsRequest();
         CorpusStructureDBImpl corpusDbConnection = (CorpusStructureDBImpl) this.getServletContext().getAttribute("corpusDbConnection");
-        if(createNodesTable(request, response, corpusDbConnection, errorsRequest, "")){
+        if (createNodesTable(request, response, corpusDbConnection, errorsRequest, "")) {
             createCalendarDropdowns(request);
         }
-        dispatchServlet(request, response, errorsRequest, authenticationUtility);
+        dispatchServlet(request, response, errorsRequest, getServletContext());
     }
 
     static boolean createNodesTable(HttpServletRequest request, HttpServletResponse response, CorpusStructureDBImpl corpusDbConnection, ErrorsRequest errorsRequest, String htmlSelectedNodesTable) throws IOException, ServletException {
@@ -138,7 +139,6 @@ public class RrsIndex extends HttpServlet {
         return true;
     }
 
-
     static void createCalendarDropdowns(HttpServletRequest request) {
         Calendar cal = Calendar.getInstance();
         PulldownGenerator datePullDownToday = new PulldownGenerator(cal);
@@ -159,7 +159,7 @@ public class RrsIndex extends HttpServlet {
         request.setAttribute("pulldownYearEnd", pulldownYearEnd);
     }
 
-    static void dispatchServlet(HttpServletRequest request, HttpServletResponse response, ErrorsRequest errorsRequest, AuthenticationUtility authUtil)
+    static void dispatchServlet(HttpServletRequest request, HttpServletResponse response, ErrorsRequest errorsRequest, ServletContext servletContext)  //, AuthenticationUtility authUtil)
             throws ServletException, IOException {
         logger.setLevel(Level.INFO);
 
@@ -182,19 +182,22 @@ public class RrsIndex extends HttpServlet {
                 view.forward(request, response);
                 return;
             }
-
-
         } else {
-            if(authUtil.isUserLoggedIn(request)){
-                logger.debug("RrsIndex: call index.jsp");
+            UserGenerator ug = (UserGenerator) servletContext.getAttribute("ams2DbConnection");
+            AuthenticationUtility authUtil = (AuthenticationUtility) servletContext.getAttribute("authenticationUtility");
 
-                RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/page/index.jsp");
-                view.forward(request, response);
-            } else {
+            assert ug != null;
+            assert authUtil != null;
 
+            if (authUtil.isUserLoggedIn(request) && ug.isExistingUserName(authUtil.getLoggedInUser(request)) ) {
                 logger.debug("RrsIndex: call index_2.jsp");
 
                 RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/page/index_2.jsp");
+                view.forward(request, response);
+            } else {
+                logger.debug("RrsIndex: call index.jsp");
+
+                RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/page/index.jsp");
                 view.forward(request, response);
             }
         }

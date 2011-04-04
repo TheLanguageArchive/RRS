@@ -6,6 +6,7 @@
 package nl.mpi.rrs.controller;
 
 import java.io.IOException;
+import javax.servlet.ServletContext;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -28,14 +29,6 @@ public class RrsIndex2 extends HttpServlet {
 
     private static Logger logger = Logger.getLogger(RrsIndex2.class);
     private AuthenticationUtility authenticationUtility;
-
-    @Override
-    public void init() throws ServletException {
-        super.init();
-        // Get authentication utility from servlet context. It is put there through
-        // spring configuration in spring-rrs-auth(-test).xml
-        authenticationUtility = (AuthenticationUtility) getServletContext().getAttribute("authenticationUtility");
-    }
 
     /** Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
@@ -65,7 +58,7 @@ public class RrsIndex2 extends HttpServlet {
             RrsIndex.createCalendarDropdowns(request);
         }
 
-        RrsIndex.dispatchServlet(request, response, errorsRequest, authenticationUtility);
+        RrsIndex.dispatchServlet(request, response, errorsRequest, getServletContext());
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
