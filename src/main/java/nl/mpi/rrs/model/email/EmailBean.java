@@ -11,12 +11,12 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import nl.mpi.rrs.model.utilities.RrsUtil;
-
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 public class EmailBean {
 
-    final static Logger logger = Logger.getLogger(EmailBean.class);
+    private final static Log logger = LogFactory.getLog(EmailBean.class);
     //defaults
     private final static String DEFAULT_CONTENT = "Unknown content";
     private final static String DEFAULT_SUBJECT = "Unknown subject";

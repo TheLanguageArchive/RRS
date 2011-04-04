@@ -3,8 +3,6 @@
  *
  * Created on February 7, 2007, 12:03 PM
  *
- * To change this template, choose Tools | Template Manager
- * and open the template in the editor.
  */
 
 package nl.mpi.rrs.model.corpusdb;
@@ -15,11 +13,13 @@ package nl.mpi.rrs.model.corpusdb;
  */
 import mpi.corpusstructure.NodeIdUtils;
 import mpi.corpusstructure.UnknownNodeException;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
-import org.apache.log4j.Logger;
 
 public class ImdiNode {
-    static Logger logger = Logger.getLogger(ImdiNode.class);
+    private final static Log logger = LogFactory.getLog(ImdiNode.class);
+
     private static String openPathPrefix;
     
     /** Creates a new instance of ImdiNode */

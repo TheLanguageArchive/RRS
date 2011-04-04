@@ -23,9 +23,8 @@ import nl.mpi.rrs.model.errors.ErrorRequest;
 import nl.mpi.rrs.model.errors.ErrorsRequest;
 import nl.mpi.rrs.model.user.UserGenerator;
 import nl.mpi.rrs.model.utilities.AuthenticationUtility;
-
-import org.apache.log4j.Logger;
-import org.apache.log4j.Level;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * Show Resource Request Form
@@ -34,16 +33,7 @@ import org.apache.log4j.Level;
  */
 public class RrsIndex extends HttpServlet {
 
-    private static Logger logger = Logger.getLogger(RrsIndex.class);
-    private AuthenticationUtility authenticationUtility;
-
-    @Override
-    public void init() throws ServletException {
-        super.init();
-        // Get authentication utility from servlet context. It is put there through
-        // spring configuration in spring-rrs-auth(-test).xml
-        authenticationUtility = (AuthenticationUtility) getServletContext().getAttribute("authenticationUtility");
-    }
+    private static Log logger = LogFactory.getLog(RrsIndex.class);
 
     /** Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
@@ -51,8 +41,6 @@ public class RrsIndex extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        logger.setLevel(Level.INFO);
-
         logger.info("RrsIndex: *************** start *****************");
         logger.info("getContextPath :" + request.getContextPath());
         logger.info("getPathInfo :" + request.getPathInfo());
@@ -161,8 +149,6 @@ public class RrsIndex extends HttpServlet {
 
     static void dispatchServlet(HttpServletRequest request, HttpServletResponse response, ErrorsRequest errorsRequest, ServletContext servletContext)  //, AuthenticationUtility authUtil)
             throws ServletException, IOException {
-        logger.setLevel(Level.INFO);
-
         if (errorsRequest.getSize() > 0) {
             if (errorsRequest.isErrorFromBrowser()) {
                 errorsRequest.setErrorsHtmlTable();

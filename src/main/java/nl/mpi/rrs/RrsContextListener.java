@@ -26,13 +26,13 @@ import nl.mpi.common.util.spring.SpringContextLoader;
 import nl.mpi.lat.ams.Constants;
 import nl.mpi.lat.auth.authentication.AuthenticationService;
 import nl.mpi.lat.auth.principal.PrincipalService;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
-import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
 
 public class RrsContextListener implements ServletContextListener {
 
-    static Logger logger = Logger.getLogger("RrsContextListener");
+    static Log logger = LogFactory.getLog(RrsContextListener.class);
     private String corpusJdbcURL;
     private String corpusUser;
     private String corpusPass;
@@ -64,12 +64,6 @@ public class RrsContextListener implements ServletContextListener {
         sc.setAttribute("emailHost", emailHost);
 
         String prefix = sc.getRealPath("/");
-        String file = sc.getInitParameter("LOG4J_PROPERTIES_FILE");
-        // if the log4j-init-file is not set, then no point in trying
-        if (file != null) {
-            PropertyConfigurator.configure(prefix + file);
-        }
-
 
         logger.debug("RrsContextListener contextInitialized");
 

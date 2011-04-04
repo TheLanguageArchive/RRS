@@ -32,11 +32,6 @@
         <param-name>EMAIL_ADDRESS_CORPMAN</param-name>
         <param-value>twan.goosen@mpi.nl</param-value>
     </context-param>
-    <!-- context-param>
-        <description>properties for the Log4j Logger</description>
-        <param-name>LOG4J_PROPERTIES_FILE</param-name>
-        <param-value>WEB-INF/properties1/log4j.properties</param-value>
-    </context-param -->
     <context-param>
         <description>Prefix for http link to nodeId e.g.:
         /corpus1.mpi.nl/ds/imdi_browser?openpath=MPI177915%23

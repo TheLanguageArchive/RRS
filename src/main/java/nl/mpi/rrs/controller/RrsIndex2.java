@@ -6,7 +6,6 @@
 package nl.mpi.rrs.controller;
 
 import java.io.IOException;
-import javax.servlet.ServletContext;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -15,10 +14,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import mpi.corpusstructure.CorpusStructureDBImpl;
 import nl.mpi.rrs.model.errors.ErrorsRequest;
-import nl.mpi.rrs.model.utilities.AuthenticationUtility;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
-import org.apache.log4j.Logger;
-import org.apache.log4j.Level;
 
 /**
  * Show Resource Request Form
@@ -27,16 +25,14 @@ import org.apache.log4j.Level;
  */
 public class RrsIndex2 extends HttpServlet {
 
-    private static Logger logger = Logger.getLogger(RrsIndex2.class);
-    
+    private final static Log logger = LogFactory.getLog(RrsIndex2.class);
+
     /** Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
      * @param response servlet response
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        logger.setLevel(Level.INFO);
-
         logger.info("RrsIndex2: *************** start *****************");
         logger.info("getContextPath :" + request.getContextPath());
         logger.info("getPathInfo :" + request.getPathInfo());

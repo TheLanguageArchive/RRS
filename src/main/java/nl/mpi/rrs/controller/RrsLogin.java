@@ -5,7 +5,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  *
@@ -13,7 +14,7 @@ import org.apache.log4j.Logger;
  */
 public class RrsLogin extends HttpServlet {
 
-    private final static Logger logger = Logger.getLogger(RrsLogin.class);
+    private final static Log logger = LogFactory.getLog(RrsLogin.class);
 
     /** Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request

@@ -17,11 +17,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
-import org.apache.log4j.Logger;
 
 public class ImdiNodeGenerator {
-    static Logger logger = Logger.getLogger(ImdiNodeGenerator.class);
+    private final static Log logger = LogFactory.getLog(ImdiNodeGenerator.class); 
     
     private static Connection con;
     
