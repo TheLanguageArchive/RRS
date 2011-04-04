@@ -28,8 +28,7 @@ import org.apache.log4j.Level;
 public class RrsIndex2 extends HttpServlet {
 
     private static Logger logger = Logger.getLogger(RrsIndex2.class);
-    private AuthenticationUtility authenticationUtility;
-
+    
     /** Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
      * @param response servlet response
