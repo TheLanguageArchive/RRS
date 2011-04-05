@@ -6,12 +6,12 @@
 <beans>
 
     <bean id="authenticationUtility" class="nl.mpi.rrs.model.utilities.DummyAuthenticationUtility">
-        <property name="loggedIn" value="false" />
+        <property name="loggedIn" value="true" />
         <property name="firstName" value="John"/>
         <property name="lastName" value="Doe"/>
         <property name="userName" value="john.doe@example.com"/>
         <property name="organization" value="Example Co."/>
-        <property name="email" value="john.doe@example.com"/>
+        <property name="email" value="t.goosen@gmail.com"/>
 
     </bean>
 
