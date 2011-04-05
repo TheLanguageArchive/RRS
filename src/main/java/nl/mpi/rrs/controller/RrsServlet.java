@@ -27,11 +27,11 @@ import nl.mpi.rrs.model.errors.ErrorsRequest;
 import nl.mpi.rrs.model.errors.RrsGeneralException;
 import nl.mpi.rrs.model.user.RequestUser;
 import nl.mpi.rrs.model.user.User;
-import nl.mpi.rrs.model.utilities.RrsUtil;
 import nl.mpi.rrs.model.ams.AmsServicesSingleton;
 import nl.mpi.rrs.model.ams.AmsLicense;
 import nl.mpi.rrs.model.user.UserGenerator;
 import nl.mpi.lat.fabric.NodeID;
+import nl.mpi.rrs.model.utilities.AuthenticationUtility;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -46,6 +46,15 @@ import org.apache.commons.logging.LogFactory;
 public class RrsServlet extends HttpServlet {
 
     private static Log logger = LogFactory.getLog(RrsServlet.class);
+    private AuthenticationUtility authenticationUtility;
+
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        // Get authentication utility from servlet context. It is put there through
+        // spring configuration in spring-rrs-auth(-test).xml
+        authenticationUtility = (AuthenticationUtility) getServletContext().getAttribute("authenticationUtility");
+    }
 
     /** Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
@@ -94,42 +103,39 @@ public class RrsServlet extends HttpServlet {
         RequestUser user = new RequestUser();
 
         // user.setUserName(request.getParameter("paramUserOldUserName"));
-        String uidFromShib = request.getRemoteUser();
-        logger.info("SHIB: uidFromShib: " + uidFromShib);
+//        String uidFromShib = request.getRemoteUser();
+//        logger.info("SHIB: uidFromShib: " + uidFromShib);
         /*
         if (uidFromShib.indexOf("@") != -1) {
-            uidFromShib = uidFromShib.substring(0, uidFromShib.indexOf("@"));
-            logger.info("SHIB: uidFromShib translated to: " + uidFromShib);
+        uidFromShib = uidFromShib.substring(0, uidFromShib.indexOf("@"));
+        logger.info("SHIB: uidFromShib translated to: " + uidFromShib);
         }
          */
-        
-        String userName = uidFromShib;
-        logger.info("Username: " + userName);
-        user.setUserName(userName);
-        userName = user.getUserName();
-        logger.info("Username: " + userName);
 
-        // TODO: check and init user-generator properly
-        if (RrsUtil.isNotEmpty(userName)) {
-            rrsRequest.setUserStatus("Existing user");
+        String userName = null;
 
-            // ams2 : using defaults : user-data provider and authentication service 
-            UserGenerator ug = (UserGenerator) this.getServletContext().getAttribute("ams2DbConnection");
-            
-            if (ug == null) {
-                ErrorRequest errorRequest = new ErrorRequest();
-                errorRequest.setErrorFormFieldLabel("AMS Database");
-                errorRequest.setErrorMessage("Server is down");
-                errorRequest.setErrorValue("");
-                errorRequest.setErrorException(null);
-                errorRequest.setErrorType("AMS_DATABASE_DOWN");
-                errorRequest.setErrorRecoverable(false);
-                errorsRequest.addError(errorRequest);
-                errorsRequest.setErrorRecoverable(false);
-                
-                dispatchServlet(request, response, errorsRequest, rrsRequest);
-                return;
-            } else {
+        UserGenerator ug = (UserGenerator) this.getServletContext().getAttribute("ams2DbConnection");
+        if (ug == null) {
+            ErrorRequest errorRequest = new ErrorRequest();
+            errorRequest.setErrorFormFieldLabel("AMS Database");
+            errorRequest.setErrorMessage("Server is down");
+            errorRequest.setErrorValue("");
+            errorRequest.setErrorException(null);
+            errorRequest.setErrorType("AMS_DATABASE_DOWN");
+            errorRequest.setErrorRecoverable(false);
+            errorsRequest.addError(errorRequest);
+            errorsRequest.setErrorRecoverable(false);
+
+            dispatchServlet(request, response, errorsRequest, rrsRequest);
+            return;
+        } else {
+            if (authenticationUtility.isUserLoggedIn(request)
+                    && ug.isExistingUserName(authenticationUtility.getLoggedInUser(request))) {
+
+                rrsRequest.setUserStatus("Existing user");
+                user.setUserName(authenticationUtility.getLoggedInUser(request));
+                userName = user.getUserName();
+                logger.info("Username: " + userName);
 
                 logger.info("using UserGenerator " + ug.getInfo());
 
@@ -138,83 +144,31 @@ public class RrsServlet extends HttpServlet {
                 String passWord = user.getPassword();
 
                 if (ug.isValidPasswordForUsername(userName, passWord)) {
-                */
-                    User userDB = ug.getUserInfoByUserName(userName);
-                    if (userDB != null) {
-                        userInfo.setFirstName(userDB.getFirstName());
-                        userInfo.setLastName(userDB.getLastName());
-                        userInfo.setEmail(userDB.getEmail());
-                        userInfo.setOrganization(userDB.getOrganization());
-                        userInfo.setUserName(userDB.getUserName());
-                        logger.info("** Got AMS2 connection for user: " + userInfo.getFullName());
-                        logger.debug("** name: " + userInfo.getLastName());
-                        logger.info("** email address: " + userInfo.getEmail());
+                 */
+                User userDB = ug.getUserInfoByUserName(userName);
+                if (userDB != null) {
+                    userInfo.setFirstName(userDB.getFirstName());
+                    userInfo.setLastName(userDB.getLastName());
+                    userInfo.setEmail(userDB.getEmail());
+                    userInfo.setOrganization(userDB.getOrganization());
+                    userInfo.setUserName(userDB.getUserName());
+                    logger.info("** Got AMS2 connection for user: " + userInfo.getFullName());
+                    logger.debug("** name: " + userInfo.getLastName());
+                    logger.info("** email address: " + userInfo.getEmail());
 
-                    } else {
-                        ErrorRequest errorRequest = new ErrorRequest();
-                        errorRequest.setErrorFormFieldLabel("Form field: Username");
-                        errorRequest.setErrorMessage("No info in database for username");
-                        errorRequest.setErrorValue(userName);
-                        errorRequest.setErrorException(null);
-                        errorRequest.setErrorType("INVALID_USER_ID");
-                        errorRequest.setErrorRecoverable(true);
-                        errorsRequest.addError(errorRequest);
-                        logger.debug("Invalid AMS username: " + userName);
-                    }
-
-                    /*
                 } else {
                     ErrorRequest errorRequest = new ErrorRequest();
-
-                    errorRequest.setErrorFormFieldLabel("Form field: Username/Password");
-                    errorRequest.setErrorMessage("Invalid username/password");
-                    errorRequest.setErrorValue(userName + "/XXXXXX");
+                    errorRequest.setErrorFormFieldLabel("Form field: Username");
+                    errorRequest.setErrorMessage("No info in database for username");
+                    errorRequest.setErrorValue(userName);
                     errorRequest.setErrorException(null);
-                    errorRequest.setErrorType("INVALID_USER_AUTH");
+                    errorRequest.setErrorType("INVALID_USER_ID");
                     errorRequest.setErrorRecoverable(true);
-
                     errorsRequest.addError(errorRequest);
-
-                    logger.debug("Invalid username/password: " + userName + "/ xxxxxx");
+                    logger.debug("Invalid AMS username: " + userName);
                 }
-                     */
             }
-
         }
-
-        /*
-        else {
-        InternetAddress[] addresses = null;
-        String userEmail = request.getParameter("paramUserNewEmail");
-        try {
-        boolean strict = true;
-        addresses = InternetAddress.parse(userEmail, strict);
-        } catch (AddressException ex) {
-        ErrorRequest errorRequest = new ErrorRequest();
-        errorRequest.setErrorFormFieldLabel("Form field: Email");
-        errorRequest.setErrorMessage("Invalid Email address (1)");
-        errorRequest.setErrorValue(userEmail);
-        errorRequest.setErrorException(null);
-        errorRequest.setErrorType("INVALID_USER_EMAIL");
-        errorRequest.setErrorRecoverable(true);
-        errorsRequest.addError(errorRequest);
-        logger.error("InternetAddress.parse(" + userEmail + ")", ex);
-        //ex.printStackTrace();
-        }
-        rrsRequest.setUserStatus("New user");
-        userInfo = new RequestUser();
-        userInfo.setAddress(request.getParameter("paramUserNewAddress"));
-        userInfo.setAffiliation(request.getParameter("paramUserNewAffiliation"));
-        userInfo.setEmail(request.getParameter("paramUserNewEmail"));
-        userInfo.setFax(request.getParameter("paramUserNewFax"));
-        userInfo.setFirstName(request.getParameter("paramUserNewFirstName"));
-        userInfo.setLastName(request.getParameter("paramUserNewLastName"));
-        userInfo.setMiddleName(request.getParameter("paramUserNewMiddleName"));
-        userInfo.setPhone(request.getParameter("paramUserNewPhone"));
-        userInfo.setStatus(request.getParameter("paramUserNewStatus"));
-        userInfo.setUserName(request.getParameter("paramUserNewUserName"));
-        }
-         */
 
         request.setAttribute("user", userInfo);
 
@@ -293,10 +247,11 @@ public class RrsServlet extends HttpServlet {
                         logger.info("Param values: " + values[i]);
                         ImdiNode imdiNode = new ImdiNode();
                         imdiNode.setImdiNodeIdWithPrefix(values[i]);
-                        
+
                         NodeID nodeId = AmsServicesSingleton.getInstance().getFabricSrv().newNodeID(imdiNode.getImdiNodeIdWithPrefix());
-                        logger.info(amsLicence.getLicenseInfo(userName, nodeId));
-                        
+                        assert userName != null : "Valid user logged in";
+                        logger.debug(amsLicence.getLicenseInfo(userName, nodeId));
+
                         //imdiNode.setImdiNodeName(corpusDbConnection.getNode(values[i]).getName());
                         //imdiNode.setImdiNodeFormat(corpusDbConnection.getNode(values[i]).getFormat());
 
@@ -306,45 +261,8 @@ public class RrsServlet extends HttpServlet {
 
                 }
             }
-        } 
-        
-        /*
-         else {
-            rrsRequest.setNodesEnteredInForm(true);
-
-            String maxFormNodeIdsString = (String) this.getServletContext().getAttribute("maxFormNodeIds");
-            logger.debug("maxFormNodeIdsString: " + maxFormNodeIdsString);
-            int maxFormNodeIds = 5;
-
-            try {
-                maxFormNodeIds = Integer.parseInt(maxFormNodeIdsString);
-            } catch (NumberFormatException ex) {
-                logger.error("RrsServlet:Integer.parseInt(" + maxFormNodeIdsString + ")", ex);
-            //ex.printStackTrace();
-            }
-
-            for (int i = 0; i < maxFormNodeIds; i++) {
-                String paramNodeId = "paramNodeId_" + i;
-                String nodeId = request.getParameter(paramNodeId);
-
-                if (nodeId != null) {
-
-                    ImdiNode imdiNode = new ImdiNode();
-                    imdiNode.setImdiNodeIdWithPrefix(nodeId);
-
-                    if (imdiNode.getImdiNodeIdWithPrefix() != null) {
-                        logger.debug("imdiNode.getImdiNodeIdWithPrefix() c: " + imdiNode.getImdiNodeIdWithPrefix());
-                        //imdiNode.setImdiNodeName(corpusDbConnection.getNode(imdiNode.getImdiNodeIdWithPrefix()).getName());
-
-                        imdiNodes.addImdiNode(imdiNode);
-                        logger.debug("imdiNode added: " + nodeId);
-                        logger.debug("imdiNode added prefix: " + imdiNode.getImdiNodeIdWithPrefix());
-                    }
-                }
-            }
         }
-        */
-        
+
         for (int i = 0; i < imdiNodes.getSize(); i++) {
             ImdiNode imdiNode = imdiNodes.getImdiNode(i);
             String nodeIdWithPrefix = imdiNode.getImdiNodeIdWithPrefix();
@@ -375,7 +293,7 @@ public class RrsServlet extends HttpServlet {
 
                     errorsRequest.addError(errorRequest);
 
-                //ex.printStackTrace();
+                    //ex.printStackTrace();
                 }
 
             }
@@ -428,7 +346,7 @@ public class RrsServlet extends HttpServlet {
                 return;
             }
 
-        //throw new nl.mpi.rrs.model.errors.RrsGeneralException(errorsRequest.getErrorsHtmlTable());
+            //throw new nl.mpi.rrs.model.errors.RrsGeneralException(errorsRequest.getErrorsHtmlTable());
         } else {
 
             EmailBean emailer = new EmailBean();
@@ -499,11 +417,11 @@ public class RrsServlet extends HttpServlet {
                 RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/error/error.jsp");
                 view.forward(request, response);
                 return;
-            /*
-            RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/error/errorUnknown.jsp");
-            view.forward(request, response);   
-            return;
-             */
+                /*
+                RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/error/errorUnknown.jsp");
+                view.forward(request, response);
+                return;
+                 */
 
             }
 

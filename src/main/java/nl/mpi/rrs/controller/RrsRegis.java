@@ -53,15 +53,15 @@ public class RrsRegis extends HttpServlet {
      */
     private void checkCurrentUser(HttpServletRequest request, HttpServletResponse response, ErrorsRequest errorsRequest) {
         if (authenticationUtility.isUserLoggedIn(request)) {
-            String uidFromShib = authenticationUtility.getLoggedInUser(request);
+            String uid = authenticationUtility.getLoggedInUser(request);
             // User already logged in
             UserGenerator ug = (UserGenerator) this.getServletContext().getAttribute("ams2DbConnection");
-            if (ug.isExistingUserName(uidFromShib)) {
+            if (ug.isExistingUserName(uid)) {
                 // User already logged in and registered. Should not register again
                 ErrorRequest errorRequest = new ErrorRequest();
                 errorRequest.setErrorFormFieldLabel("Username");
                 errorRequest.setErrorMessage("User is already registered in database");
-                errorRequest.setErrorValue(uidFromShib);
+                errorRequest.setErrorValue(uid);
                 errorRequest.setErrorException(null);
                 errorRequest.setErrorType("USER_REREGISTER");
                 errorRequest.setErrorRecoverable(true);
@@ -71,7 +71,7 @@ public class RrsRegis extends HttpServlet {
             } else {
                 // Try to pre-fill the form
 
-                request.setAttribute("uid", uidFromShib);
+                request.setAttribute("uid", uid);
 
                 RegistrationUser user = authenticationUtility.createRegistrationUser(request);
                 request.setAttribute("paramUserNewFirstName", user.getFirstName());

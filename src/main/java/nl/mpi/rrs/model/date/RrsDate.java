@@ -18,11 +18,12 @@ import java.util.Calendar;
 //import java.util.Date;
 
 import nl.mpi.rrs.model.utilities.RrsUtil;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
-import org.apache.log4j.Logger;
 
 public class RrsDate {
-    static Logger logger = Logger.getLogger(RrsDate.class);
+    static Log logger = LogFactory.getLog(RrsDate.class);
     
     public final static ArrayList<String>  MONTHS;
     static {
@@ -43,7 +44,7 @@ public class RrsDate {
     }
     
     
-    public static ArrayList<String> MONTHS_SHORT;
+    public final static ArrayList<String> MONTHS_SHORT;
     static {
         MONTHS_SHORT = new ArrayList();
         MONTHS_SHORT.add(null);

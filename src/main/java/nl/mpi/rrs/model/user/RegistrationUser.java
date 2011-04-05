@@ -16,23 +16,21 @@ public class RegistrationUser extends User {
     public RegistrationUser() {
         super();
     }
-    
     private static Log _log = LogFactory.getLog(RegistrationUser.class);
-    
     private String userRecordAsString;
     private String userInfo;
 
     public String createUserRecordAsString(String newLine, String delim) {
 
         String result =
-                this.removeDelim(this.getUserName(), delim) + delim +
-                this.removeDelim(this.getFirstName(), delim) + delim +
-                this.removeDelim(this.getLastName(), delim) + delim +
-                this.removeDelim(this.getEmail(), delim) + delim +
-                this.removeDelim(this.getOrganization(), delim) + delim +
-                this.encodePassword(this.removeDelim(this.getPassword(), delim)) + delim +
-                this.isDobesCocSigned() + delim +
-                this.removeDelim(this.getCreation_ts(), delim) + newLine;
+                this.removeDelim(this.getUserName(), delim) + delim
+                + this.removeDelim(this.getFirstName(), delim) + delim
+                + this.removeDelim(this.getLastName(), delim) + delim
+                + this.removeDelim(this.getEmail(), delim) + delim
+                + this.removeDelim(this.getOrganization(), delim) + delim
+                + this.encodePassword(this.removeDelim(this.getPassword(), delim)) + delim
+                + this.isDobesCocSigned() + delim
+                + this.removeDelim(this.getCreation_ts(), delim) + newLine;
 
         return result;
     }
@@ -46,12 +44,12 @@ public class RegistrationUser extends User {
     }
 
     public String createUserInfo(String newLine) {
-        String result = "User Id: " + this.getUserName() + newLine +
-                "Password: " + this.getPassword() + newLine +
-                "First Name: " + this.getFirstName() + newLine +
-                "Last Name: " + this.getLastName() + newLine +
-                "Organisation: " + this.getOrganization() + newLine +
-                "Email: " + this.getEmail();
+        String result = "User Id: " + this.getUserName() + newLine
+                + "Password: " + this.getPassword() + newLine
+                + "First Name: " + this.getFirstName() + newLine
+                + "Last Name: " + this.getLastName() + newLine
+                + "Organisation: " + this.getOrganization() + newLine
+                + "Email: " + this.getEmail();
 
         return result;
     }
@@ -99,7 +97,7 @@ public class RegistrationUser extends User {
                         _log.info("Invalid cryptic password: " + crypticPassword);
                         return null;
                     }
-                    
+
                 }
             }
         }
@@ -123,5 +121,21 @@ public class RegistrationUser extends User {
         }
 
         return result;
+    }
+
+    public boolean validate() {
+        return !isNullOrEmpty(getUserName())
+                && !isNullOrEmpty(getFirstName())
+                && !isNullOrEmpty(getLastName())
+                && !isNullOrEmpty(getEmail())
+                && !isNullOrEmpty(getOrganization());
+    }
+
+    private static boolean isNullOrEmpty(String string) {
+        if (string == null) {
+            return false;
+        } else {
+            return string.isEmpty();
+        }
     }
 }
