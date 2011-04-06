@@ -23,7 +23,6 @@
             <slo action="lO">http://lux16.mpi.nl/Shibboleth.sso/Logout</slo>
         </authentication>
 
-        <!-- shib params you don't need to change -->
         <composition action="rF">
             <shibheader>
                 <attribute>eduPersonAffiliation</attribute>
@@ -31,6 +30,17 @@
                 <attribute>mail</attribute>
                 <attribute>ou</attribute>
                 <attribute>o</attribute>
+
+                <attribute>email</attribute>
+                <attribute>givenName</attribute>
+                <attribute>cn</attribute>
+                <attribute>displayName</attribute>
+                <attribute>eduPersonNickname</attribute>
+                <attribute>surName</attribute>
+                <attribute>sn</attribute>
+                <attribute>organizationName</attribute>
+                <attribute>damlrPersonAffiliation</attribute>
+                <attribute>damlrPersonHostingInstitute</attribute>
             </shibheader>
         </composition>
 

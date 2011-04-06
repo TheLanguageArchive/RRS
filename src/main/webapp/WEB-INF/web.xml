@@ -167,6 +167,17 @@
         <servlet-name>RrsLogin</servlet-name>
         <url-pattern>/RrsLogin</url-pattern>
     </servlet-mapping>
+
+
+    <servlet>
+        <servlet-name>ShibTest</servlet-name>
+        <servlet-class>nl.mpi.rrs.model.utilities.ShibTest</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ShibTest</servlet-name>
+        <url-pattern>/ShibTest</url-pattern>
+    </servlet-mapping>
+
     <session-config>
         <session-timeout>
             30
