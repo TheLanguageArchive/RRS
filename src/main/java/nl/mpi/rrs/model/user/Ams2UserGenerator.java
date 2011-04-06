@@ -114,7 +114,8 @@ public class Ams2UserGenerator implements UserGenerator {
                 result = true;
             }
         } catch (DataSourceException ex) {
-            _log.info("username: " + userName + " does not exist!");
+            _log.error("Database error while trying to fetch user ",ex);
+            throw new RuntimeException("Database error while trying to fetch user "+userName,ex);
         }
 
         return result;
@@ -294,7 +295,7 @@ public class Ams2UserGenerator implements UserGenerator {
     /**
      * @param authSrv the authSrv to set
      */
-    public void setAuthSrv(AuthenticationService authSrv) {
+    final public void setAuthSrv(AuthenticationService authSrv) {
         mAuthSrv = authSrv;
     }
 
@@ -308,7 +309,7 @@ public class Ams2UserGenerator implements UserGenerator {
     /**
      * @param pcplSrv the pcplSrv to set
      */
-    public void setPcplSrv(PrincipalService pcplSrv) {
+    final public void setPcplSrv(PrincipalService pcplSrv) {
         mPcplSrv = pcplSrv;
     }
 
