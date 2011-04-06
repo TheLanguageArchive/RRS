@@ -28,7 +28,6 @@ import nl.mpi.rrs.model.errors.RrsGeneralException;
 import nl.mpi.rrs.model.user.RequestUser;
 import nl.mpi.rrs.model.user.User;
 import nl.mpi.rrs.model.ams.AmsServicesSingleton;
-import nl.mpi.rrs.model.ams.AmsLicense;
 import nl.mpi.rrs.model.user.UserGenerator;
 import nl.mpi.lat.fabric.NodeID;
 import nl.mpi.rrs.model.utilities.AuthenticationUtility;
@@ -66,54 +65,60 @@ public class RrsServlet extends HttpServlet {
         RrsRequest rrsRequest = new RrsRequest();
         ErrorsRequest errorsRequest = new ErrorsRequest();
 
+        CorpusStructureDBImpl corpusDbConnection = initDbConnection(errorsRequest);
+        UserGenerator ug = initUserGenerator(errorsRequest);
+
+        if (ug != null && corpusDbConnection != null) {
+            initRequest(request, rrsRequest, ug, corpusDbConnection, errorsRequest);
+        }
+        dispatchServlet(request, response, errorsRequest, rrsRequest);
+    }
+
+    private void initRequest(HttpServletRequest request, RrsRequest rrsRequest, UserGenerator userGenerator, CorpusStructureDBImpl corpusDbConnection, ErrorsRequest errorsRequest) {
         String openPathPrefix = this.getServletContext().getInitParameter("OPENPATH_PREFIX");
         ImdiNode.setOpenPathPrefix(openPathPrefix);
         logger.debug("openPathPrefix: " + openPathPrefix);
 
-        //CorpusNodes.setDBCredentials();
-        //CorpusStructureDBImpl corpusDbConnection = CorpusNodes.csdb;
-        CorpusStructureDBImpl corpusDbConnection = (CorpusStructureDBImpl) this.getServletContext().getAttribute("corpusDbConnection");
+        RequestUser userInfo = initRequestUser(request, rrsRequest, userGenerator, errorsRequest);
+        if (userInfo != null) {
+            initRequestDates(request, rrsRequest, errorsRequest);
+            initRequestNodes(request, rrsRequest, userInfo, corpusDbConnection, errorsRequest);
 
+            rrsRequest.setRemarksOther(request.getParameter("paramRequestRemarksOther"));
+            rrsRequest.setPublicationAim(request.getParameter("paramRequestPublicationAim"));
+            rrsRequest.setResearchProject(request.getParameter("paramRequestResearchProject"));
+
+            request.setAttribute("rrsRequest", rrsRequest);
+        }
+    }
+
+    /**
+     *
+     * @param errorsRequest Collection to add to in case of error
+     * @return null if db connection is not present
+     */
+    private CorpusStructureDBImpl initDbConnection(ErrorsRequest errorsRequest) {
+        CorpusStructureDBImpl corpusDbConnection = (CorpusStructureDBImpl) this.getServletContext().getAttribute("corpusDbConnection");
         if (corpusDbConnection == null) {
             ErrorRequest errorRequest = new ErrorRequest();
-
             errorRequest.setErrorFormFieldLabel("Corpus Database");
             errorRequest.setErrorMessage("Server is down");
             errorRequest.setErrorValue("");
             errorRequest.setErrorException(null);
             errorRequest.setErrorType("CORPUS_DATABASE_DOWN");
             errorRequest.setErrorRecoverable(false);
-
             errorsRequest.addError(errorRequest);
             errorsRequest.setErrorRecoverable(false);
-
-            dispatchServlet(request, response, errorsRequest, rrsRequest);
-            return;
-
         }
+        return corpusDbConnection;
+    }
 
-        String emailAddressCorpman = (String) this.getServletContext().getAttribute("emailAddressCorpman");
-        request.setAttribute("emailAddressCorpman", emailAddressCorpman);
-
-        String emailHost = (String) this.getServletContext().getAttribute("emailHost");
-        request.setAttribute("emailHost", emailHost);
-
-        ImdiNodes imdiNodes = new ImdiNodes();
-        RequestUser userInfo = new RequestUser();
-        RequestUser user = new RequestUser();
-
-        // user.setUserName(request.getParameter("paramUserOldUserName"));
-//        String uidFromShib = request.getRemoteUser();
-//        logger.info("SHIB: uidFromShib: " + uidFromShib);
-        /*
-        if (uidFromShib.indexOf("@") != -1) {
-        uidFromShib = uidFromShib.substring(0, uidFromShib.indexOf("@"));
-        logger.info("SHIB: uidFromShib translated to: " + uidFromShib);
-        }
-         */
-
-        String userName = null;
-
+    /**
+     *
+     * @param errorsRequest Collection to add to in case of error
+     * @return null if user generator is not present
+     */
+    private UserGenerator initUserGenerator(ErrorsRequest errorsRequest) {
         UserGenerator ug = (UserGenerator) this.getServletContext().getAttribute("ams2DbConnection");
         if (ug == null) {
             ErrorRequest errorRequest = new ErrorRequest();
@@ -125,53 +130,61 @@ public class RrsServlet extends HttpServlet {
             errorRequest.setErrorRecoverable(false);
             errorsRequest.addError(errorRequest);
             errorsRequest.setErrorRecoverable(false);
-
-            dispatchServlet(request, response, errorsRequest, rrsRequest);
-            return;
-        } else {
-            if (authenticationUtility.isUserLoggedIn(request)
-                    && ug.isExistingUserName(authenticationUtility.getLoggedInUser(request))) {
-
-                rrsRequest.setUserStatus("Existing user");
-                user.setUserName(authenticationUtility.getLoggedInUser(request));
-                userName = user.getUserName();
-                logger.info("Username: " + userName);
-
-                logger.info("using UserGenerator " + ug.getInfo());
-
-                /*
-                user.setPassword(request.getParameter("paramUserOldPassword"));
-                String passWord = user.getPassword();
-
-                if (ug.isValidPasswordForUsername(userName, passWord)) {
-                 */
-                User userDB = ug.getUserInfoByUserName(userName);
-                if (userDB != null) {
-                    userInfo.setFirstName(userDB.getFirstName());
-                    userInfo.setLastName(userDB.getLastName());
-                    userInfo.setEmail(userDB.getEmail());
-                    userInfo.setOrganization(userDB.getOrganization());
-                    userInfo.setUserName(userDB.getUserName());
-                    logger.info("** Got AMS2 connection for user: " + userInfo.getFullName());
-                    logger.debug("** name: " + userInfo.getLastName());
-                    logger.info("** email address: " + userInfo.getEmail());
-
-                } else {
-                    ErrorRequest errorRequest = new ErrorRequest();
-                    errorRequest.setErrorFormFieldLabel("Form field: Username");
-                    errorRequest.setErrorMessage("No info in database for username");
-                    errorRequest.setErrorValue(userName);
-                    errorRequest.setErrorException(null);
-                    errorRequest.setErrorType("INVALID_USER_ID");
-                    errorRequest.setErrorRecoverable(true);
-                    errorsRequest.addError(errorRequest);
-                    logger.debug("Invalid AMS username: " + userName);
-                }
-            }
         }
+        return ug;
+    }
 
-        request.setAttribute("user", userInfo);
+    private RequestUser initRequestUser(HttpServletRequest request, RrsRequest rrsRequest, UserGenerator ug, ErrorsRequest errorsRequest) {
+        RequestUser userInfo = new RequestUser();
+        if (authenticationUtility.isUserLoggedIn(request) && ug.isExistingUserName(authenticationUtility.getLoggedInUser(request))) {
+            rrsRequest.setUserStatus("Existing user");
+            String userName = authenticationUtility.getLoggedInUser(request);
+            logger.info("Username: " + userName);
+            logger.info("using UserGenerator " + ug.getInfo());
+            /*
+            user.setPassword(request.getParameter("paramUserOldPassword"));
+            String passWord = user.getPassword();
+            if (ug.isValidPasswordForUsername(userName, passWord)) {
+             */
+            User userDB = ug.getUserInfoByUserName(userName);
+            if (userDB != null) {
+                userInfo.setFirstName(userDB.getFirstName());
+                userInfo.setLastName(userDB.getLastName());
+                userInfo.setEmail(userDB.getEmail());
+                userInfo.setOrganization(userDB.getOrganization());
+                userInfo.setUserName(userDB.getUserName());
+                logger.info("** Got AMS2 connection for user: " + userInfo.getFullName());
+                logger.debug("** name: " + userInfo.getLastName());
+                logger.info("** email address: " + userInfo.getEmail());
+            } else {
+                ErrorRequest errorRequest = new ErrorRequest();
+                errorRequest.setErrorFormFieldLabel("Form field: Username");
+                errorRequest.setErrorMessage("No info in database for username");
+                errorRequest.setErrorValue(userName);
+                errorRequest.setErrorException(null);
+                errorRequest.setErrorType("INVALID_USER_ID");
+                errorRequest.setErrorRecoverable(true);
+                errorsRequest.addError(errorRequest);
+                logger.debug("Invalid AMS username: " + userName);
+            }
+            request.setAttribute("user", userInfo);
+            rrsRequest.setUser(userInfo);
+            return userInfo;
+        } else {
+            ErrorRequest errorRequest = new ErrorRequest();
+            errorRequest.setErrorFormFieldLabel("Form field: Username");
+            errorRequest.setErrorMessage("No user is authenticated");
+            errorRequest.setErrorValue(rrsRequest.getUserStatus());
+            errorRequest.setErrorException(null);
+            errorRequest.setErrorType("USER_NOT_AUTHENTICATED");
+            errorRequest.setErrorRecoverable(true);
+            errorsRequest.addError(errorRequest);
+            logger.debug("No authenticated user");
+            return null;
+        }
+    }
 
+    private void initRequestDates(HttpServletRequest request, RrsRequest rrsRequest, ErrorsRequest errorsRequest) {
         RrsDate fromDate = new RrsDate();
         fromDate.setDay(request.getParameter("paramRequestFromDateDay"));
         fromDate.setMonth(request.getParameter("paramRequestFromDateMonth"));
@@ -179,20 +192,15 @@ public class RrsServlet extends HttpServlet {
         fromDate.setValue();
         if (!fromDate.isAValidDate()) {
             ErrorRequest errorRequest = new ErrorRequest();
-
             errorRequest.setErrorFormFieldLabel("Form field: Period From date");
             errorRequest.setErrorMessage("Invalid date");
             errorRequest.setErrorValue(fromDate.getValue());
             errorRequest.setErrorException(null);
             errorRequest.setErrorType("INVALID_DATE");
             errorRequest.setErrorRecoverable(true);
-
             errorsRequest.addError(errorRequest);
-
             logger.debug("Invalid date: " + fromDate.getValue());
         }
-
-
         RrsDate toDate = new RrsDate();
         toDate.setDay(request.getParameter("paramRequestToDateDay"));
         toDate.setMonth(request.getParameter("paramRequestToDateMonth"));
@@ -200,45 +208,33 @@ public class RrsServlet extends HttpServlet {
         toDate.setValue();
         if (!toDate.isAValidDate()) {
             ErrorRequest errorRequest = new ErrorRequest();
-
             errorRequest.setErrorFormFieldLabel("Form field: Period To date");
             errorRequest.setErrorMessage("Invalid date");
             errorRequest.setErrorValue(toDate.getValue());
             errorRequest.setErrorException(null);
             errorRequest.setErrorType("INVALID_DATE");
             errorRequest.setErrorRecoverable(true);
-
             errorsRequest.addError(errorRequest);
-
             logger.debug("Invalid date: " + toDate.getValue());
         }
-
         if (fromDate.isLaterThan(toDate.toCalendar())) {
             ErrorRequest errorRequest = new ErrorRequest();
-
             errorRequest.setErrorFormFieldLabel("Form field: Period From/To");
             errorRequest.setErrorMessage("Invalid period");
             errorRequest.setErrorValue(fromDate.getValue() + " - " + toDate.getValue());
             errorRequest.setErrorException(null);
             errorRequest.setErrorType("INVALID_DATE_PERIOD");
             errorRequest.setErrorRecoverable(true);
-
             errorsRequest.addError(errorRequest);
-
             logger.debug("Invalid period: " + fromDate.getValue() + " - " + toDate.getValue());
         }
-
-        rrsRequest.setUser(userInfo);
         rrsRequest.setFromDate(fromDate);
         rrsRequest.setToDate(toDate);
+    }
 
-        rrsRequest.setRemarksOther(request.getParameter("paramRequestRemarksOther"));
-        rrsRequest.setPublicationAim(request.getParameter("paramRequestPublicationAim"));
-        rrsRequest.setResearchProject(request.getParameter("paramRequestResearchProject"));
-
+    private void initRequestNodes(HttpServletRequest request, RrsRequest rrsRequest, RequestUser userInfo, CorpusStructureDBImpl corpusDbConnection, ErrorsRequest errorsRequest) {
         String[] values = request.getParameterValues("nodeid");
-
-        AmsLicense amsLicence = new AmsLicense();
+        ImdiNodes imdiNodes = new ImdiNodes();
         if (values != null) {
             rrsRequest.setNodesEnteredInForm(false);
             if (values.length > 0) {
@@ -247,58 +243,47 @@ public class RrsServlet extends HttpServlet {
                         logger.info("Param values: " + values[i]);
                         ImdiNode imdiNode = new ImdiNode();
                         imdiNode.setImdiNodeIdWithPrefix(values[i]);
-
                         NodeID nodeId = AmsServicesSingleton.getInstance().getFabricSrv().newNodeID(imdiNode.getImdiNodeIdWithPrefix());
-                        assert userName != null : "Valid user logged in";
-                        logger.debug(amsLicence.getLicenseInfo(userName, nodeId));
+                        assert authenticationUtility.isUserLoggedIn(request) : "Valid user logged in";
+                        
+                        //AmsLicense amsLicence = new AmsLicense();
+                        //logger.debug(amsLicence.getLicenseInfo(userInfo.getUserName(), nodeId));
 
                         //imdiNode.setImdiNodeName(corpusDbConnection.getNode(values[i]).getName());
                         //imdiNode.setImdiNodeFormat(corpusDbConnection.getNode(values[i]).getFormat());
-
                         imdiNodes.addImdiNode(imdiNode);
-
                     }
-
                 }
             }
         }
-
+        
         for (int i = 0; i < imdiNodes.getSize(); i++) {
             ImdiNode imdiNode = imdiNodes.getImdiNode(i);
             String nodeIdWithPrefix = imdiNode.getImdiNodeIdWithPrefix();
             if (nodeIdWithPrefix != null) {
-
                 try {
                     imdiNode.setImdiNodeName(corpusDbConnection.getNode(nodeIdWithPrefix).getName());
                     imdiNode.setImdiNodeFormat(corpusDbConnection.getNode(nodeIdWithPrefix).getFormat());
                     imdiNode.setImdiNodeUrl(corpusDbConnection.getNamePath(nodeIdWithPrefix));
                     imdiNode.setImdiNodeUri(corpusDbConnection.getObjectURI(nodeIdWithPrefix).toString());
-
                     imdiNodes.setImdiNode(i, imdiNode);
-
                 } catch (UnknownNodeException ex) {
                     ErrorRequest errorRequest = new ErrorRequest();
-
                     if (rrsRequest.isNodesEnteredInForm()) {
                         errorRequest.setErrorFormFieldLabel("Form field: Node Id");
                     } else {
                         errorRequest.setErrorFormFieldLabel("Browser selected: Node Id");
                     }
-
                     errorRequest.setErrorValue(nodeIdWithPrefix);
                     errorRequest.setErrorMessage("Invalid NodeId");
                     errorRequest.setErrorException("mpi.corpusstructure.UnknownNodeException");
                     errorRequest.setErrorType("INVALID_NODE_ID");
                     errorRequest.setErrorRecoverable(true);
-
                     errorsRequest.addError(errorRequest);
-
                     //ex.printStackTrace();
                 }
-
             }
         }
-
         if (imdiNodes.getSize() > 0) {
             rrsRequest.setImdiNodes(imdiNodes);
         } else {
@@ -309,14 +294,8 @@ public class RrsServlet extends HttpServlet {
             errorRequest.setErrorException(null);
             errorRequest.setErrorType("EMPTY_NODE_ID");
             errorRequest.setErrorRecoverable(true);
-
             errorsRequest.addError(errorRequest);
         }
-
-        request.setAttribute("rrsRequest", rrsRequest);
-
-        dispatchServlet(request, response, errorsRequest, rrsRequest);
-        return;
     }
 
     private void dispatchServlet(HttpServletRequest request, HttpServletResponse response, ErrorsRequest errorsRequest, RrsRequest rrsRequest)
@@ -325,110 +304,80 @@ public class RrsServlet extends HttpServlet {
         logger.debug("errorsRequest.getSize(): " + errorsRequest.getSize());
 
         if (errorsRequest.getSize() > 0) {
-
+            RequestDispatcher view;
             if (errorsRequest.isErrorRecoverable()) {
-
                 errorsRequest.setErrorsHtmlTable();
-
                 String htmlErrorTable = errorsRequest.getErrorsHtmlTable();
-
                 request.setAttribute("htmlErrorTable", htmlErrorTable);
-
-                logger.info("errorsRequest.isErrorRecoverable:" + errorsRequest.isErrorRecoverable() + " call view/error/error.jsp");
-                RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/error/error.jsp");
-                view.forward(request, response);
-                return;
-
+                logger.info("errorsRequest.isErrorRecoverable: call view/error/error.jsp");
+                view = request.getRequestDispatcher("/WEB-INF/view/error/error.jsp");
             } else {
-                logger.info("NOT errorsRequest.isErrorRecoverable:" + errorsRequest.isErrorRecoverable() + " call view/error/errorUnknown.jsp");
-                RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/error/errorUnknown.jsp");
-                view.forward(request, response);
-                return;
+                logger.info("NOT errorsRequest.isErrorRecoverable: call view/error/errorUnknown.jsp");
+                view = request.getRequestDispatcher("/WEB-INF/view/error/errorUnknown.jsp");
             }
-
-            //throw new nl.mpi.rrs.model.errors.RrsGeneralException(errorsRequest.getErrorsHtmlTable());
-        } else {
-
-            EmailBean emailer = new EmailBean();
-
-            rrsRequest.setEmailContent();
-
-            emailer.setSubject("Resource Request System");
-
-            emailer.setContent(rrsRequest.getEmailContent());
-            String corpmanEmail = (String) this.getServletContext().getAttribute("emailAddressCorpman");
-            String emailHost = (String) this.getServletContext().getAttribute("emailHost");
-            String userEmail = rrsRequest.getUser().getEmail();
-
-            emailer.setTo(corpmanEmail);
-            emailer.setCc(userEmail);
-            emailer.setFrom(corpmanEmail);
-            emailer.setSmtpHost(emailHost);
-            logger.info("From: " + corpmanEmail);
-
-
-            try {
-                emailer.sendMessage();
-            } catch (javax.mail.SendFailedException e) {
-                ErrorRequest errorRequest = new ErrorRequest();
-
-                errorRequest.setErrorFormFieldLabel("Form field: Email");
-                errorRequest.setErrorMessage("Invalid Email address");
-                errorRequest.setErrorValue(userEmail);
-                errorRequest.setErrorException(null);
-                errorRequest.setErrorType("INVALID_USER_EMAIL");
-                errorRequest.setErrorRecoverable(true);
-
-                errorsRequest.addError(errorRequest);
-
-                errorsRequest.setErrorsHtmlTable();
-
-                String htmlErrorTable = errorsRequest.getErrorsHtmlTable();
-
-                request.setAttribute("htmlErrorTable", htmlErrorTable);
-
-                logger.error("RrsServlet javax.mail.SendFailedException: can't send email", e);
-
-                RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/error/error.jsp");
-                view.forward(request, response);
-                return;
-
-            } catch (java.lang.Exception e) {
-                // catch all other possible email errors
-                ErrorRequest errorRequest = new ErrorRequest();
-
-                errorRequest.setErrorFormFieldLabel("Form field: Email");
-                errorRequest.setErrorMessage("Invalid Email address (3)");
-                errorRequest.setErrorValue(userEmail);
-                errorRequest.setErrorException(null);
-                errorRequest.setErrorType("INVALID_USER_EMAIL");
-                errorRequest.setErrorRecoverable(true);
-
-                errorsRequest.addError(errorRequest);
-
-                errorsRequest.setErrorsHtmlTable();
-
-                String htmlErrorTable = errorsRequest.getErrorsHtmlTable();
-
-                request.setAttribute("htmlErrorTable", htmlErrorTable);
-
-                logger.error("RrsServlet java.lang.Exception: can't send email", e);
-
-                RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/error/error.jsp");
-                view.forward(request, response);
-                return;
-                /*
-                RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/error/errorUnknown.jsp");
-                view.forward(request, response);
-                return;
-                 */
-
-            }
-
-            logger.info("RrsServlet: No Exception");
-            RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/page/result.jsp");
             view.forward(request, response);
+            return;
+        } else {
+            if (sendMail(rrsRequest, request, errorsRequest, response)) {
+                logger.debug("RrsServlet: No Exception");
+                RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/page/result.jsp");
+                view.forward(request, response);
+            }
         }
+    }
+
+    private boolean sendMail(RrsRequest rrsRequest, HttpServletRequest request, ErrorsRequest errorsRequest, HttpServletResponse response) throws ServletException, IOException {
+        EmailBean emailer = new EmailBean();
+        rrsRequest.setEmailContent();
+        emailer.setSubject("Resource Request System");
+        emailer.setContent(rrsRequest.getEmailContent());
+        String corpmanEmail = (String) this.getServletContext().getAttribute("emailAddressCorpman");
+        String emailHost = (String) this.getServletContext().getAttribute("emailHost");
+        String userEmail = rrsRequest.getUser().getEmail();
+        request.setAttribute("emailAddressCorpman", corpmanEmail);
+        request.setAttribute("emailHost", emailHost);
+        emailer.setTo(corpmanEmail);
+        emailer.setCc(userEmail);
+        emailer.setFrom(corpmanEmail);
+        emailer.setSmtpHost(emailHost);
+        logger.info("From: " + corpmanEmail);
+        try {
+            emailer.sendMessage();
+        } catch (javax.mail.SendFailedException e) {
+            ErrorRequest errorRequest = new ErrorRequest();
+            errorRequest.setErrorFormFieldLabel("Form field: Email");
+            errorRequest.setErrorMessage("Invalid Email address");
+            errorRequest.setErrorValue(userEmail);
+            errorRequest.setErrorException(null);
+            errorRequest.setErrorType("INVALID_USER_EMAIL");
+            errorRequest.setErrorRecoverable(true);
+            errorsRequest.addError(errorRequest);
+            errorsRequest.setErrorsHtmlTable();
+            String htmlErrorTable = errorsRequest.getErrorsHtmlTable();
+            request.setAttribute("htmlErrorTable", htmlErrorTable);
+            logger.error("RrsServlet javax.mail.SendFailedException: can't send email", e);
+            RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/error/error.jsp");
+            view.forward(request, response);
+            return false;
+        } catch (java.lang.Exception e) {
+            // catch all other possible email errors
+            ErrorRequest errorRequest = new ErrorRequest();
+            errorRequest.setErrorFormFieldLabel("Form field: Email");
+            errorRequest.setErrorMessage("Invalid Email address (3)");
+            errorRequest.setErrorValue(userEmail);
+            errorRequest.setErrorException(null);
+            errorRequest.setErrorType("INVALID_USER_EMAIL");
+            errorRequest.setErrorRecoverable(true);
+            errorsRequest.addError(errorRequest);
+            errorsRequest.setErrorsHtmlTable();
+            String htmlErrorTable = errorsRequest.getErrorsHtmlTable();
+            request.setAttribute("htmlErrorTable", htmlErrorTable);
+            logger.error("RrsServlet java.lang.Exception: can't send email", e);
+            RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/error/error.jsp");
+            view.forward(request, response);
+            return false;
+        }
+        return true;
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

@@ -55,19 +55,45 @@ public class RrsDoRegis extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // ams2 : using defaults : user-data provider and authentication service 
+        RegisFileIO regisFileIO = initRegisFileIO();
+        RegistrationUser userInfo = initUserInfo(request);
+
+        if (userInfo.validate()) {
+            RequestDispatcher view = doRegistration(request, response, regisFileIO, userInfo);
+            view.forward(request, response);
+        } else {
+            request.setAttribute("rrsRegisErrorMessage", "One or more values are incorrect or missing from the registration form");
+
+            ErrorRequest errorRequest = new ErrorRequest();
+
+            errorRequest.setErrorFormFieldLabel("");
+            errorRequest.setErrorMessage("One or more values are missing from the registration form");
+            errorRequest.setErrorValue("");
+            errorRequest.setErrorException(null);
+            errorRequest.setErrorType("FORM_DATA_INVALID");
+            errorRequest.setErrorRecoverable(true);
+
+            errorsRequest.addError(errorRequest);
+
+            logger.debug("UserInfo invalid");
+            RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/page/regis2.jsp");
+            view.forward(request, response);
+        }
+    }
+
+    private RegisFileIO initRegisFileIO() {
+        // ams2 : using defaults : user-data provider and authentication service
         String rrsRegistrationFileName = this.getServletContext().getInitParameter("REGISTRATION_FILENAME");
-
-
         RegisFileIO regisFileIO = (RegisFileIO) this.getServletContext().getAttribute("regisFileIO");
         if (regisFileIO == null) {
             logger.error("RegisFileIO is NOT initialized during deploy.");
 
             regisFileIO = new RegisFileIO(rrsRegistrationFileName);
         }
+        return regisFileIO;
+    }
 
-        UserGenerator ug = (UserGenerator) this.getServletContext().getAttribute("ams2DbConnection");
-
+    private RegistrationUser initUserInfo(HttpServletRequest request) {
         RegistrationUser userInfo = new RegistrationUser();
         if (authenticationUtility.isUserLoggedIn(request)) {
             String uid = authenticationUtility.getLoggedInUser(request);
@@ -89,49 +115,32 @@ public class RrsDoRegis extends HttpServlet {
         request.setAttribute("paramUserNewLastName", userInfo.getLastName());
         request.setAttribute("paramUserNewEmail", userInfo.getEmail());
         request.setAttribute("paramUserNewOrganization", userInfo.getOrganization());
-        //request.setAttribute("paramUserNewPassword_1", request.getParameter("paramUserNewPassword_1"));
-        //request.setAttribute("paramUserNewPassword_2", request.getParameter("paramUserNewPassword_2"));
+        return userInfo;
+    }
 
-        if (!userInfo.validate()) {
-            request.setAttribute("rrsRegisErrorMessage", "One or more values are incorrect or missing from the registration form");
+    private RequestDispatcher doRegistration(HttpServletRequest request, HttpServletResponse response, RegisFileIO regisFileIO, RegistrationUser userInfo) throws IOException, ServletException {
+        String userId = userInfo.getUserName();
+
+        UserGenerator ug = (UserGenerator) this.getServletContext().getAttribute("ams2DbConnection");
+        if (ug.isExistingUserName(userId)) {
+
+            request.setAttribute("rrsRegisErrorMessage", "This User ID is already taken, please use a different one!");
 
             ErrorRequest errorRequest = new ErrorRequest();
 
-            errorRequest.setErrorFormFieldLabel("");
-            errorRequest.setErrorMessage("One or more values are missing from the registration form");
-            errorRequest.setErrorValue("");
+            errorRequest.setErrorFormFieldLabel("Form field: UserID");
+            errorRequest.setErrorMessage("This User ID is already taken, please use a different one!");
+            errorRequest.setErrorValue("UserID: " + userId);
             errorRequest.setErrorException(null);
-            errorRequest.setErrorType("FORM_DATA_INVALID");
+            errorRequest.setErrorType("EXISTING_USER_ID");
             errorRequest.setErrorRecoverable(true);
 
             errorsRequest.addError(errorRequest);
 
-            logger.debug("UserInfo invalid");
-            RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/page/regis2.jsp");
-            view.forward(request, response);
+            logger.debug("User ID is already taken: " + userId);
+            return request.getRequestDispatcher("/WEB-INF/view/page/regis2.jsp");
         } else {
-            String userId = userInfo.getUserName();
-
-            if (ug.isExistingUserName(userId)) {
-
-                request.setAttribute("rrsRegisErrorMessage", "This User ID is already taken, please use a different one!");
-
-                ErrorRequest errorRequest = new ErrorRequest();
-
-                errorRequest.setErrorFormFieldLabel("Form field: UserID");
-                errorRequest.setErrorMessage("This User ID is already taken, please use a different one!");
-                errorRequest.setErrorValue("UserID: " + userId);
-                errorRequest.setErrorException(null);
-                errorRequest.setErrorType("EXISTING_USER_ID");
-                errorRequest.setErrorRecoverable(true);
-
-                errorsRequest.addError(errorRequest);
-
-                logger.debug("User ID is already taken: " + userId);
-                RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/page/regis2.jsp");
-                view.forward(request, response);
-
-            } else if (regisFileIO.isRegistrationInFile(userInfo)) {
+            if (regisFileIO.isRegistrationInFile(userInfo)) {
                 request.setAttribute("rrsRegisErrorMessage", "This User ID is already reserved, please use a different one!");
 
                 ErrorRequest errorRequest = new ErrorRequest();
@@ -146,9 +155,7 @@ public class RrsDoRegis extends HttpServlet {
                 errorsRequest.addError(errorRequest);
 
                 logger.debug("User ID is already reserved: " + userId);
-                RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/page/regis2.jsp");
-                view.forward(request, response);
-
+                return request.getRequestDispatcher("/WEB-INF/view/page/regis2.jsp");
             } else {
                 request.setAttribute("user", userInfo);
 
@@ -157,9 +164,8 @@ public class RrsDoRegis extends HttpServlet {
                 boolean success = regisFileIO.writeRegistrationToFile(userInfo);
 
                 if (!success) {
-                    request.setAttribute("rrsRegisErrorMessage", "Error adding  user to registration file: " + rrsRegistrationFileName);
-                    RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/page/regis2.jsp");
-                    view.forward(request, response);
+                    request.setAttribute("rrsRegisErrorMessage", "Error adding  user to registration file: " + regisFileIO.getRegistrationFilename());
+                    return request.getRequestDispatcher("/WEB-INF/view/page/regis2.jsp");
                 } else {
                     String urlRrsDobesCoc = this.getServletContext().getInitParameter("DOBES_COC_LINK");
 
@@ -169,9 +175,7 @@ public class RrsDoRegis extends HttpServlet {
                     }
 
                     request.setAttribute("urlRrsDobesCoc", urlRrsDobesCoc);
-
-                    RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/page/dobesCoc.jsp");
-                    view.forward(request, response);
+                    return request.getRequestDispatcher("/WEB-INF/view/page/dobesCoc.jsp");
                 }
             }
         }
