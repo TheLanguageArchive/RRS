@@ -38,9 +38,6 @@ public class RrsRegis extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        //response.setContentType("text/html;charset=UTF-8");
-
         ErrorsRequest errorsRequest = new ErrorsRequest();
         checkCurrentUser(request, response, errorsRequest);
         dispatchServlet(request, response, errorsRequest);
