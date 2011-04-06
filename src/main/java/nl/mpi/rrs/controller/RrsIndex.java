@@ -175,7 +175,12 @@ public class RrsIndex extends HttpServlet {
             assert ug != null;
             assert authUtil != null;
 
-            if (authUtil.isUserLoggedIn(request) && ug.isExistingUserName(authUtil.getLoggedInUser(request)) ) {
+            boolean loggedIn = authUtil.isUserLoggedIn(request);
+            if(loggedIn){
+                request.setAttribute("uid", authUtil.getLoggedInUser(request));
+            }
+
+            if (loggedIn && ug.isExistingUserName(authUtil.getLoggedInUser(request)) ) {
                 logger.debug("RrsIndex: call index_2.jsp");
 
                 RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/page/index_2.jsp");
