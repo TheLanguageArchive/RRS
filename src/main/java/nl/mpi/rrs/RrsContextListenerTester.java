@@ -18,8 +18,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import mpi.corpusstructure.CorpusStructureDBImpl;
-import mpi.corpusstructure.NodeIdUtils;
+import nl.mpi.corpusstructure.CorpusStructureDBImpl;
+import nl.mpi.corpusstructure.NodeIdUtils;
 
 /**
  *

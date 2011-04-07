@@ -11,8 +11,8 @@ package nl.mpi.rrs.model.corpusdb;
  *
  * @author kees
  */
-import mpi.corpusstructure.NodeIdUtils;
-import mpi.corpusstructure.UnknownNodeException;
+import nl.mpi.corpusstructure.NodeIdUtils;
+import nl.mpi.corpusstructure.UnknownNodeException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 

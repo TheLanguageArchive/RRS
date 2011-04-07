@@ -8,13 +8,12 @@ import java.util.Collection;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import nl.mpi.rrs.model.user.RegistrationUser;
+
 /**
  * Shibboleth implementation of AuthenticationUtility
  * @author Twan Goosen <twan.goosen@mpi.nl>
  */
 public class ShibbolethUtil implements AuthenticationUtility {
-
-//    private static Log _log = LogFactory.getLog(ShibbolethUtil.class);
     public final static String SHIB_ANONYMOUS_USER = "anonymous";
 
     public boolean isUserLoggedIn(HttpServletRequest request) {

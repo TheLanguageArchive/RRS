@@ -15,8 +15,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import mpi.corpusstructure.CorpusStructureDBImpl;
-import mpi.corpusstructure.UnknownNodeException;
+import nl.mpi.corpusstructure.CorpusStructureDB;
+import nl.mpi.corpusstructure.UnknownNodeException;
 import nl.mpi.rrs.model.corpusdb.ImdiNode;
 import nl.mpi.rrs.model.date.PulldownGenerator;
 import nl.mpi.rrs.model.errors.ErrorRequest;
@@ -53,14 +53,14 @@ public class RrsIndex extends HttpServlet {
         request.setAttribute("urlRrsRegistration", urlRrsRegistration);
 
         ErrorsRequest errorsRequest = new ErrorsRequest();
-        CorpusStructureDBImpl corpusDbConnection = (CorpusStructureDBImpl) this.getServletContext().getAttribute("corpusDbConnection");
+        CorpusStructureDB corpusDbConnection = (CorpusStructureDB) this.getServletContext().getAttribute("corpusDbConnection");
         if (createNodesTable(request, response, corpusDbConnection, errorsRequest, "")) {
             createCalendarDropdowns(request);
         }
         dispatchServlet(request, response, errorsRequest, getServletContext());
     }
 
-    static boolean createNodesTable(HttpServletRequest request, HttpServletResponse response, CorpusStructureDBImpl corpusDbConnection, ErrorsRequest errorsRequest, String htmlSelectedNodesTable) throws IOException, ServletException {
+    static boolean createNodesTable(HttpServletRequest request, HttpServletResponse response, CorpusStructureDB corpusDbConnection, ErrorsRequest errorsRequest, String htmlSelectedNodesTable) throws IOException, ServletException {
         logger.debug("RrsIndex2 Context: htmlSelectedNodesTable:" + htmlSelectedNodesTable);
         String[] values = request.getParameterValues("nodeid");
         if (values != null) {

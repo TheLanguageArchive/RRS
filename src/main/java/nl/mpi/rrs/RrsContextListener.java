@@ -2,9 +2,6 @@
  * RrsContextListener.java
  *
  * Created on February 5, 2007, 2:34 PM
- *
- * To change this template, choose Tools | Template Manager
- * and open the template in the editor.
  */
 package nl.mpi.rrs;
 
@@ -16,7 +13,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-import mpi.corpusstructure.CorpusStructureDBImpl;
+import nl.mpi.corpusstructure.CorpusStructureDBImpl;
 
 import nl.mpi.rrs.model.registrations.RegisFileIO;
 import nl.mpi.rrs.model.user.UserGenerator;

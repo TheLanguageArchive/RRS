@@ -12,7 +12,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import mpi.corpusstructure.CorpusStructureDBImpl;
+import nl.mpi.corpusstructure.CorpusStructureDB;
+
 import nl.mpi.rrs.model.errors.ErrorsRequest;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -43,7 +44,7 @@ public class RrsIndex2 extends HttpServlet {
 
         ErrorsRequest errorsRequest = new ErrorsRequest();
 
-        CorpusStructureDBImpl corpusDbConnection = (CorpusStructureDBImpl) this.getServletContext().getAttribute("corpusDbConnection");
+        CorpusStructureDB corpusDbConnection = (CorpusStructureDB) this.getServletContext().getAttribute("corpusDbConnection");
         String htmlSelectedNodesTable = (String) request.getSession().getAttribute("htmlSelectedNodesTable");
         if (htmlSelectedNodesTable == null) {
             htmlSelectedNodesTable = "";

@@ -55,7 +55,7 @@
 		</plugins>
 
 		<!--** testing ***** -->
-		<!--<testSourceDirectory>src/test/java</testSourceDirectory>
+		<testSourceDirectory>src/test/java</testSourceDirectory>
 		<testResources>
 			<testResource>
 				<includes>
@@ -64,7 +64,7 @@
 				<directory>test/resources</directory>
 				<filtering>true</filtering>
 			</testResource>
-		</testResources>-->
+		</testResources>
 
 	</build>
 
@@ -75,13 +75,6 @@
 			<groupId>nl.mpi</groupId>
 			<artifactId>ams2</artifactId>
 			<version>1.4.5.1</version>
-			<scope>compile</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>nl.mpi</groupId>
-			<artifactId>corpusstructure</artifactId>
-			<version>1.6.5.4</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
@@ -282,5 +275,7 @@
 			<version>1.0</version>
 		</dependency>
 	</dependencies>
-
+    <properties>
+        <netbeans.hint.deploy.server>Tomcat60</netbeans.hint.deploy.server>
+    </properties>
 </project>

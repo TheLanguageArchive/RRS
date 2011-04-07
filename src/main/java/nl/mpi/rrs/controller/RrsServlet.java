@@ -15,8 +15,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import mpi.corpusstructure.CorpusStructureDBImpl;
-import mpi.corpusstructure.UnknownNodeException;
+import nl.mpi.corpusstructure.CorpusStructureDBImpl;
+import nl.mpi.corpusstructure.UnknownNodeException;
 import nl.mpi.rrs.model.RrsRequest;
 import nl.mpi.rrs.model.corpusdb.ImdiNode;
 import nl.mpi.rrs.model.corpusdb.ImdiNodes;
@@ -82,7 +82,7 @@ public class RrsServlet extends HttpServlet {
         RequestUser userInfo = initRequestUser(request, rrsRequest, userGenerator, errorsRequest);
         if (userInfo != null) {
             initRequestDates(request, rrsRequest, errorsRequest);
-            initRequestNodes(request, rrsRequest, userInfo, corpusDbConnection, errorsRequest);
+            initRequestNodes(request, rrsRequest, corpusDbConnection, errorsRequest);
 
             rrsRequest.setRemarksOther(request.getParameter("paramRequestRemarksOther"));
             rrsRequest.setPublicationAim(request.getParameter("paramRequestPublicationAim"));
@@ -232,7 +232,7 @@ public class RrsServlet extends HttpServlet {
         rrsRequest.setToDate(toDate);
     }
 
-    private void initRequestNodes(HttpServletRequest request, RrsRequest rrsRequest, RequestUser userInfo, CorpusStructureDBImpl corpusDbConnection, ErrorsRequest errorsRequest) {
+    private void initRequestNodes(HttpServletRequest request, RrsRequest rrsRequest, CorpusStructureDBImpl corpusDbConnection, ErrorsRequest errorsRequest) {
         String[] values = request.getParameterValues("nodeid");
         ImdiNodes imdiNodes = new ImdiNodes();
         if (values != null) {
