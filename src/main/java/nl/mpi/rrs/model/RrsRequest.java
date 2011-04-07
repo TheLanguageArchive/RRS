@@ -30,6 +30,8 @@ public class RrsRequest {
     
     private RequestUser user;
     private String userStatus;
+
+    private String identityProviderId;
     
     private ImdiNodes imdiNodes;
     private boolean nodesEnteredInForm;
@@ -108,10 +110,11 @@ public class RrsRequest {
             return false;
     }
     
-    public void setValid(boolean valid) {
+    public final void setValid(boolean valid) {
         this.valid = valid;
     }
     
+    @Override
     public String toString() {
         String newLine = "\n";
         
@@ -149,29 +152,32 @@ public class RrsRequest {
         
         this.imdiNodes.setImdiNodesInfo();
         String imdiNodesInfo = this.imdiNodes.getImdiNodesInfo();
+
+        StringBuilder result = new StringBuilder();
+
+        //String result = "";
+        result.append("User info:").append(newLine);
+        result.append("==========").append(newLine);
+        result.append(userInfo).append(newLine);
+        result.append("Identified by: ").append(this.getIdentityProviderId()).append(newLine);
+        result.append(newLine);
+        result.append("Nodes requested:").append(newLine);
+        result.append("================").append(newLine);
+        result.append(imdiNodesInfo);
+        result.append(newLine);
+        result.append("Usage aim:").append(newLine);
+        result.append("==========").append(newLine);
+        result.append("ResearchProject: ").append(this.getResearchProject()).append(newLine);
+        StringBuilder append = result.append("PublicationAim: ").append(this.getPublicationAim()).append(newLine);
+        result.append("RemarksOther: ").append(this.getRemarksOther()).append(newLine);
+        result.append(newLine);
+        result.append("Period for use:").append(newLine);
+        result.append("===============").append(newLine);
+        result.append("From: ").append(this.getFromDate().getValue()).append(newLine);
+        result.append("To  : ").append(this.getToDate().getValue()).append(newLine);
+        result.append(newLine);
         
-        String result = "";
-        result += "User info:" + newLine;
-        result += "==========" + newLine;
-        result += userInfo + newLine;
-        result += newLine;
-        result += "Nodes requested:" + newLine;
-        result += "================" + newLine;
-        result += imdiNodesInfo;
-        result += newLine;
-        result += "Usage aim:" + newLine;
-        result += "==========" + newLine;
-        result += "ResearchProject: " + this.getResearchProject() + newLine;
-        result += "PublicationAim: " + this.getPublicationAim() + newLine;
-        result += "RemarksOther: " + this.getRemarksOther() + newLine;
-        result += newLine;
-        result += "Period for use:" + newLine;
-        result += "===============" + newLine;
-        result += "From: " + this.getFromDate().getValue() + newLine;
-        result += "To  : " + this.getToDate().getValue() + newLine;
-        result += newLine;
-        
-        this.emailContent = result;
+        this.emailContent = result.toString();
     }
     
     public String getEmailContent() {
@@ -193,5 +199,19 @@ public class RrsRequest {
 
     public void setToDateString(RrsDate toDate) {
         this.toDateString = toDate.getValue();
+    }
+
+    /**
+     * @return the identityProviderId
+     */
+    public String getIdentityProviderId() {
+        return identityProviderId;
+    }
+
+    /**
+     * @param identityProviderId the identityProviderId to set
+     */
+    public void setIdentityProviderId(String identityProviderId) {
+        this.identityProviderId = identityProviderId;
     }
 }

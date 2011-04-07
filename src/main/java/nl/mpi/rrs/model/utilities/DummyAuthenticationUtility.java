@@ -65,4 +65,8 @@ public class DummyAuthenticationUtility implements AuthenticationUtility {
         this.lastName = lastName;
     }
 
+    public String getIdentityProviderId(HttpServletRequest request) {
+        return "RRS DUMMY PROVIDER!!!";
+    }
+
 }

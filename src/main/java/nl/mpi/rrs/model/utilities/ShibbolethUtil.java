@@ -30,6 +30,17 @@ public class ShibbolethUtil implements AuthenticationUtility {
             return null;
         }
     }
+    
+    /**
+     *
+     * @param request Current HttpServletRequest
+     * @return IdentityProviderID according to the current authentication context
+     * @see de.mpg.aai.shhaa.context.AuthenticationContext
+     */
+    public String getIdentityProviderId(HttpServletRequest request) {
+        AuthenticationContext context = AuthenticationContextHolder.get(request);
+        return context.getIdentiyProviderID();
+    }
 
     public RegistrationUser createRegistrationUser(HttpServletRequest request) {
         AuthenticationContext context = AuthenticationContextHolder.get(request);

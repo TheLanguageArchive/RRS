@@ -89,6 +89,8 @@ public class RrsServlet extends HttpServlet {
             rrsRequest.setPublicationAim(request.getParameter("paramRequestPublicationAim"));
             rrsRequest.setResearchProject(request.getParameter("paramRequestResearchProject"));
 
+            rrsRequest.setIdentityProviderId(authenticationUtility.getIdentityProviderId(request));
+
             request.setAttribute("rrsRequest", rrsRequest);
         }
     }

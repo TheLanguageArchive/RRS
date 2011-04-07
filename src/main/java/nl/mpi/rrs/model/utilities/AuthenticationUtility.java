@@ -28,4 +28,9 @@ public interface AuthenticationUtility {
      */
     boolean isUserLoggedIn(HttpServletRequest request);
 
+    /**
+     * @param request Current HttpServletRequest
+     * @return A string identifying the provider identifying the user
+     */
+    String getIdentityProviderId(HttpServletRequest request);
 }
