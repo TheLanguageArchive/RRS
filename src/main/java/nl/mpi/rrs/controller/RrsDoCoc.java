@@ -5,7 +5,6 @@
 package nl.mpi.rrs.controller;
 
 import java.io.*;
-import java.net.*;
 
 import javax.servlet.*;
 import javax.servlet.RequestDispatcher;
@@ -32,7 +31,6 @@ import org.apache.commons.logging.LogFactory;
  */
 public class RrsDoCoc extends HttpServlet {
 
-    
     private static Log logger = LogFactory.getLog(RrsDoCoc.class);
 
     /** 
@@ -176,11 +174,11 @@ public class RrsDoCoc extends HttpServlet {
             RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/error/error.jsp");
             view.forward(request, response);
             return;
-        /*
-        RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/error/errorUnknown.jsp");
-        view.forward(request, response);   
-        return;
-         */
+            /*
+            RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/error/errorUnknown.jsp");
+            view.forward(request, response);
+            return;
+             */
 
         }
 
