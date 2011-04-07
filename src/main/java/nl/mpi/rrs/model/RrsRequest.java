@@ -2,9 +2,6 @@
  * RrsRequest.java
  *
  * Created on February 7, 2007, 2:31 PM
- *
- * To change this template, choose Tools | Template Manager
- * and open the template in the editor.
  */
 
 package nl.mpi.rrs.model;

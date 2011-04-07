@@ -114,8 +114,8 @@ public class Ams2UserGenerator implements UserGenerator {
                 result = true;
             }
         } catch (DataSourceException ex) {
-            _log.error("Database error while trying to fetch user ",ex);
-            throw new RuntimeException("Database error while trying to fetch user "+userName,ex);
+            _log.error("User not found: " + userName);
+            return false;
         }
 
         return result;
