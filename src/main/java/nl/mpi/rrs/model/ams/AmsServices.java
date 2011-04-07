@@ -32,7 +32,7 @@ public class AmsServices {
     /**
      * example method to load spring-configured services from ams2 api
      */
-    public void loadAms2Services() {
+    private void loadAms2Services() {
 
         // 1st create the spring-bean-loader instance 
         // you might consider it as kind of "bean factory"

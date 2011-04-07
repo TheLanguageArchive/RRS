@@ -6,7 +6,8 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockServletContext;
 
 /**
- *
+ * Currently tests whether util responds properly to the remote user property.
+ * TODO: Mocking Shibboleth would be very nice to have, but is cumbersome (if possible)
  * @author Twan Goosen <twan.goosen@mpi.nl>
  */
 public class TestShibbolethUtil {
@@ -34,19 +35,5 @@ public class TestShibbolethUtil {
         MockHttpServletRequest request = new MockHttpServletRequest(servletContext);
         request.setRemoteUser(LOGGEDIN_USERNAME);
         Assert.assertTrue(util.isUserLoggedIn(request));
-    }
-
-    /**
-     * @param servletContext the servletContext to set
-     */
-    public void setServletContext(MockServletContext servletContext) {
-        this.servletContext = servletContext;
-    }
-
-    /**
-     * @param shibbolethUtil the shibbolethUtil to set
-     */
-    public void setShibbolethUtil(ShibbolethUtil shibbolethUtil) {
-        this.util = shibbolethUtil;
     }
 }

@@ -55,7 +55,7 @@ public class AmsLicense {
             FedUID uid = this.toFedUid(userName);
             latUser = services.getPcplSrv().getUser(uid);
         } catch (DataSourceException ex) {
-            _log.info("username: " + userName + "can't be converted to LatUser!");
+            _log.error("username: " + userName + "can't be converted to LatUser!");
 
         }
 
@@ -84,7 +84,7 @@ public class AmsLicense {
                 if (targetNodeID == null) {
                     targetNodeID = services.getFabricSrv().getRootNode();
                     Node node = services.getFabricSrv().getNode(targetNodeID);
-                    _log.info("RootNode: " + node.getName());
+                    _log.debug("RootNode: " + node.getName());
 
                 /*
                 NodeID dobesRootID = services.getFabricSrv().newNodeID("MPI77915#");
@@ -105,7 +105,7 @@ public class AmsLicense {
                 List<NodeLicense> nls = authzSrv.getLicenseAcceptance(targetNodeID, targetUser);           
 
                 if (nls == null || nls.isEmpty()) {
-                    _log.info("nls isEmpt: ");
+                    _log.debug("nls isEmpt: ");
                 } else {
                     // just to demonstrate how to get acceptance information
                     // cycling on all the general licenses
@@ -113,10 +113,10 @@ public class AmsLicense {
                         NodeLicense nl = iter.next();
                         License lics = nl.getLicense();
 
-                        _log.info("NodeLicense:  LicName: " + lics.getName());
-                        _log.info("+++ LicLabel: " + lics.getLabel());
-                        _log.info("+++ LicFile: " + lics.getFile());
-                        _log.info("+++ userName: " + userName);
+                        _log.debug("NodeLicense:  LicName: " + lics.getName());
+                        _log.debug("+++ LicLabel: " + lics.getLabel());
+                        _log.debug("+++ LicFile: " + lics.getFile());
+                        _log.debug("+++ userName: " + userName);
 
                         result += "NodeLicense:  LicName: " + lics.getName() + "\n";
                         result += "+++ LicFile: " + lics.getFile() + "\n";
@@ -134,7 +134,7 @@ public class AmsLicense {
                 // represented by value-object class NodePcplLicense
 
                 if (npcpls == null || npcpls.isEmpty()) {
-                    _log.info("npcpls isEmpt: ");
+                    _log.debug("npcpls isEmpt: ");
                     return "";
                 }
 
@@ -144,10 +144,10 @@ public class AmsLicense {
 
                     // this is the license which is assigned (and (maybe still) needs acceptance):
                     License lics = npl.getLicense();
-                    _log.info("NodePcplLicense LicName: " + lics.getName());
-                    _log.info("+++ LicFile: " + lics.getFile());
-                    _log.info("+++ Accepted: " + npl.isAccepted());
-                    _log.info("+++ userName: " + userName);
+                    _log.debug("NodePcplLicense LicName: " + lics.getName());
+                    _log.debug("+++ LicFile: " + lics.getFile());
+                    _log.debug("+++ Accepted: " + npl.isAccepted());
+                    _log.debug("+++ userName: " + userName);
 
                     result += "NodePcplLicense LicName: " + lics.getName() + "\n";
                     result += "+++ LicFile: " + lics.getFile() + "\n";
@@ -159,7 +159,7 @@ public class AmsLicense {
                 services.getAuthzSrv().staleNode(unE.getNodeID());
             }
         } else {
-            _log.info("Can't get license info for unknown user: " + userName);
+            _log.warn("Can't get license info for unknown user: " + userName);
         }
 
         return result;
@@ -173,9 +173,9 @@ public class AmsLicense {
      */
     public boolean acceptLicenseInfo(String userName, NodeID targetNodeID, String licName) {
         Integer licId = this.getLicId(licName, userName);
-        _log.info("licId: " + licId.toString());
+        _log.debug("licId: " + licId.toString());
         if (licId.compareTo(-1) == 0) {
-            _log.info("licenseId not found for: " + licName);
+            _log.warn("licenseId not found for: " + licName);
             return false;
         }
         
@@ -201,32 +201,31 @@ public class AmsLicense {
             // for the given user (= for the whole archive)
             if (targetNodeID == null) {
                 targetNodeID = services.getFabricSrv().getRootNode();
-                _log.info("Root targetNode: " + targetNodeID.getMpiID());
+                _log.debug("Root targetNode: " + targetNodeID.getMpiID());
             } else {
-                _log.info("targetNode: " + targetNodeID.getMpiID());
+                _log.debug("targetNode: " + targetNodeID.getMpiID());
             }
 
             // select a list of licences that user has to sign for this node
             List<NodeLicense> nls = authzSrv.getLicenseAcceptance(targetNodeID, targetUser);
             if (nls == null || nls.isEmpty()) {
-                _log.info("No NodeLicense found under node: " + targetNodeID.getMpiID());
+                _log.warn("No NodeLicense found under node: " + targetNodeID.getMpiID());
                 return false;
             }
 
             for (Iterator<NodeLicense> iter = nls.iterator(); iter.hasNext();) {
                 NodeLicense nl = iter.next();
                 if (nl.getLicense().getID().compareTo(licId) == 0) {
-                    _log.info("Licence found; try to save .. ");
+                    _log.debug("Licence found; try to save .. ");
 
                     try {
                         NodePcplLicense npl = authzSrv.saveLicenseAcceptance(nl.getNodeID(), nl.getLicense(), targetUser);
-                        _log.info("license saved: " + licId);
-                        _log.info("license accepted: " + npl.isAccepted());
+                        _log.debug("license saved: " + licId);
+                        _log.debug("license accepted: " + npl.isAccepted());
 
                         return true;
                     } catch (DataSourceException dE) {
-                        _log.error("Can't save license: " + licId);
-                        _log.error(dE.getMessage());
+                        _log.error("Can't save license: " + licId, dE);
                         return false;
                     }
                 }

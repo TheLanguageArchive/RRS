@@ -17,7 +17,7 @@ public class AmsServicesSingleton {
         
     }
     
-    public static AmsServices getInstance() {
+    public synchronized static AmsServices getInstance() {
         return services;
     }
 

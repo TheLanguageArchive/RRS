@@ -30,6 +30,7 @@ import nl.mpi.rrs.model.user.User;
 import nl.mpi.rrs.model.ams.AmsServicesSingleton;
 import nl.mpi.rrs.model.user.UserGenerator;
 import nl.mpi.lat.fabric.NodeID;
+import nl.mpi.rrs.model.ams.AmsLicense;
 import nl.mpi.rrs.model.utilities.AuthenticationUtility;
 
 import org.apache.commons.logging.Log;
@@ -82,7 +83,7 @@ public class RrsServlet extends HttpServlet {
         RequestUser userInfo = initRequestUser(request, rrsRequest, userGenerator, errorsRequest);
         if (userInfo != null) {
             initRequestDates(request, rrsRequest, errorsRequest);
-            initRequestNodes(request, rrsRequest, corpusDbConnection, errorsRequest);
+            initRequestNodes(request, rrsRequest, userInfo, corpusDbConnection, errorsRequest);
 
             rrsRequest.setRemarksOther(request.getParameter("paramRequestRemarksOther"));
             rrsRequest.setPublicationAim(request.getParameter("paramRequestPublicationAim"));
@@ -232,7 +233,7 @@ public class RrsServlet extends HttpServlet {
         rrsRequest.setToDate(toDate);
     }
 
-    private void initRequestNodes(HttpServletRequest request, RrsRequest rrsRequest, CorpusStructureDBImpl corpusDbConnection, ErrorsRequest errorsRequest) {
+    private void initRequestNodes(HttpServletRequest request, RrsRequest rrsRequest, RequestUser userInfo, CorpusStructureDBImpl corpusDbConnection, ErrorsRequest errorsRequest) {
         String[] values = request.getParameterValues("nodeid");
         ImdiNodes imdiNodes = new ImdiNodes();
         if (values != null) {
@@ -246,8 +247,8 @@ public class RrsServlet extends HttpServlet {
                         NodeID nodeId = AmsServicesSingleton.getInstance().getFabricSrv().newNodeID(imdiNode.getImdiNodeIdWithPrefix());
                         assert authenticationUtility.isUserLoggedIn(request) : "Valid user logged in";
                         
-                        //AmsLicense amsLicence = new AmsLicense();
-                        //logger.debug(amsLicence.getLicenseInfo(userInfo.getUserName(), nodeId));
+                        AmsLicense amsLicence = new AmsLicense();
+                        logger.debug(amsLicence.getLicenseInfo(userInfo.getUserName(), nodeId));
 
                         //imdiNode.setImdiNodeName(corpusDbConnection.getNode(values[i]).getName());
                         //imdiNode.setImdiNodeFormat(corpusDbConnection.getNode(values[i]).getFormat());
