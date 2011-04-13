@@ -35,8 +35,6 @@ import org.apache.commons.logging.LogFactory;
 public class RrsDoRegis extends HttpServlet {
 
     private static Log logger = LogFactory.getLog(RrsDoRegis.class);
-    RrsRegistration rrsRegistration = new RrsRegistration();
-    ErrorsRequest errorsRequest = new ErrorsRequest();
     private AuthenticationProvider authenticationProvider;
 
     @Override
@@ -55,11 +53,12 @@ public class RrsDoRegis extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        ErrorsRequest errorsRequest = new ErrorsRequest();
         RegisFileIO regisFileIO = initRegisFileIO();
         RegistrationUser userInfo = initUserInfo(request);
 
         if (userInfo.validate()) {
-            RequestDispatcher view = doRegistration(request, response, regisFileIO, userInfo);
+            RequestDispatcher view = doRegistration(request, response, regisFileIO, userInfo, errorsRequest);
             view.forward(request, response);
         } else {
             request.setAttribute("rrsRegisErrorMessage", "One or more values are incorrect or missing from the registration form");
@@ -118,7 +117,7 @@ public class RrsDoRegis extends HttpServlet {
         return userInfo;
     }
 
-    private RequestDispatcher doRegistration(HttpServletRequest request, HttpServletResponse response, RegisFileIO regisFileIO, RegistrationUser userInfo) throws IOException, ServletException {
+    private RequestDispatcher doRegistration(HttpServletRequest request, HttpServletResponse response, RegisFileIO regisFileIO, RegistrationUser userInfo, ErrorsRequest errorsRequest) throws IOException, ServletException {
         String userId = userInfo.getUserName();
 
         UserGenerator ug = (UserGenerator) this.getServletContext().getAttribute("ams2DbConnection");

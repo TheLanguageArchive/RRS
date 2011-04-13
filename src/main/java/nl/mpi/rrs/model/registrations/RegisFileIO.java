@@ -9,6 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -21,12 +22,11 @@ import org.apache.commons.logging.LogFactory;
  *
  * @author kees
  */
-public class RegisFileIO {
+public class RegisFileIO implements Serializable {
 
     public RegisFileIO(String registrationFilename) {
         this.setRegistrationFilename(registrationFilename);
     }
-    
     // sequence of fields in delimited file
     private final int USER_ID = 0;
     private final int USER_FIRST_NAME = 1;
@@ -36,13 +36,10 @@ public class RegisFileIO {
     private final int USER_PASSWORD = 5;
     private final int USER_DOBES_COC_SIGNED = 6;
     private final int USER_CREATION = 7;
-    
     private String registrationFilename;
-    
     private final String delim = "\t";
-    
     private static Log _log = LogFactory.getLog(RegisFileIO.class);
-    
+
     /**
      * set field CocSigned to true in user record
      * @param userInfo User object
@@ -223,15 +220,15 @@ public class RegisFileIO {
                         String userDobesCocSigned = fields[USER_DOBES_COC_SIGNED];
                          */
                         String userCreation = fields[USER_CREATION];
-                        
+
                         Date userCreationDate = new Date();
-                        
+
                         try {
                             userCreationDate = new SimpleDateFormat("MMM dd, yyyy").parse(userCreation);
-                        } catch (ParseException e) {                           
+                        } catch (ParseException e) {
                             _log.error("Invalid date: " + userCreation + " : " + e.getMessage());
                         }
-                        
+
                         if (RrsUtil.dateDiffFromToday(userCreationDate) > ageInDays) {
                             recordsRemoved++;
                             success = true;
@@ -269,7 +266,7 @@ public class RegisFileIO {
         }
 
         _log.info(recordsRemoved + " records removed from registration file.");
-        
+
         return recordsRemoved;
     }
 
@@ -425,9 +422,7 @@ public class RegisFileIO {
         return registrationFilename;
     }
 
-    public void setRegistrationFilename(String registrationFilename) {
+    public final void setRegistrationFilename(String registrationFilename) {
         this.registrationFilename = registrationFilename;
     }
-    
-    
 }

@@ -10,7 +10,8 @@ import nl.mpi.rrs.model.user.RegistrationUser;
 public interface AuthenticationProvider {
 
     /**
-     * Creates a registration user and attempts to set properties from the currently logged in user
+     * Creates a (non-persistent) registration user object and attempts to set
+     * properties from the currently logged in user
      * @param request
      * @return Registration user with properties set where applicable
      */

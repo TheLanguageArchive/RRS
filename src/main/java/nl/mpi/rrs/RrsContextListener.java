@@ -60,8 +60,6 @@ public class RrsContextListener implements ServletContextListener {
         String emailHost = sc.getInitParameter("EMAIL_HOST");
         sc.setAttribute("emailHost", emailHost);
 
-        String prefix = sc.getRealPath("/");
-
         logger.debug("RrsContextListener contextInitialized");
 
         try {

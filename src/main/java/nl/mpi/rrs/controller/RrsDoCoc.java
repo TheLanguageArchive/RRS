@@ -32,6 +32,7 @@ import org.apache.commons.logging.LogFactory;
 public class RrsDoCoc extends HttpServlet {
 
     private static Log logger = LogFactory.getLog(RrsDoCoc.class);
+    public final int REGISTRATION_EXPIRATION_DAYS = 30;
 
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -84,20 +85,19 @@ public class RrsDoCoc extends HttpServlet {
 
         regisFileIO.updateCocSigned(userInfo);
 
-        String checkEmailLinkBase = "";
+        StringBuilder checkEmailLinkBase = new StringBuilder();
         String urlFields[] = request.getRequestURL().toString().split("/");
 
         for (int i = 0; i < urlFields.length - 1; i++) {
-            checkEmailLinkBase += urlFields[i];
-            checkEmailLinkBase += "/";
+            checkEmailLinkBase.append(urlFields[i]);
+            checkEmailLinkBase.append("/");
         }
 
-        int daysOld = 30;
-        int recordsRemoved = regisFileIO.removeOldRegistrationsFromFile(daysOld);
+        regisFileIO.removeOldRegistrationsFromFile(REGISTRATION_EXPIRATION_DAYS);
 
         RrsRegistration rrsRegistration = new RrsRegistration();
         rrsRegistration.setUser(userInfo);
-        rrsRegistration.setBaseUrl(checkEmailLinkBase);
+        rrsRegistration.setBaseUrl(checkEmailLinkBase.toString());
 
         logger.info("checkEmailLinkBase: " + checkEmailLinkBase);
 
