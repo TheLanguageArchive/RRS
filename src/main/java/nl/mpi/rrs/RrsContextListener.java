@@ -91,6 +91,8 @@ public class RrsContextListener implements ServletContextListener {
 
         sc.setAttribute("ams2DbConnection", ug);
         sc.setAttribute("corpusDbConnection", corpusDbConnection);
+        sc.setAttribute("archiveObjectsDbConnection", corpusDbConnection);
+
     }
 
     public void contextDestroyed(ServletContextEvent sce) {

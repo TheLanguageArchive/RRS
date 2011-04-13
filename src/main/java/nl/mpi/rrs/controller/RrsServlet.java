@@ -14,8 +14,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import nl.mpi.corpusstructure.ArchiveObjectsDB;
+import nl.mpi.corpusstructure.CorpusStructureDB;
 
-import nl.mpi.corpusstructure.CorpusStructureDBImpl;
 import nl.mpi.corpusstructure.UnknownNodeException;
 import nl.mpi.rrs.model.RrsRequest;
 import nl.mpi.rrs.model.corpusdb.ImdiNode;
@@ -66,16 +67,17 @@ public class RrsServlet extends HttpServlet {
         RrsRequest rrsRequest = new RrsRequest();
         ErrorsRequest errorsRequest = new ErrorsRequest();
 
-        CorpusStructureDBImpl corpusDbConnection = initDbConnection(errorsRequest);
+        CorpusStructureDB corpusDbConnection = initCorpusStructureDbConnection(errorsRequest);
+        ArchiveObjectsDB archiveObjectsDbConnection = initArchiveObjectsDbConnection(errorsRequest);
         UserGenerator ug = initUserGenerator(errorsRequest);
 
         if (ug != null && corpusDbConnection != null) {
-            initRequest(request, rrsRequest, ug, corpusDbConnection, errorsRequest);
+            initRequest(request, rrsRequest, ug, corpusDbConnection, archiveObjectsDbConnection, errorsRequest);
         }
         dispatchServlet(request, response, errorsRequest, rrsRequest);
     }
 
-    private void initRequest(HttpServletRequest request, RrsRequest rrsRequest, UserGenerator userGenerator, CorpusStructureDBImpl corpusDbConnection, ErrorsRequest errorsRequest) {
+    private void initRequest(HttpServletRequest request, RrsRequest rrsRequest, UserGenerator userGenerator, CorpusStructureDB corpusDbConnection, ArchiveObjectsDB archiveObjectsDbConnection, ErrorsRequest errorsRequest) {
         String openPathPrefix = this.getServletContext().getInitParameter("OPENPATH_PREFIX");
         ImdiNode.setOpenPathPrefix(openPathPrefix);
         logger.debug("openPathPrefix: " + openPathPrefix);
@@ -83,7 +85,7 @@ public class RrsServlet extends HttpServlet {
         RequestUser userInfo = initRequestUser(request, rrsRequest, userGenerator, errorsRequest);
         if (userInfo != null) {
             initRequestDates(request, rrsRequest, errorsRequest);
-            initRequestNodes(request, rrsRequest, userInfo, corpusDbConnection, errorsRequest);
+            initRequestNodes(request, rrsRequest, userInfo, corpusDbConnection, archiveObjectsDbConnection, errorsRequest);
 
             rrsRequest.setRemarksOther(request.getParameter("paramRequestRemarksOther"));
             rrsRequest.setPublicationAim(request.getParameter("paramRequestPublicationAim"));
@@ -100,8 +102,8 @@ public class RrsServlet extends HttpServlet {
      * @param errorsRequest Collection to add to in case of error
      * @return null if db connection is not present
      */
-    private CorpusStructureDBImpl initDbConnection(ErrorsRequest errorsRequest) {
-        CorpusStructureDBImpl corpusDbConnection = (CorpusStructureDBImpl) this.getServletContext().getAttribute("corpusDbConnection");
+    private CorpusStructureDB initCorpusStructureDbConnection(ErrorsRequest errorsRequest) {
+        CorpusStructureDB corpusDbConnection = (CorpusStructureDB) this.getServletContext().getAttribute("corpusDbConnection");
         if (corpusDbConnection == null) {
             ErrorRequest errorRequest = new ErrorRequest();
             errorRequest.setErrorFormFieldLabel("Corpus Database");
@@ -114,6 +116,23 @@ public class RrsServlet extends HttpServlet {
             errorsRequest.setErrorRecoverable(false);
         }
         return corpusDbConnection;
+    }
+
+
+    private ArchiveObjectsDB initArchiveObjectsDbConnection(ErrorsRequest errorsRequest) {
+        ArchiveObjectsDB archiveObjectsDbConnection = (ArchiveObjectsDB) this.getServletContext().getAttribute("archiveObjectsDbConnection");
+        if (archiveObjectsDbConnection == null) {
+            ErrorRequest errorRequest = new ErrorRequest();
+            errorRequest.setErrorFormFieldLabel("Archive objects database");
+            errorRequest.setErrorMessage("Server is down");
+            errorRequest.setErrorValue("");
+            errorRequest.setErrorException(null);
+            errorRequest.setErrorType("CORPUS_DATABASE_DOWN");
+            errorRequest.setErrorRecoverable(false);
+            errorsRequest.addError(errorRequest);
+            errorsRequest.setErrorRecoverable(false);
+        }
+        return archiveObjectsDbConnection;
     }
 
     /**
@@ -235,7 +254,7 @@ public class RrsServlet extends HttpServlet {
         rrsRequest.setToDate(toDate);
     }
 
-    private void initRequestNodes(HttpServletRequest request, RrsRequest rrsRequest, RequestUser userInfo, CorpusStructureDBImpl corpusDbConnection, ErrorsRequest errorsRequest) {
+    private void initRequestNodes(HttpServletRequest request, RrsRequest rrsRequest, RequestUser userInfo, CorpusStructureDB corpusDbConnection, ArchiveObjectsDB archiveObjectsDbConnection, ErrorsRequest errorsRequest) {
         String[] values = request.getParameterValues("nodeid");
         ImdiNodes imdiNodes = new ImdiNodes();
         if (values != null) {
@@ -248,7 +267,7 @@ public class RrsServlet extends HttpServlet {
                         imdiNode.setImdiNodeIdWithPrefix(values[i]);
                         NodeID nodeId = AmsServicesSingleton.getInstance().getFabricSrv().newNodeID(imdiNode.getImdiNodeIdWithPrefix());
                         assert authenticationProvider.isUserLoggedIn(request) : "Valid user logged in";
-                        
+
                         AmsLicense amsLicence = new AmsLicense();
                         logger.debug(amsLicence.getLicenseInfo(userInfo.getUserName(), nodeId));
 
@@ -259,7 +278,7 @@ public class RrsServlet extends HttpServlet {
                 }
             }
         }
-        
+
         for (int i = 0; i < imdiNodes.getSize(); i++) {
             ImdiNode imdiNode = imdiNodes.getImdiNode(i);
             String nodeIdWithPrefix = imdiNode.getImdiNodeIdWithPrefix();
@@ -268,7 +287,7 @@ public class RrsServlet extends HttpServlet {
                     imdiNode.setImdiNodeName(corpusDbConnection.getNode(nodeIdWithPrefix).getName());
                     imdiNode.setImdiNodeFormat(corpusDbConnection.getNode(nodeIdWithPrefix).getFormat());
                     imdiNode.setImdiNodeUrl(corpusDbConnection.getNamePath(nodeIdWithPrefix));
-                    imdiNode.setImdiNodeUri(corpusDbConnection.getObjectURI(nodeIdWithPrefix).toString());
+                    imdiNode.setImdiNodeUri(archiveObjectsDbConnection.getObjectURI(nodeIdWithPrefix).toString());
                     imdiNodes.setImdiNode(i, imdiNode);
                 } catch (UnknownNodeException ex) {
                     ErrorRequest errorRequest = new ErrorRequest();
@@ -388,6 +407,7 @@ public class RrsServlet extends HttpServlet {
      * @param request servlet request
      * @param response servlet response
      */
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
@@ -397,6 +417,7 @@ public class RrsServlet extends HttpServlet {
      * @param request servlet request
      * @param response servlet response
      */
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -405,8 +426,10 @@ public class RrsServlet extends HttpServlet {
 
     /** Returns a short description of the servlet.
      */
+    @Override
     public java.lang.String getServletInfo() {
         return "Resource Request System Controller Servlet";
     }
+
     // </editor-fold>
 }
