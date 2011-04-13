@@ -101,7 +101,7 @@ public class RrsRequest {
     }
     
     public boolean isValid() {
-        if (this.getUser().isValid() && this.isValid() ) {
+        if (this.getUser().isValid() && this.valid ) {
             return true;
         } else
             return false;
@@ -165,7 +165,7 @@ public class RrsRequest {
         result.append("Usage aim:").append(newLine);
         result.append("==========").append(newLine);
         result.append("ResearchProject: ").append(this.getResearchProject()).append(newLine);
-        StringBuilder append = result.append("PublicationAim: ").append(this.getPublicationAim()).append(newLine);
+        result.append("PublicationAim: ").append(this.getPublicationAim()).append(newLine);
         result.append("RemarksOther: ").append(this.getRemarksOther()).append(newLine);
         result.append(newLine);
         result.append("Period for use:").append(newLine);

@@ -226,7 +226,6 @@ public class Ams2UserGenerator implements UserGenerator {
      * @throws DataSourceException if save fails
      */
     public String getMembersOfGroup(String groupName) {
-        String result = "";
         LatGroup group;
 
         try {
@@ -238,12 +237,17 @@ public class Ams2UserGenerator implements UserGenerator {
 
 
         Set<LatPrincipal> members = group.getMembers();
+        StringBuilder result = new StringBuilder();
         for (Iterator<LatPrincipal> iter = members.iterator(); iter.hasNext();) {
             LatPrincipal npl = iter.next();
-            result += "Name: " + npl.getName() + " ::: Id: " + npl.getUid() + " ::: \n";
+            result.append("Name: ")
+                    .append(npl.getName())
+                    .append(" ::: Id: ")
+                    .append(npl.getUid())
+                    .append(" ::: \n");
         }
 
-        return result;
+        return result.toString();
 
     }
 

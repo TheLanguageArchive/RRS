@@ -375,7 +375,7 @@ public class RegisFileIO implements Serializable {
                         String userLastName = fields[USER_LAST_NAME];
                         String userEmail = fields[USER_EMAIL];
                         String userOrganization = fields[USER_ORGANIZATION];
-                        String userPassword = userInfo.decodePassword(fields[USER_PASSWORD]);
+                        String userPassword = RegistrationUser.decodePassword(fields[USER_PASSWORD]);
                         String userDobesCocSigned = fields[USER_DOBES_COC_SIGNED];
                         String userCreation = fields[USER_CREATION];
 
@@ -386,7 +386,7 @@ public class RegisFileIO implements Serializable {
                             userInfo.setEmail(userEmail);
                             userInfo.setOrganization(userOrganization);
                             userInfo.setPassword(userPassword);
-                            userInfo.setDobesCocSigned(new Boolean(userDobesCocSigned));
+                            userInfo.setDobesCocSigned(Boolean.valueOf(userDobesCocSigned));
                             userInfo.setCreation_ts(userCreation);
 
                             _log.info("Found registrated user:");
@@ -418,11 +418,11 @@ public class RegisFileIO implements Serializable {
 
     }
 
-    public String getRegistrationFilename() {
+    public final synchronized String getRegistrationFilename() {
         return registrationFilename;
     }
 
-    public final void setRegistrationFilename(String registrationFilename) {
+    public final synchronized void setRegistrationFilename(String registrationFilename) {
         this.registrationFilename = registrationFilename;
     }
 }

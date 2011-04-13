@@ -28,7 +28,7 @@ public class RegistrationUser extends User {
                 + this.removeDelim(this.getLastName(), delim) + delim
                 + this.removeDelim(this.getEmail(), delim) + delim
                 + this.removeDelim(this.getOrganization(), delim) + delim
-                + this.encodePassword(this.removeDelim(this.getPassword(), delim)) + delim
+                + encodePassword(this.removeDelim(this.getPassword(), delim)) + delim
                 + this.isDobesCocSigned() + delim
                 + this.removeDelim(this.getCreation_ts(), delim) + newLine;
 
@@ -81,7 +81,7 @@ public class RegistrationUser extends User {
         this.userInfo = this.createUserInfo(newLine);
     }
 
-    public String decodePassword(String crypticPassword) {
+    public static String decodePassword(String crypticPassword) {
         String result = "";
 
         if (crypticPassword != null) {
@@ -105,22 +105,22 @@ public class RegistrationUser extends User {
         return result;
     }
 
-    public String encodePassword(String password) {
-        String result = "";
+    public static String encodePassword(String password) {
+        StringBuilder result = new StringBuilder();
 
         if (password != null) {
-            result = "#";
+            result.append("#");
             for (int i = 0; i < password.length(); i++) {
                 int charVal = password.charAt(i);
                 charVal += 1000 + i;
-                result += charVal;
+                result.append(charVal);
                 if (i != password.length() - 1) {
-                    result += "-";
+                    result.append("-");
                 }
             }
         }
 
-        return result;
+        return result.toString();
     }
 
     public boolean validate() {

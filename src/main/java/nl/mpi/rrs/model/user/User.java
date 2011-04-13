@@ -68,16 +68,16 @@ public class User {
     public void setFirstName(String firstName) {
         if (RrsUtil.isNotEmpty(firstName)) {
             String fields[] = firstName.split("\\s+");
-            firstName = "";
-
+            
+            StringBuilder firstNameBuilder = new StringBuilder();
             for (int i = 0; i < fields.length; i++) {
-                firstName += toInitCase(fields[i]);
+                firstNameBuilder.append(toInitCase(fields[i]));
                 if (i != fields.length - 1) {
-                    firstName += " ";
+                    firstNameBuilder.append(" ");
                 }
             }
 
-            this.firstName = firstName;
+            this.firstName = firstNameBuilder.toString();
 
         } else {
             this.firstName = null;
@@ -245,16 +245,14 @@ public class User {
     public void setValid(boolean valid) {
         this.valid = valid;
     }
-    
+
     public void setPassword(String password) {
         this.password = password;
     }
-    
+
     public String getPassword() {
         return this.password;
     }
-
-    
 
     public String toInitCase(String name) {
         if (RrsUtil.isNotEmpty(name)) {

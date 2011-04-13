@@ -27,7 +27,6 @@ public class ImdiNodes {
     
     private ArrayList<ImdiNode> imdiNodes;
     private boolean valid;
-    private int size;
     private String htmlTable;
     private String imdiNodesInfo;
     
@@ -116,8 +115,8 @@ public class ImdiNodes {
     }
 
     public void setImdiNodesInfo() {
-        String newLine = "\n";
-        String result = "";
+        final String newLine = "\n";
+        final StringBuilder result = new StringBuilder();
         
         for (int i=0; i< this.getSize(); i++) {
             String nodeId = this.getImdiNode(i).getImdiNodeIdWithPrefix();
@@ -126,15 +125,15 @@ public class ImdiNodes {
             String nodeUri = this.getImdiNode(i).getImdiNodeUri();
             
             String nodeIdHtml = nodeId.substring(0,nodeId.length()-1) + "%23"; // substitute # with %23
-            String nodeOpenPath = this.getImdiNode(i).getOpenPathPrefix() + nodeIdHtml;
+            String nodeOpenPath = ImdiNode.getOpenPathPrefix() + nodeIdHtml;
             
-            result += "ID : " + nodeId  + newLine;
-            result += "URL: " + nodeUrl + newLine;
-            result += "URI: " + nodeUri + newLine;
-            result += "OP : " + nodeOpenPath + newLine + newLine;
+            result.append("ID : ").append(nodeId).append(newLine);
+            result.append("URL: ").append(nodeUrl).append(newLine);
+            result.append("URI: ").append(nodeUri).append(newLine);
+            result.append("OP : ").append(nodeOpenPath).append(newLine).append(newLine);
         }
         
-        this.imdiNodesInfo = result;
+        this.imdiNodesInfo = result.toString();
     }
     
 }

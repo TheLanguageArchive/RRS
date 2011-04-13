@@ -195,7 +195,7 @@ public class RrsDate {
     }
     
     public void setDayInt(int dayInt) {
-        this.day = new Integer(dayInt).toString();
+        this.day = String.valueOf(dayInt);
         this.dayInt = dayInt;
     }
     

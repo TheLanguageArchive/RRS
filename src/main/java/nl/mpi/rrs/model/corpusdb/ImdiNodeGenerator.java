@@ -24,7 +24,7 @@ import org.apache.commons.logging.LogFactory;
 public class ImdiNodeGenerator {
     private final static Log logger = LogFactory.getLog(ImdiNodeGenerator.class); 
     
-    private static Connection con;
+    private Connection con;
     
     /** Creates a new instance of ImdiNodeGenerator */
     public ImdiNodeGenerator() {

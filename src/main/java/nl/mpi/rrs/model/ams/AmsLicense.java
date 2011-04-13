@@ -70,7 +70,7 @@ public class AmsLicense {
      * 
      */
     public String getLicenseInfo(String userName, NodeID targetNodeID) {
-        String result = "";
+        StringBuilder result = new StringBuilder();
         //String dobesLicenceName = "Dobes Code of Conduct v2";
 
         LatUser targetUser = this.toLatUser(userName);
@@ -118,8 +118,8 @@ public class AmsLicense {
                         _log.debug("+++ LicFile: " + lics.getFile());
                         _log.debug("+++ userName: " + userName);
 
-                        result += "NodeLicense:  LicName: " + lics.getName() + "\n";
-                        result += "+++ LicFile: " + lics.getFile() + "\n";
+                        result.append("NodeLicense:  LicName: ").append(lics.getName()).append("\n");
+                        result.append("+++ LicFile: ").append(lics.getFile()).append("\n");
                         
                         //this.acceptLicenseInfo(userName, targetNodeID, lics.getID());
 
@@ -149,9 +149,9 @@ public class AmsLicense {
                     _log.debug("+++ Accepted: " + npl.isAccepted());
                     _log.debug("+++ userName: " + userName);
 
-                    result += "NodePcplLicense LicName: " + lics.getName() + "\n";
-                    result += "+++ LicFile: " + lics.getFile() + "\n";
-                    result += "+++ Accepted: " + npl.isAccepted() + "\n";
+                    result.append("NodePcplLicense LicName: ").append(lics.getName()).append("\n");
+                    result.append("+++ LicFile: ").append(lics.getFile()).append("\n");
+                    result.append("+++ Accepted: ").append(npl.isAccepted()).append("\n");
 
                 }
             } catch (UnknownNodeException unE) {
@@ -162,7 +162,7 @@ public class AmsLicense {
             _log.warn("Can't get license info for unknown user: " + userName);
         }
 
-        return result;
+        return result.toString();
     }
 
     /**
