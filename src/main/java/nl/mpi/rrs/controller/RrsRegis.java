@@ -12,7 +12,7 @@ import nl.mpi.rrs.model.errors.ErrorRequest;
 import nl.mpi.rrs.model.errors.ErrorsRequest;
 import nl.mpi.rrs.model.user.RegistrationUser;
 import nl.mpi.rrs.model.user.UserGenerator;
-import nl.mpi.rrs.model.utilities.AuthenticationUtility;
+import nl.mpi.rrs.model.utilities.AuthenticationProvider;
 
 /**
  * Show User Registration Form
@@ -21,14 +21,14 @@ import nl.mpi.rrs.model.utilities.AuthenticationUtility;
  */
 public class RrsRegis extends HttpServlet {
 
-    private AuthenticationUtility authenticationUtility;
+    private AuthenticationProvider authenticationProvider;
 
     @Override
     public void init() throws ServletException {
         super.init();
         // Get authentication utility from servlet context. It is put there through
         // spring configuration in spring-rrs-auth(-test).xml
-        authenticationUtility = (AuthenticationUtility) getServletContext().getAttribute("authenticationUtility");
+        authenticationProvider = (AuthenticationProvider) getServletContext().getAttribute("authenticationProvider");
     }
 
     /** 
@@ -49,8 +49,8 @@ public class RrsRegis extends HttpServlet {
      * @param response Servlet response
      */
     private void checkCurrentUser(HttpServletRequest request, HttpServletResponse response, ErrorsRequest errorsRequest) {
-        if (authenticationUtility.isUserLoggedIn(request)) {
-            String uid = authenticationUtility.getLoggedInUser(request);
+        if (authenticationProvider.isUserLoggedIn(request)) {
+            String uid = authenticationProvider.getLoggedInUser(request);
             // User already logged in
             UserGenerator ug = (UserGenerator) this.getServletContext().getAttribute("ams2DbConnection");
             if (ug.isExistingUserName(uid)) {
@@ -70,7 +70,7 @@ public class RrsRegis extends HttpServlet {
 
                 request.setAttribute("uid", uid);
 
-                RegistrationUser user = authenticationUtility.createRegistrationUser(request);
+                RegistrationUser user = authenticationProvider.createRegistrationUser(request);
                 request.setAttribute("paramUserNewFirstName", user.getFirstName());
                 request.setAttribute("paramUserNewLastName", user.getLastName());
                 request.setAttribute("paramUserNewEmail", user.getEmail());

@@ -22,7 +22,7 @@ import nl.mpi.rrs.model.date.PulldownGenerator;
 import nl.mpi.rrs.model.errors.ErrorRequest;
 import nl.mpi.rrs.model.errors.ErrorsRequest;
 import nl.mpi.rrs.model.user.UserGenerator;
-import nl.mpi.rrs.model.utilities.AuthenticationUtility;
+import nl.mpi.rrs.model.utilities.AuthenticationProvider;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -147,7 +147,7 @@ public class RrsIndex extends HttpServlet {
         request.setAttribute("pulldownYearEnd", pulldownYearEnd);
     }
 
-    static void dispatchServlet(HttpServletRequest request, HttpServletResponse response, ErrorsRequest errorsRequest, ServletContext servletContext)  //, AuthenticationUtility authUtil)
+    static void dispatchServlet(HttpServletRequest request, HttpServletResponse response, ErrorsRequest errorsRequest, ServletContext servletContext)
             throws ServletException, IOException {
         if (errorsRequest.getSize() > 0) {
             if (errorsRequest.isErrorFromBrowser()) {
@@ -170,17 +170,17 @@ public class RrsIndex extends HttpServlet {
             }
         } else {
             UserGenerator ug = (UserGenerator) servletContext.getAttribute("ams2DbConnection");
-            AuthenticationUtility authUtil = (AuthenticationUtility) servletContext.getAttribute("authenticationUtility");
+            AuthenticationProvider authProvider = (AuthenticationProvider) servletContext.getAttribute("authenticationProvider");
 
             assert ug != null;
-            assert authUtil != null;
+            assert authProvider != null;
 
-            boolean loggedIn = authUtil.isUserLoggedIn(request);
+            boolean loggedIn = authProvider.isUserLoggedIn(request);
             if(loggedIn){
-                request.setAttribute("uid", authUtil.getLoggedInUser(request));
+                request.setAttribute("uid", authProvider.getLoggedInUser(request));
             }
 
-            if (loggedIn && ug.isExistingUserName(authUtil.getLoggedInUser(request)) ) {
+            if (loggedIn && ug.isExistingUserName(authProvider.getLoggedInUser(request)) ) {
                 logger.debug("RrsIndex: call index_2.jsp");
 
                 RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/page/index_2.jsp");

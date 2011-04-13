@@ -7,7 +7,7 @@ import nl.mpi.rrs.model.user.RegistrationUser;
  *
  * @author Twan Goosen <twan.goosen@mpi.nl>
  */
-public interface AuthenticationUtility {
+public interface AuthenticationProvider {
 
     /**
      * Creates a registration user and attempts to set properties from the currently logged in user

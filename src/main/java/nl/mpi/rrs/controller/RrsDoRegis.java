@@ -16,7 +16,7 @@ import nl.mpi.rrs.model.errors.ErrorsRequest;
 import nl.mpi.rrs.model.registrations.RegisFileIO;
 import nl.mpi.rrs.model.user.RegistrationUser;
 import nl.mpi.rrs.model.user.UserGenerator;
-import nl.mpi.rrs.model.utilities.AuthenticationUtility;
+import nl.mpi.rrs.model.utilities.AuthenticationProvider;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -37,14 +37,14 @@ public class RrsDoRegis extends HttpServlet {
     private static Log logger = LogFactory.getLog(RrsDoRegis.class);
     RrsRegistration rrsRegistration = new RrsRegistration();
     ErrorsRequest errorsRequest = new ErrorsRequest();
-    private AuthenticationUtility authenticationUtility;
+    private AuthenticationProvider authenticationProvider;
 
     @Override
     public void init() throws ServletException {
         super.init();
         // Get authentication utility from servlet context. It is put there through
         // spring configuration in spring-rrs-auth(-test).xml
-        authenticationUtility = (AuthenticationUtility) getServletContext().getAttribute("authenticationUtility");
+        authenticationProvider = (AuthenticationProvider) getServletContext().getAttribute("authenticationUtility");
     }
 
     /**
@@ -95,8 +95,8 @@ public class RrsDoRegis extends HttpServlet {
 
     private RegistrationUser initUserInfo(HttpServletRequest request) {
         RegistrationUser userInfo = new RegistrationUser();
-        if (authenticationUtility.isUserLoggedIn(request)) {
-            String uid = authenticationUtility.getLoggedInUser(request);
+        if (authenticationProvider.isUserLoggedIn(request)) {
+            String uid = authenticationProvider.getLoggedInUser(request);
             userInfo.setUserName(uid);
             request.setAttribute("uid", uid);
         } else {

@@ -10,10 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import nl.mpi.rrs.model.user.RegistrationUser;
 
 /**
- * Shibboleth implementation of AuthenticationUtility
+ * Shibboleth implementation of AuthenticationProvider
  * @author Twan Goosen <twan.goosen@mpi.nl>
  */
-public class ShibbolethUtil implements AuthenticationUtility {
+public class ShibbolethAuthenticationProvider implements AuthenticationProvider {
     public final static String SHIB_ANONYMOUS_USER = "anonymous";
 
     public boolean isUserLoggedIn(HttpServletRequest request) {

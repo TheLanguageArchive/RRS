@@ -5,8 +5,8 @@
 
 <beans>
 
-    <bean id="authenticationUtility" class="nl.mpi.rrs.model.utilities.DummyAuthenticationUtility">
-        <property name="loggedIn" value="true" />
+    <bean id="authenticationProvider" class="nl.mpi.rrs.model.utilities.DummyAuthenticationProvider">
+        <property name="loggedIn" value="false" />
         <property name="firstName" value="John"/>
         <property name="lastName" value="Doe"/>
         <property name="userName" value="john.doe@example.com"/>
@@ -18,16 +18,11 @@
     <bean class="org.springframework.web.context.support.ServletContextAttributeExporter">
         <property name="attributes">
             <map>
-                <entry key="authenticationUtility" value-ref="authenticationUtility"/>
+                <entry key="authenticationProvider" value-ref="authenticationProvider"/>
             </map>
         </property>
     </bean>
 
-
-<!--    <bean id="registrationServlet"
-            class = "nl.mpi.rrs.controller.RrsRegis"    >
-        <property name="authenticationUtility" ref="authenticationUtility" />
-    </bean>-->
 
 	<!-- *** OVERRIDE standard config *** -->
 	<!-- 

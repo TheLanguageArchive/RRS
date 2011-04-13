@@ -7,7 +7,7 @@ import nl.mpi.rrs.model.user.RegistrationUser;
  *
  * @author Twan Goosen <twan.goosen@mpi.nl>
  */
-public class DummyAuthenticationUtility implements AuthenticationUtility {
+public class DummyAuthenticationProvider implements AuthenticationProvider {
 
     private boolean loggedIn;
     private String userName;

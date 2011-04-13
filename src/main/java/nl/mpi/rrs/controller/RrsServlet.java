@@ -31,7 +31,7 @@ import nl.mpi.rrs.model.ams.AmsServicesSingleton;
 import nl.mpi.rrs.model.user.UserGenerator;
 import nl.mpi.lat.fabric.NodeID;
 import nl.mpi.rrs.model.ams.AmsLicense;
-import nl.mpi.rrs.model.utilities.AuthenticationUtility;
+import nl.mpi.rrs.model.utilities.AuthenticationProvider;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -46,14 +46,14 @@ import org.apache.commons.logging.LogFactory;
 public class RrsServlet extends HttpServlet {
 
     private static Log logger = LogFactory.getLog(RrsServlet.class);
-    private AuthenticationUtility authenticationUtility;
+    private AuthenticationProvider authenticationProvider;
 
     @Override
     public void init() throws ServletException {
         super.init();
         // Get authentication utility from servlet context. It is put there through
         // spring configuration in spring-rrs-auth(-test).xml
-        authenticationUtility = (AuthenticationUtility) getServletContext().getAttribute("authenticationUtility");
+        authenticationProvider = (AuthenticationProvider) getServletContext().getAttribute("authenticationProvider");
     }
 
     /** Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -89,7 +89,7 @@ public class RrsServlet extends HttpServlet {
             rrsRequest.setPublicationAim(request.getParameter("paramRequestPublicationAim"));
             rrsRequest.setResearchProject(request.getParameter("paramRequestResearchProject"));
 
-            rrsRequest.setIdentityProviderId(authenticationUtility.getIdentityProviderId(request));
+            rrsRequest.setIdentityProviderId(authenticationProvider.getIdentityProviderId(request));
 
             request.setAttribute("rrsRequest", rrsRequest);
         }
@@ -139,9 +139,9 @@ public class RrsServlet extends HttpServlet {
 
     private RequestUser initRequestUser(HttpServletRequest request, RrsRequest rrsRequest, UserGenerator ug, ErrorsRequest errorsRequest) {
         RequestUser userInfo = new RequestUser();
-        if (authenticationUtility.isUserLoggedIn(request) && ug.isExistingUserName(authenticationUtility.getLoggedInUser(request))) {
+        if (authenticationProvider.isUserLoggedIn(request) && ug.isExistingUserName(authenticationProvider.getLoggedInUser(request))) {
             rrsRequest.setUserStatus("Existing user");
-            String userName = authenticationUtility.getLoggedInUser(request);
+            String userName = authenticationProvider.getLoggedInUser(request);
             logger.info("Username: " + userName);
             logger.info("using UserGenerator " + ug.getInfo());
             /*
@@ -247,7 +247,7 @@ public class RrsServlet extends HttpServlet {
                         ImdiNode imdiNode = new ImdiNode();
                         imdiNode.setImdiNodeIdWithPrefix(values[i]);
                         NodeID nodeId = AmsServicesSingleton.getInstance().getFabricSrv().newNodeID(imdiNode.getImdiNodeIdWithPrefix());
-                        assert authenticationUtility.isUserLoggedIn(request) : "Valid user logged in";
+                        assert authenticationProvider.isUserLoggedIn(request) : "Valid user logged in";
                         
                         AmsLicense amsLicence = new AmsLicense();
                         logger.debug(amsLicence.getLicenseInfo(userInfo.getUserName(), nodeId));

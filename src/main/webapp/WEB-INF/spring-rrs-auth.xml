@@ -4,8 +4,8 @@
 	"http://www.springframework.org/dtd/spring-beans.dtd">
 
 <beans>
-    <bean id="authenticationUtility"
-            class="nl.mpi.rrs.model.utilities.ShibbolethUtil">
+    <bean id="authenticationProvider"
+            class="nl.mpi.rrs.model.utilities.ShibbolethAuthenticationProvider">
         <property name="emailAttributes">
             <list>
                 <value>mail</value>
@@ -40,16 +40,11 @@
     <bean class="org.springframework.web.context.support.ServletContextAttributeExporter">
         <property name="attributes">
             <map>
-                <entry key="authenticationUtility" value-ref="authenticationUtility"/>
+                <entry key="authenticationProvider" value-ref="authenticationProvider"/>
             </map>
         </property>
     </bean>
 
-
-<!--    <bean id="registrationServlet"
-            class = "nl.mpi.rrs.controller.RrsRegis"    >
-        <property name="authenticationUtility" ref="authenticationUtility" />
-    </bean>-->
 
 	<!-- *** OVERRIDE standard config *** -->
 	<!-- 
