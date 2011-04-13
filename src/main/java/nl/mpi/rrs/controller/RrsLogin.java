@@ -1,6 +1,7 @@
 package nl.mpi.rrs.controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +17,12 @@ public class RrsLogin extends HttpServlet {
 
     private final static Log logger = LogFactory.getLog(RrsLogin.class);
 
+    public enum RedirectLocation {
+
+        RrsRegistration,
+        RrsIndex
+    }
+
     /** Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
      * @param response servlet response
@@ -25,10 +32,20 @@ public class RrsLogin extends HttpServlet {
         logger.info("RrsLogin");
         String redirectString = request.getParameter("redirect");
         if (redirectString != null && !redirectString.isEmpty()) {
-            logger.info("Redirecting to " + redirectString);
-            response.sendRedirect(redirectString);
+            try {
+                // check against allowed redirect locations
+                RedirectLocation location = RedirectLocation.valueOf(redirectString);
+                // no exception thrown, so valid redirect location
+                logger.info("Redirecting to " + location.toString());
+                response.sendRedirect(location.toString());
+                return;
+            } catch (IllegalArgumentException ex) {
+                logger.warn("Illegal redirect attempt: " + redirectString);
+            }
         }
-        // TODO
+        PrintWriter writer = response.getWriter();
+        writer.append("Illegal or invalid redirect");
+        writer.close();
     }
 
     @Override
