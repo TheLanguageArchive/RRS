@@ -33,6 +33,7 @@ import nl.mpi.rrs.model.user.UserGenerator;
 import nl.mpi.lat.fabric.NodeID;
 import nl.mpi.rrs.model.ams.AmsLicense;
 import nl.mpi.rrs.model.utilities.AuthenticationProvider;
+import nl.mpi.rrs.RrsConstants;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -54,7 +55,7 @@ public class RrsServlet extends HttpServlet {
         super.init();
         // Get authentication utility from servlet context. It is put there through
         // spring configuration in spring-rrs-auth(-test).xml
-        authenticationProvider = (AuthenticationProvider) getServletContext().getAttribute("authenticationProvider");
+        authenticationProvider = (AuthenticationProvider) getServletContext().getAttribute(RrsConstants.AUTHENTICATION_PROVIDER_ATTRIBUTE);
     }
 
     /** Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -103,7 +104,7 @@ public class RrsServlet extends HttpServlet {
      * @return null if db connection is not present
      */
     private CorpusStructureDB initCorpusStructureDbConnection(ErrorsRequest errorsRequest) {
-        CorpusStructureDB corpusDbConnection = (CorpusStructureDB) this.getServletContext().getAttribute("corpusDbConnection");
+        CorpusStructureDB corpusDbConnection = (CorpusStructureDB) this.getServletContext().getAttribute(RrsConstants.CORPUS_DB_CONNECTION_ATTRIBUTE);
         if (corpusDbConnection == null) {
             ErrorRequest errorRequest = new ErrorRequest();
             errorRequest.setErrorFormFieldLabel("Corpus Database");
@@ -120,7 +121,7 @@ public class RrsServlet extends HttpServlet {
 
 
     private ArchiveObjectsDB initArchiveObjectsDbConnection(ErrorsRequest errorsRequest) {
-        ArchiveObjectsDB archiveObjectsDbConnection = (ArchiveObjectsDB) this.getServletContext().getAttribute("archiveObjectsDbConnection");
+        ArchiveObjectsDB archiveObjectsDbConnection = (ArchiveObjectsDB) this.getServletContext().getAttribute(RrsConstants.ARCHIVE_OBJECTS_DB_CONNECTION_ATTRIBUTE);
         if (archiveObjectsDbConnection == null) {
             ErrorRequest errorRequest = new ErrorRequest();
             errorRequest.setErrorFormFieldLabel("Archive objects database");
@@ -141,7 +142,7 @@ public class RrsServlet extends HttpServlet {
      * @return null if user generator is not present
      */
     private UserGenerator initUserGenerator(ErrorsRequest errorsRequest) {
-        UserGenerator ug = (UserGenerator) this.getServletContext().getAttribute("ams2DbConnection");
+        UserGenerator ug = (UserGenerator) this.getServletContext().getAttribute(RrsConstants.AMS2_DB_CONNECTION_ATTRIBUTE);
         if (ug == null) {
             ErrorRequest errorRequest = new ErrorRequest();
             errorRequest.setErrorFormFieldLabel("AMS Database");

@@ -4,6 +4,7 @@
     Author     : kees
 --%>
 
+<%@page import="nl.mpi.rrs.controller.RrsLogin"%>
 <%@include file="/WEB-INF/include/doctypeStrict.jspf" %>
 <%--
 The taglib directive below imports the JSTL library. If you uncomment it,
@@ -57,7 +58,7 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
                         <% if(request.getAttribute("uid") == null) {%>
                         <p>If you have an account with any of the federated organizations, you can try logging in first, so that
                         your registration will be linked to that account. Otherwise you can go ahead and register for a new account using the form below.</p>
-                        <a href="RrsLogin?redirect=RrsRegistration">Click here to log in</a>.
+                        <a href="RrsLogin?redirect=<%= RrsLogin.RedirectLocation.RrsRegistration %>">Click here to log in</a>.
                         <% } else { %>
                         <p>You are logged in as <strong>${uid}</strong>. If you register using the form below, your registration
                             will be linked to this account. <br /> If this is not you, or if you would rather register for a new account, please

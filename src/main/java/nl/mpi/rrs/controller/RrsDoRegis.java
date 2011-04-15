@@ -8,8 +8,8 @@ import java.io.*;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
+import nl.mpi.rrs.RrsConstants;
 
-import nl.mpi.rrs.model.RrsRegistration;
 import nl.mpi.rrs.model.errors.ErrorRequest;
 import nl.mpi.rrs.model.errors.ErrorsRequest;
 
@@ -42,7 +42,7 @@ public class RrsDoRegis extends HttpServlet {
         super.init();
         // Get authentication utility from servlet context. It is put there through
         // spring configuration in spring-rrs-auth(-test).xml
-        authenticationProvider = (AuthenticationProvider) getServletContext().getAttribute("authenticationUtility");
+        authenticationProvider = (AuthenticationProvider) getServletContext().getAttribute(RrsConstants.AUTHENTICATION_PROVIDER_ATTRIBUTE);
     }
 
     /**
@@ -120,7 +120,7 @@ public class RrsDoRegis extends HttpServlet {
     private RequestDispatcher doRegistration(HttpServletRequest request, HttpServletResponse response, RegisFileIO regisFileIO, RegistrationUser userInfo, ErrorsRequest errorsRequest) throws IOException, ServletException {
         String userId = userInfo.getUserName();
 
-        UserGenerator ug = (UserGenerator) this.getServletContext().getAttribute("ams2DbConnection");
+        UserGenerator ug = (UserGenerator) this.getServletContext().getAttribute(RrsConstants.AMS2_DB_CONNECTION_ATTRIBUTE);
         if (ug.isExistingUserName(userId)) {
 
             request.setAttribute("rrsRegisErrorMessage", "This User ID is already taken, please use a different one!");

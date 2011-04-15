@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import nl.mpi.corpusstructure.CorpusStructureDB;
 import nl.mpi.corpusstructure.UnknownNodeException;
+import nl.mpi.rrs.RrsConstants;
 import nl.mpi.rrs.model.corpusdb.ImdiNode;
 import nl.mpi.rrs.model.date.PulldownGenerator;
 import nl.mpi.rrs.model.errors.ErrorRequest;
@@ -53,7 +54,7 @@ public class RrsIndex extends HttpServlet {
         request.setAttribute("urlRrsRegistration", urlRrsRegistration);
 
         ErrorsRequest errorsRequest = new ErrorsRequest();
-        CorpusStructureDB corpusDbConnection = (CorpusStructureDB) this.getServletContext().getAttribute("corpusDbConnection");
+        CorpusStructureDB corpusDbConnection = (CorpusStructureDB) this.getServletContext().getAttribute(RrsConstants.CORPUS_DB_CONNECTION_ATTRIBUTE);
         if (createNodesTable(request, response, corpusDbConnection, errorsRequest, "")) {
             createCalendarDropdowns(request);
         }
@@ -169,8 +170,8 @@ public class RrsIndex extends HttpServlet {
                 return;
             }
         } else {
-            UserGenerator ug = (UserGenerator) servletContext.getAttribute("ams2DbConnection");
-            AuthenticationProvider authProvider = (AuthenticationProvider) servletContext.getAttribute("authenticationProvider");
+            UserGenerator ug = (UserGenerator) servletContext.getAttribute(RrsConstants.AMS2_DB_CONNECTION_ATTRIBUTE);
+            AuthenticationProvider authProvider = (AuthenticationProvider) servletContext.getAttribute(RrsConstants.AUTHENTICATION_PROVIDER_ATTRIBUTE);
 
             assert ug != null;
             assert authProvider != null;

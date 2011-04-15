@@ -8,6 +8,7 @@ import java.io.*;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
+import nl.mpi.rrs.RrsConstants;
 import nl.mpi.rrs.model.errors.ErrorRequest;
 import nl.mpi.rrs.model.errors.ErrorsRequest;
 import nl.mpi.rrs.model.user.RegistrationUser;
@@ -28,7 +29,7 @@ public class RrsRegis extends HttpServlet {
         super.init();
         // Get authentication utility from servlet context. It is put there through
         // spring configuration in spring-rrs-auth(-test).xml
-        authenticationProvider = (AuthenticationProvider) getServletContext().getAttribute("authenticationProvider");
+        authenticationProvider = (AuthenticationProvider) getServletContext().getAttribute(RrsConstants.AUTHENTICATION_PROVIDER_ATTRIBUTE);
     }
 
     /** 
@@ -52,7 +53,7 @@ public class RrsRegis extends HttpServlet {
         if (authenticationProvider.isUserLoggedIn(request)) {
             String uid = authenticationProvider.getLoggedInUser(request);
             // User already logged in
-            UserGenerator ug = (UserGenerator) this.getServletContext().getAttribute("ams2DbConnection");
+            UserGenerator ug = (UserGenerator) this.getServletContext().getAttribute(RrsConstants.AMS2_DB_CONNECTION_ATTRIBUTE);
             if (ug.isExistingUserName(uid)) {
                 // User already logged in and registered. Should not register again
                 ErrorRequest errorRequest = new ErrorRequest();

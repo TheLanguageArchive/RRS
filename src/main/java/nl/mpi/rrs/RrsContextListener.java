@@ -89,9 +89,9 @@ public class RrsContextListener implements ServletContextListener {
         UserGenerator ug = this.getUserGenerator(null, null, null);	// ams2 : using defaults
         logger.info("using UserGenerator " + ug.getInfo());
 
-        sc.setAttribute("ams2DbConnection", ug);
-        sc.setAttribute("corpusDbConnection", corpusDbConnection);
-        sc.setAttribute("archiveObjectsDbConnection", corpusDbConnection);
+        sc.setAttribute(RrsConstants.AMS2_DB_CONNECTION_ATTRIBUTE, ug);
+        sc.setAttribute(RrsConstants.CORPUS_DB_CONNECTION_ATTRIBUTE, corpusDbConnection);
+        sc.setAttribute(RrsConstants.ARCHIVE_OBJECTS_DB_CONNECTION_ATTRIBUTE, corpusDbConnection);
 
     }
 
