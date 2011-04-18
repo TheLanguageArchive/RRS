@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE beans PUBLIC 
+	"-//SPRING//DTD BEAN//EN" 
+	"http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+
+    <bean id="authenticationProvider" class="nl.mpi.rrs.authentication.LanaAuthenticationProvider"></bean>
+
+    <bean class="org.springframework.web.context.support.ServletContextAttributeExporter">
+        <property name="attributes">
+            <map>
+                <entry key="authenticationProvider" value-ref="authenticationProvider"/>
+            </map>
+        </property>
+    </bean>
+
+
+	<!-- *** OVERRIDE standard config *** -->
+	<!-- 
+		To override the configuration for any bean present in the three xmls file above
+		add here below the new configuration values as shown in the following example.
+	 --> 
+	<!-- 
+	<bean id="damlrSrv" class="nl.mpi.lat.ams.service.impl.DamLrSrv">
+		<property name="defaultHostingInstitute" value="MPINLA" />
+		<property name="defaultHostingService" value="ams2/ldap" />
+		<property name="defaultFedID" value="mpi.nl" />
+		<property name="defaultDelimiter" value="@" />
+		<property name="useFederateID" value="true" />
+		<property name="damlrLdapApi" ref="damlrLdapApi" />
+		<property name="ldapEnabled" value="true" />
+	</bean>
+	-->
+</beans>
