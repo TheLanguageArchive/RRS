@@ -1,4 +1,4 @@
-package nl.mpi.rrs.model.utilities;
+package nl.mpi.rrs.authentication;
 
 import de.mpg.aai.shhaa.context.AuthenticationContext;
 import de.mpg.aai.shhaa.context.AuthenticationContextHolder;

@@ -1,4 +1,4 @@
-package nl.mpi.rrs.model.utilities;
+package nl.mpi.rrs.authentication;
 
 import javax.servlet.http.HttpServletRequest;
 import nl.mpi.rrs.model.user.RegistrationUser;

@@ -16,7 +16,7 @@ import nl.mpi.rrs.model.errors.ErrorsRequest;
 import nl.mpi.rrs.model.registrations.RegisFileIO;
 import nl.mpi.rrs.model.user.RegistrationUser;
 import nl.mpi.rrs.model.user.UserGenerator;
-import nl.mpi.rrs.model.utilities.AuthenticationProvider;
+import nl.mpi.rrs.authentication.AuthenticationProvider;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

@@ -32,7 +32,7 @@ import nl.mpi.rrs.model.ams.AmsServicesSingleton;
 import nl.mpi.rrs.model.user.UserGenerator;
 import nl.mpi.lat.fabric.NodeID;
 import nl.mpi.rrs.model.ams.AmsLicense;
-import nl.mpi.rrs.model.utilities.AuthenticationProvider;
+import nl.mpi.rrs.authentication.AuthenticationProvider;
 import nl.mpi.rrs.RrsConstants;
 
 import org.apache.commons.logging.Log;

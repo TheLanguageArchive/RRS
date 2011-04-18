@@ -1,4 +1,4 @@
-package nl.mpi.rrs.model.utilities;
+package nl.mpi.rrs.authentication;
 
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockServletContext;
@@ -15,7 +15,7 @@ import static org.junit.Assert.assertFalse;
 public class TestShibbolethAuthenticationProvider {
 
     private MockServletContext servletContext = new MockServletContext();
-    private nl.mpi.rrs.model.utilities.ShibbolethAuthenticationProvider util = new ShibbolethAuthenticationProvider();
+    private nl.mpi.rrs.authentication.ShibbolethAuthenticationProvider util = new ShibbolethAuthenticationProvider();
 
     private final static String ANONYMOUS_USERNAME="anonymous";
     private final static String LOGGEDIN_USERNAME="john@doe.net";

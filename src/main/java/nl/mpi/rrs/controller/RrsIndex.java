@@ -23,7 +23,7 @@ import nl.mpi.rrs.model.date.PulldownGenerator;
 import nl.mpi.rrs.model.errors.ErrorRequest;
 import nl.mpi.rrs.model.errors.ErrorsRequest;
 import nl.mpi.rrs.model.user.UserGenerator;
-import nl.mpi.rrs.model.utilities.AuthenticationProvider;
+import nl.mpi.rrs.authentication.AuthenticationProvider;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
