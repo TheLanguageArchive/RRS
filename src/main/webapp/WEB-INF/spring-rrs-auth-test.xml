@@ -6,13 +6,13 @@
 <beans>
 
     <bean id="authenticationProvider" class="nl.mpi.rrs.authentication.DummyAuthenticationProvider">
-        <property name="loggedIn" value="true" />
-        <property name="firstName" value="John"/>
-        <property name="lastName" value="Doe"/>
-        <property name="userName" value="john.doe@example.com"/>
+        <property name="loggedIn" value="false" />
+        <property name="firstName" value="Jack"/>
+        <property name="lastName" value="Johnson"/>
+        <property name="userName" value="jack.johnson@example.com"/>
         <property name="organization" value="Example Co."/>
         <property name="email" value="t.goosen@gmail.com"/>
-
+        <property name="federated" value="false" />
     </bean>
 
     <bean class="org.springframework.web.context.support.ServletContextAttributeExporter">

@@ -15,6 +15,7 @@ public class DummyAuthenticationProvider implements AuthenticationProvider {
     private String lastName;
     private String email;
     private String organization;
+    private boolean federated;
 
     public RegistrationUser createRegistrationUser(HttpServletRequest request) {
         RegistrationUser ru = new RegistrationUser();
@@ -70,7 +71,11 @@ public class DummyAuthenticationProvider implements AuthenticationProvider {
     }
 
     public boolean isFederated() {
-        return true;
+        return federated;
+    }
+
+    public void setFederated(boolean federated){
+        this.federated = federated;
     }
 
 }

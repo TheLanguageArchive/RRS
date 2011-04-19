@@ -70,6 +70,7 @@ public class RrsRegis extends HttpServlet {
                 // Try to pre-fill the form
 
                 request.setAttribute("uid", uid);
+                request.setAttribute("federated", authenticationProvider.isFederated());
 
                 RegistrationUser user = authenticationProvider.createRegistrationUser(request);
                 request.setAttribute("paramUserNewFirstName", user.getFirstName());
