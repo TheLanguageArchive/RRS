@@ -44,14 +44,19 @@ public class RegistrationUser extends User {
     }
 
     public String createUserInfo(String newLine) {
-        String result = "User Id: " + this.getUserName() + newLine
-                + "Password: " + this.getPassword() + newLine
-                + "First Name: " + this.getFirstName() + newLine
-                + "Last Name: " + this.getLastName() + newLine
-                + "Organisation: " + this.getOrganization() + newLine
-                + "Email: " + this.getEmail();
 
-        return result;
+        StringBuilder userInfoStringBuilder = new StringBuilder();
+
+        userInfoStringBuilder.append("User Id: ").append(this.getUserName()).append(newLine);
+        if (!getPassword().isEmpty()) {
+            userInfoStringBuilder.append("Password: ").append(this.getPassword()).append(newLine);
+        }
+        userInfoStringBuilder.append("First Name: ").append(this.getFirstName()).append(newLine);
+        userInfoStringBuilder.append("Last Name: ").append(this.getLastName()).append(newLine);
+        userInfoStringBuilder.append("Organisation: ").append(this.getOrganization()).append(newLine);
+        userInfoStringBuilder.append("Email: ").append(this.getEmail());
+
+        return userInfoStringBuilder.toString();
     }
 
     public String getUserRecordAsString() {
