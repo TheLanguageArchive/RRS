@@ -101,6 +101,7 @@ public class ShibbolethAuthenticationProvider implements AuthenticationProvider 
     private List<String> lastNameAttributes;
     private List<String> organizationAttributes;
     private List<String> emailAttributes;
+    private boolean federated = true;
 
     /**
      * @param nameAttributes the nameAttributes to set
@@ -130,7 +131,19 @@ public class ShibbolethAuthenticationProvider implements AuthenticationProvider 
         this.emailAttributes = emailAttributes;
     }
 
+    /**
+     * Gets whether federation is supported. Defaults to true.
+     * @return whether federation is supported
+     */
     public boolean isFederated() {
-        return true;
+        return federated;
+    }
+
+    /**
+     * Sets whether federation should be supported. Defaults to true.
+     * @param federated the federated to set
+     */
+    public void setFederated(boolean federated) {
+        this.federated = federated;
     }
 }

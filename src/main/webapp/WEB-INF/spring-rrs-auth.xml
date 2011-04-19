@@ -6,6 +6,7 @@
 <beans>
     <bean id="authenticationProvider"
             class="nl.mpi.rrs.authentication.ShibbolethAuthenticationProvider">
+        <property name="federated" value="False" />
         <property name="emailAttributes">
             <list>
                 <value>mail</value>
