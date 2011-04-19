@@ -129,4 +129,8 @@ public class ShibbolethAuthenticationProvider implements AuthenticationProvider 
     public void setEmailAttributes(List<String> emailAttributes) {
         this.emailAttributes = emailAttributes;
     }
+
+    public boolean isFederated() {
+        return true;
+    }
 }

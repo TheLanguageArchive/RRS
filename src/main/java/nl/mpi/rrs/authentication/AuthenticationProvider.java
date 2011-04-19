@@ -34,4 +34,11 @@ public interface AuthenticationProvider {
      * @return A string identifying the provider identifying the user
      */
     String getIdentityProviderId(HttpServletRequest request);
+
+    /**
+     * Tells whether authentication is federated. If so, the application should
+     * take into account that users can be logged in but not registered
+     * @return Whether authentication is federated
+     */
+    boolean isFederated();
 }

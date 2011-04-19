@@ -69,4 +69,8 @@ public class DummyAuthenticationProvider implements AuthenticationProvider {
         return "RRS DUMMY PROVIDER!!!";
     }
 
+    public boolean isFederated() {
+        return true;
+    }
+
 }

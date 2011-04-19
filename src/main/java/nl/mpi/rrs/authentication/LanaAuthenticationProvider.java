@@ -25,4 +25,8 @@ public class LanaAuthenticationProvider implements AuthenticationProvider {
     public RegistrationUser createRegistrationUser(HttpServletRequest request) {
         return new RegistrationUser();
     }
+
+    public boolean isFederated() {
+        return false;
+    }
 }
