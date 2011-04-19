@@ -4,9 +4,17 @@
 	"http://www.springframework.org/dtd/spring-beans.dtd">
 
 <beans>
-    <bean id="authenticationProvider"
-            class="nl.mpi.rrs.authentication.ShibbolethAuthenticationProvider">
-        <property name="federated" value="False" />
+    <bean id="authenticationProvider" class="nl.mpi.rrs.authentication.ShibbolethAuthenticationProvider">
+        <!--
+            Federation support can be optionally turned off by setting the below
+            value to False.
+        -->
+        <property name="federated" value="True" />
+
+        <!--
+            The attribute lists below determine which fields (provided order determines priority)
+            will be checked to find values to pre-fill the registration form.
+        -->
         <property name="emailAttributes">
             <list>
                 <value>mail</value>

@@ -116,9 +116,9 @@
 
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>/WEB-INF/spring-rrs-auth.xml</param-value>
-<!--        <param-value>/WEB-INF/spring-rrs-auth-test.xml</param-value>-->
+        <param-value>/WEB-INF/spring-rrs-auth-shib.xml</param-value>
 <!--        <param-value>/WEB-INF/spring-rrs-auth-lana.xml</param-value>-->
+<!--        <param-value>/WEB-INF/spring-rrs-auth-test.xml</param-value>-->
     </context-param>
 
     <listener>
