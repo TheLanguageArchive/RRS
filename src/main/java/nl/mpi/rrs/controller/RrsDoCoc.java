@@ -83,7 +83,10 @@ public class RrsDoCoc extends HttpServlet {
             return;
         }
 
-        regisFileIO.updateCocSigned(userInfo);
+        boolean cocAgree = "ON".equals(request.getParameter("coc_agree"));
+        if (cocAgree) {
+            regisFileIO.updateCocSigned(userInfo);
+        }
 
         StringBuilder checkEmailLinkBase = new StringBuilder();
         String urlFields[] = request.getRequestURL().toString().split("/");

@@ -25,8 +25,9 @@
         <hr />
         <p>In order to get access to data in the DOBES corpora, 
             you will need to sign the DoBES Code of Conduct.<br />
-            Please read the Code of Conduct below and tick the "I agree" button
-            at the bottom of the page.
+            It is recommended that you read the Code of Conduct below and tick the "I agree" button
+            at the bottom of the page. <br />You can also choose to skip this step, and optionally accept the
+            code of conduct later.
         </p>
         
         <div>
@@ -37,7 +38,7 @@
         
         <p />
         
-        <form id="resource_request_dobes_coc_form" method="post" action="RrsCoc.do" onsubmit="return validateForm( this )">
+        <form id="resource_request_dobes_coc_form" method="post" action="RrsCoc.do" >
             <fieldset>
                 
                 <input type="hidden" name="userName" value="${user.userName}" />
@@ -51,9 +52,12 @@
                 </div>
                 
                 <div id="buttons"> 
-                    <input type="submit" value="Submit DoBES Code of Conduct" />
+                    <input onclick="return validateForm( getElementById('resource_request_dobes_coc_form') )" type="submit" value="Submit DoBES Code of Conduct" /><br />
+                    <hr />
+                    <input type="submit" value="Skip this step" />
                 </div>
-                
+
+
             </fieldset>
             
         </form>

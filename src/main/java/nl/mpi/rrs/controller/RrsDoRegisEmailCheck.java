@@ -61,7 +61,10 @@ public class RrsDoRegisEmailCheck extends HttpServlet {
         request.setAttribute("RrsRegisId", userRegisId);
 
         ErrorsRequest errorsRequest = new ErrorsRequest();
-        if (!processNewUserIfRegistered(request, response, errorsRequest, userName, userRegisId)) {
+        if (processNewUserIfRegistered(request, response, errorsRequest, userName, userRegisId)) {
+            RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/page/emailCheckOk.jsp");
+            view.forward(request, response);
+        } else {
             // Registration failed. Show errors table
             errorsRequest.setErrorsHtmlTable();
 
@@ -130,7 +133,12 @@ public class RrsDoRegisEmailCheck extends HttpServlet {
                 } else {
                     logger.error("User: " + userName + " can't be removed from registration file.");
                 }
-                return acceptLicenseForUser(request, response, errorsRequest, userInfo, rrsRegistration.getRegisId());
+
+                if (rrsRegistration.getUser().isDobesCocSigned()) {
+                    return acceptLicenseForUser(request, response, errorsRequest, userInfo, rrsRegistration.getRegisId());
+                } else {
+                    return true;
+                }
             } else {
                 ErrorRequest errorRequest = new ErrorRequest();
                 errorRequest.setErrorFormFieldLabel("Add user");
@@ -157,8 +165,6 @@ public class RrsDoRegisEmailCheck extends HttpServlet {
         if (al.acceptLicenseInfo(userInfo.getUserName(), targetNodeID, dobesCodeOfConductLicenseName)) {
             logger.info("*** END OF REGISTRATION for user: " + userInfo.getUserName());
             logger.info("");
-            RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/page/emailCheckOk.jsp");
-            view.forward(request, response);
             return true;
         } else {
             ErrorRequest errorRequest = new ErrorRequest();
