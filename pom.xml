@@ -74,6 +74,12 @@
             <artifactId>corpusstructure-api</artifactId>
             <version>1.7.3</version>
             <scope>compile</scope>
+            <exclusions>
+                <exclusion>
+                    <artifactId>xalan</artifactId>
+                    <groupId>xalan</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>nl.mpi</groupId>
@@ -85,12 +91,6 @@
             <groupId>nl.mpi</groupId>
             <artifactId>lana2</artifactId>
             <version>1.0.2</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>nl.mpi</groupId>
-            <artifactId>lana_auth</artifactId>
-            <version>1.0</version>
             <scope>compile</scope>
         </dependency>
 
@@ -288,6 +288,11 @@
             <artifactId>lana2</artifactId>
             <version>1.0.2</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>lana2</artifactId>
+            <version>1.0.2</version>
         </dependency>
     </dependencies>
 
