@@ -1,57 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context crossContext="true" debug="0" docBase="webapps/RRS" path="/ds/RRS_V1" privileged="true" reloadable="true">
-  <!-- ** corpusstructure ** -->
-  <!--
-    <Resource
-        name="jdbc/CSDB"
-        auth="Container"
-        type="javax.sql.DataSource"
-        driverClassName="org.postgresql.Driver"
-        url="jdbc:postgresql://lux08.mpi.nl:5432/corpusstructure"
-        username="webuser"
-        password="v3Py(gc.k"
-        maxActive="10"
-        maxIdle="5"
-        maxWait="4000"
-    />
-    -->
-  <!-- ** ams2 db -->
-  <!--
-    <Resource
-        name="jdbc/AMS2DB"
-        auth="Container"
-        type="javax.sql.DataSource"
-        driverClassName="org.postgresql.Driver"
-        url="jdbc:postgresql://lux08.mpi.nl:5432/ams2"
-        username="webuser"
-        password="v3Py(gc.k"
-        maxActive="10"
-        maxIdle="5"
-        maxWait="4000"
-        removeAbandoned="true"
-        removeAbandonedTimeout="300"
-        logAbandoned="true"
-    />
-
-    -->
-  <Resource auth="Container" driverClassName="org.postgresql.Driver" maxActive="10" maxIdle="5" maxWait="4000" name="jdbc/CSDB" password="start1a" type="javax.sql.DataSource" url="jdbc:postgresql://lux16.mpi.nl:5432/corpusstructure" username="webuser"/>
-  <Resource auth="Container" driverClassName="org.postgresql.Driver" logAbandoned="true" maxActive="10" maxIdle="5" maxWait="4000" name="jdbc/AMS2DB" password="start1a" removeAbandoned="true" removeAbandonedTimeout="300" type="javax.sql.DataSource" url="jdbc:postgresql://lux16.mpi.nl:5432/ams2" username="webuser"/>
-  <!-- damlr ldap for authentication -->
-  <Resource auth="Container" factory="org.apache.naming.factory.BeanFactory" name="ldap/DAMLR" password="secret" principal="cn=Administrator,dc=mpi.nl" type="nl.mpi.common.catalina.impl.LdapJndiRes" url="ldap://lux17.mpi.nl:389/dc=mpi.nl"/>
-  <!-- mpi active-directory/kdc  for authentication -->
-  <Resource auth="Container" factory="org.apache.naming.factory.BeanFactory" kdc="NT01.MPI.NL" name="kdc/MPI-NL" realm="MPI.NL" type="nl.mpi.common.catalina.impl.KerberosJndiRes"/>
-  <!--  ** user db to OLD ams-1 (expiring) ** -->
-  <!--
-	<Resource
-		name="jdbc/USERDB"
-		auth="Container"
-		type="javax.sql.DataSource"
-		driverClassName="org.postgresql.Driver"
-		url="jdbc:postgresql://lux16.mpi.nl:5432/ams"
-		username="webuser"
-		password="start1a"
-		maxActive="10"
-		maxIdle="5"
-		maxWait="4000" />
-    -->
+    
+    <Parameter name="EMAIL_HOST" 
+	value="mailhost.mpi.nl"
+	description="default imap mail host" />
+	
+    <Parameter name="AMS_INTERFACE_LINK" 	
+	value="http://lux16.mpi.nl/am/ams2/index.face?nodeid=MPI0%23" 
+	description="URL AMS lat access management system"  />
+	
+    <Parameter name="RRS_V1_CORPUS_SERVER_JDBC_URL" 
+	value="jdbc:postgresql://lux16.mpi.nl:5432/corpusstructure" 
+	description="Corpus DB connection string" />
+	
+    <Parameter name="RRS_V1_CORPUS_SERVER_DB_USER" 
+	value="webuser" 
+	description="Corpus DB username" />
+	
+    <Parameter name="RRS_V1_CORPUS_SERVER_DB_PASS" 
+	value="start1a" 
+	description="Corpus DB webuser password" />
+	
+    <Parameter name="EMAIL_ADDRESS_CORPMAN" 
+	value="twan.goosen@mpi.nl" 
+	description="email address of user corpman corpman@mpi.nl" />
+	
+    <Parameter name="OPENPATH_PREFIX" 
+	value="http://corpus1.mpi.nl/ds/imdi_browser?openpath=" 
+	description="Prefix for http link to nodeId e.g.: /corpus1.mpi.nl/ds/imdi_browser?openpath=MPI177915%23" />
+	
+    <Parameter name="DOBES_COC_LINK" 
+	value="default" 
+	description="Link to location of file with DoBES Code of Conduct. /ds/RRS_V1/dobes_coc_v2.html" />
+	
+    <Parameter name="REGISTRATION_FILENAME" 
+	value="/tmp/registration.txt" 
+	description="For saving RRS registrations temporarily" />
+	
+    <Parameter name="DOBES_COC_LICENSE_NAME" 
+	value="Dobes Code of Conduct v2" 
+	description="Name of the Dobes code of conduct license as stored in the AMS database" />
+    
+    <!-- DATABASE CONNECTIONS -->
+    
+    <!-- damlr ldap for authentication -->
+<!--    <Resource auth="Container" factory="org.apache.naming.factory.BeanFactory" name="ldap/DAMLR" password="secret" principal="cn=Administrator,dc=mpi.nl" type="nl.mpi.common.catalina.impl.LdapJndiRes" url="ldap://lux17.mpi.nl:389/dc=mpi.nl"/> -->
+    <!-- mpi active-directory/kdc  for authentication -->
+<!--    <Resource auth="Container" factory="org.apache.naming.factory.BeanFactory" kdc="NT01.MPI.NL" name="kdc/MPI-NL" realm="MPI.NL" type="nl.mpi.common.catalina.impl.KerberosJndiRes"/> -->
 </Context>
