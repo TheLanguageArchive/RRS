@@ -26,10 +26,10 @@ import nl.mpi.lat.auth.principal.PrincipalService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-
 public class RrsContextListener implements ServletContextListener {
 
     static Log logger = LogFactory.getLog(RrsContextListener.class);
+    private String corpusDbName;
     private String corpusJdbcURL;
     private String corpusUser;
     private String corpusPass;
@@ -44,63 +44,70 @@ public class RrsContextListener implements ServletContextListener {
 
     public void contextInitialized(ServletContextEvent sce) {
 
-        ServletContext sc = sce.getServletContext();
+	ServletContext sc = sce.getServletContext();
 
-        rrsRegistrationFileName = sc.getInitParameter("REGISTRATION_FILENAME");
+	rrsRegistrationFileName = sc.getInitParameter("REGISTRATION_FILENAME");
 
-        String maxFormNodeIds = sc.getInitParameter("MAX_FORM_NODE_IDS");
-        sc.setAttribute("maxFormNodeIds", maxFormNodeIds);
-        
-        String amsInterfaceLink = sc.getInitParameter("AMS_INTERFACE_LINK");
-        sc.setAttribute("amsInterfaceLink", amsInterfaceLink);
+	String maxFormNodeIds = sc.getInitParameter("MAX_FORM_NODE_IDS");
+	sc.setAttribute("maxFormNodeIds", maxFormNodeIds);
 
-        String emailAddressCorpman = sc.getInitParameter("EMAIL_ADDRESS_CORPMAN");
-        sc.setAttribute("emailAddressCorpman", emailAddressCorpman);        
-        
-        String emailHost = sc.getInitParameter("EMAIL_HOST");
-        sc.setAttribute("emailHost", emailHost);
+	String amsInterfaceLink = sc.getInitParameter("AMS_INTERFACE_LINK");
+	sc.setAttribute("amsInterfaceLink", amsInterfaceLink);
 
-        logger.debug("RrsContextListener contextInitialized");
+	String emailAddressCorpman = sc.getInitParameter("EMAIL_ADDRESS_CORPMAN");
+	sc.setAttribute("emailAddressCorpman", emailAddressCorpman);
 
-        try {
-            Class cl = Class.forName("org.postgresql.Driver");
-        } catch (ClassNotFoundException ex) {
-            logger.error("RRS_V1 ***** contextInitialized: No org.postgresql.Driver", ex);
-        //ex.printStackTrace();
-        }
+	String emailHost = sc.getInitParameter("EMAIL_HOST");
+	sc.setAttribute("emailHost", emailHost);
 
-        corpusJdbcURL = sc.getInitParameter("RRS_V1_CORPUS_SERVER_JDBC_URL");
-        corpusUser = sc.getInitParameter("RRS_V1_CORPUS_SERVER_DB_USER");
-        corpusPass = sc.getInitParameter("RRS_V1_CORPUS_SERVER_DB_PASS");
+	logger.debug("RrsContextListener contextInitialized");
+
+	try {
+	    Class cl = Class.forName("org.postgresql.Driver");
+	} catch (ClassNotFoundException ex) {
+	    logger.error("RRS_V1 ***** contextInitialized: No org.postgresql.Driver", ex);
+	    //ex.printStackTrace();
+	}
+
+	corpusDbName = sc.getInitParameter("RRS_V1_CORPUS_SERVER_DB_NAME");
+	corpusJdbcURL = sc.getInitParameter("RRS_V1_CORPUS_SERVER_JDBC_URL");
+	corpusUser = sc.getInitParameter("RRS_V1_CORPUS_SERVER_DB_USER");
+	corpusPass = sc.getInitParameter("RRS_V1_CORPUS_SERVER_DB_PASS");
 
 
-        //try {
-        boolean bootstrapMode = false;
-        corpusDbConnection = new CorpusStructureDBImpl(corpusJdbcURL, bootstrapMode, corpusUser, corpusPass);
-        if (corpusDbConnection == null) {
-            logger.fatal("************ corpusDbConnection is null");
-            logger.fatal("corpusJdbcURL: " + corpusJdbcURL);
-            logger.fatal("corpusUser: " + corpusUser);
-        }
+	//try {
+	if (corpusDbName != null) {
+	    logger.info("Connecting to database by name " + corpusDbName);
+	    corpusDbConnection = new CorpusStructureDBImpl(corpusDbName);
+	}
+	if (corpusDbConnection == null) {
+	    logger.info("Connecting to database by url " + corpusJdbcURL + " and provided username/password");
+	    boolean bootstrapMode = false;
+	    corpusDbConnection = new CorpusStructureDBImpl(corpusJdbcURL, bootstrapMode, corpusUser, corpusPass);
+	}
+	if (corpusDbConnection == null) {
+	    logger.fatal("************ corpusDbConnection is null");
+	    logger.fatal("corpusJdbcURL: " + corpusJdbcURL);
+	    logger.fatal("corpusUser: " + corpusUser);
+	}
+	RegisFileIO rfio = this.getRegisFileIO();
+	sc.setAttribute("regisFileIO", rfio);
 
-        RegisFileIO rfio = this.getRegisFileIO();
-        sc.setAttribute("regisFileIO", rfio);
+	UserGenerator ug = this.getUserGenerator(null, null, null);	// ams2 : using defaults
+	logger.info("using UserGenerator " + ug.getInfo());
 
-        UserGenerator ug = this.getUserGenerator(null, null, null);	// ams2 : using defaults
-        logger.info("using UserGenerator " + ug.getInfo());
-
-        sc.setAttribute(RrsConstants.AMS2_DB_CONNECTION_ATTRIBUTE, ug);
-        sc.setAttribute(RrsConstants.CORPUS_DB_CONNECTION_ATTRIBUTE, corpusDbConnection);
-        sc.setAttribute(RrsConstants.ARCHIVE_OBJECTS_DB_CONNECTION_ATTRIBUTE, corpusDbConnection);
+	sc.setAttribute(RrsConstants.AMS2_DB_CONNECTION_ATTRIBUTE, ug);
+	sc.setAttribute(RrsConstants.CORPUS_DB_CONNECTION_ATTRIBUTE, corpusDbConnection);
+	sc.setAttribute(RrsConstants.ARCHIVE_OBJECTS_DB_CONNECTION_ATTRIBUTE, corpusDbConnection);
 
     }
 
     public void contextDestroyed(ServletContextEvent sce) {
-        logger.info("contextDestroyed");
-        if (corpusDbConnection != null) {
-            logger.info("Closing Corpus DB");
-            corpusDbConnection.close();
-        }
+	logger.info("contextDestroyed");
+	if (corpusDbConnection != null) {
+	    logger.info("Closing Corpus DB");
+	    corpusDbConnection.close();
+	}
 
     }
 
@@ -124,48 +131,48 @@ public class RrsContextListener implements ServletContextListener {
      * @param authenticationSrv NAME of the (spring-bean) service which implements {@link AuthenticationService}
      */
     private UserGenerator getUserGenerator(String springConfigPaths, String principalSrv, String authenticationSrv) {
-        if (mUserGenerator != null) {
-            return mUserGenerator;
-        }
+	if (mUserGenerator != null) {
+	    return mUserGenerator;
+	}
 
-        logger.info("initializing new (ams2)user-generator...");
-        SpringContextLoader spring = new SpringContextLoader();
-        spring.init(Text.notEmpty(springConfigPaths)
-                ? springConfigPaths
-                : "spring-ams2-auth.xml");
-        Ams2UserGenerator userGenerator = new Ams2UserGenerator(
-                (PrincipalService) spring.getBean(
-                Text.notEmpty(principalSrv)
-                ? principalSrv
-                : Constants.BEAN_PRINCIPAL_SRV),
-                (AuthenticationService) spring.getBean(
-                Text.notEmpty(authenticationSrv)
-                ? authenticationSrv
-                : Constants.BEAN_INTEGRATED_AUTHENTICATION_SRV));
+	logger.info("initializing new (ams2)user-generator...");
+	SpringContextLoader spring = new SpringContextLoader();
+	spring.init(Text.notEmpty(springConfigPaths)
+		? springConfigPaths
+		: "spring-ams2-auth.xml");
+	Ams2UserGenerator userGenerator = new Ams2UserGenerator(
+		(PrincipalService) spring.getBean(
+		Text.notEmpty(principalSrv)
+		? principalSrv
+		: Constants.BEAN_PRINCIPAL_SRV),
+		(AuthenticationService) spring.getBean(
+		Text.notEmpty(authenticationSrv)
+		? authenticationSrv
+		: Constants.BEAN_INTEGRATED_AUTHENTICATION_SRV));
 
-        this.setUserGenerator(userGenerator);
-        //mUserGenerator = ug2;
-        return mUserGenerator;
+	this.setUserGenerator(userGenerator);
+	//mUserGenerator = ug2;
+	return mUserGenerator;
     }
 
     /**
      * @param userGenerator the userGenerator to set
      */
     private void setUserGenerator(UserGenerator userGenerator) {
-        mUserGenerator = userGenerator;
+	mUserGenerator = userGenerator;
     }
 
     public RegisFileIO getRegisFileIO() {
-        if (this.regisFileIO != null) {
-            return this.regisFileIO;
-        } else {
-            RegisFileIO rf = new RegisFileIO(rrsRegistrationFileName);
-            this.setRegisFileIO(rf);
-            return this.regisFileIO;
-        }
+	if (this.regisFileIO != null) {
+	    return this.regisFileIO;
+	} else {
+	    RegisFileIO rf = new RegisFileIO(rrsRegistrationFileName);
+	    this.setRegisFileIO(rf);
+	    return this.regisFileIO;
+	}
     }
 
     public void setRegisFileIO(RegisFileIO regisFileIO) {
-        this.regisFileIO = regisFileIO;
+	this.regisFileIO = regisFileIO;
     }
 }
