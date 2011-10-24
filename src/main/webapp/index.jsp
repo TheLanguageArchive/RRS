@@ -12,7 +12,9 @@
         <%@include file="/WEB-INF/include/titleMax.jspf" %>
         
         
-        <h1>You don't have access to this application!</h1>
+        <h1>Resource Request System</h1>
+	
+	<p>Version: ${project.version}</p>
     </body>
 </html>
         

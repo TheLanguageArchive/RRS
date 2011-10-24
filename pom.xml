@@ -36,6 +36,7 @@
                         <resource>
                             <directory>src/main/webapp</directory>
                             <includes>
+				<include>index.jsp</include>
                                 <include>WEB-INF/faces-config.xml</include>
                                 <include>include/nav.jsp</include>
                             </includes>
