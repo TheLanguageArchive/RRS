@@ -136,19 +136,23 @@ public class RrsContextListener implements ServletContextListener {
 	}
 
 	logger.info("initializing new (ams2)user-generator...");
-	SpringContextLoader spring = new SpringContextLoader();
-	spring.init(Text.notEmpty(springConfigPaths)
+	
+	springConfigPaths = Text.notEmpty(springConfigPaths)
 		? springConfigPaths
-		: "spring-ams2-auth.xml");
-	Ams2UserGenerator userGenerator = new Ams2UserGenerator(
-		(PrincipalService) spring.getBean(
-		Text.notEmpty(principalSrv)
-		? principalSrv
-		: Constants.BEAN_PRINCIPAL_SRV),
-		(AuthenticationService) spring.getBean(
-		Text.notEmpty(authenticationSrv)
-		? authenticationSrv
-		: Constants.BEAN_INTEGRATED_AUTHENTICATION_SRV));
+		: "spring-ams2-auth.xml";
+	logger.info("Spring config paths: " + springConfigPaths);
+
+	SpringContextLoader spring = new SpringContextLoader();
+	spring.init(springConfigPaths);
+	logger.info("Spring context loader: " + spring.toString());
+
+	PrincipalService principalService = (PrincipalService) spring.getBean(Text.notEmpty(principalSrv) ? principalSrv : Constants.BEAN_PRINCIPAL_SRV);
+	logger.info("Principal service: " + principalService.toString());
+	AuthenticationService authenticationService = (AuthenticationService) spring.getBean(Text.notEmpty(authenticationSrv) ? authenticationSrv : Constants.BEAN_INTEGRATED_AUTHENTICATION_SRV);
+	logger.info("Authentication service: " + authenticationService.toString());
+
+	Ams2UserGenerator userGenerator = new Ams2UserGenerator(principalService, authenticationService);
+	logger.info("User generator initialized: " + userGenerator.getInfo());
 
 	this.setUserGenerator(userGenerator);
 	//mUserGenerator = ug2;

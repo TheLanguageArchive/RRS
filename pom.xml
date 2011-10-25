@@ -11,7 +11,7 @@
     <groupId>nl.mpi</groupId>
     <artifactId>rrs</artifactId>
     <packaging>war</packaging>
-    <version>1.6-SNAPSHOT</version>
+    <version>1.5-SNAPSHOT</version>
     <name>Resource Request System</name>
     <url>https://trac.mpi.nl/wiki/ResourceRequestSystem</url>
     <description>Resource Request System for the language archive</description>
@@ -64,12 +64,6 @@
 	<!-- -= DEPENDENCIES =- **************************************************-->
     <dependencies>
 		<!-- ** mpi :: lat ***** -->
-        <dependency>
-            <groupId>nl.mpi</groupId>
-            <artifactId>ams2</artifactId>
-            <version>1.4.6</version>
-            <scope>compile</scope>
-        </dependency>
         <dependency>
             <groupId>nl.mpi</groupId>
             <artifactId>corpusstructure-api</artifactId>
@@ -294,6 +288,11 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>lana2</artifactId>
             <version>1.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>ams2</artifactId>
+            <version>1.4.6.1</version>
         </dependency>
     </dependencies>
 
