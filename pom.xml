@@ -11,7 +11,7 @@
     <groupId>nl.mpi</groupId>
     <artifactId>rrs</artifactId>
     <packaging>war</packaging>
-    <version>1.5-SNAPSHOT</version>
+    <version>1.6-SNAPSHOT</version>
     <name>Resource Request System</name>
     <url>https://trac.mpi.nl/wiki/ResourceRequestSystem</url>
     <description>Resource Request System for the language archive</description>
@@ -67,7 +67,7 @@
         <dependency>
             <groupId>nl.mpi</groupId>
             <artifactId>corpusstructure-api</artifactId>
-            <version>1.7.3</version>
+            <version>1.7.4</version>
             <scope>compile</scope>
             <exclusions>
                 <exclusion>
