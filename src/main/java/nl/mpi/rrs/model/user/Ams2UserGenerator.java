@@ -173,7 +173,7 @@ public class Ams2UserGenerator implements UserGenerator {
             pcplSrv.save(user, userinfo.getPassword());  // throws DataSourceException (unchecked)
         } catch (DataSourceException aE) {
             result = false;
-            _log.info("addNewUser: failed adding to ANMS DB for userName: " + userName);
+            _log.warn("addNewUser: failed adding to ANMS DB for userName: " + userName, aE);
         }
 
         return result;
