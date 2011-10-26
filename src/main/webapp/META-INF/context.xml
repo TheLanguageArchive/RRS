@@ -7,6 +7,10 @@
 	value="/tmp/registration.txt" 
 	description="For saving RRS registrations temporarily" />
 	
+    <Parameter name="ARCHIVE_USERS_IDP_NAME"
+	value="'MPI Nijmegen' from the 'Damlr federation'"
+	description="Name of IdP to be shown to users that have registered unauthenticated. Leave empty to have none shown (e.g. if there is only one)." />
+	
     <!-- Code of conduct -->
 	
     <Parameter name="DOBES_COC_LINK" 

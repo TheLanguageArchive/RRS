@@ -52,7 +52,7 @@ public class RrsContextListener implements ServletContextListener {
 	sc.setAttribute("maxFormNodeIds", maxFormNodeIds);
 
 	String amsInterfaceLink = sc.getInitParameter("AMS_INTERFACE_LINK");
-	sc.setAttribute("amsInterfaceLink", amsInterfaceLink);
+	sc.setAttribute(RrsConstants.AMS_INTERFACE_LINK, amsInterfaceLink);
 
 	String emailAddressCorpman = sc.getInitParameter("EMAIL_ADDRESS_CORPMAN");
 	sc.setAttribute("emailAddressCorpman", emailAddressCorpman);
@@ -91,7 +91,7 @@ public class RrsContextListener implements ServletContextListener {
 	    logger.fatal("corpusUser: " + corpusUser);
 	}
 	RegisFileIO rfio = this.getRegisFileIO();
-	sc.setAttribute("regisFileIO", rfio);
+	sc.setAttribute(RrsConstants.REGIS_FILE_IO, rfio);
 
 	UserGenerator ug = this.getUserGenerator(null, null, null);	// ams2 : using defaults
 	logger.info("using UserGenerator " + ug.getInfo());
@@ -100,6 +100,13 @@ public class RrsContextListener implements ServletContextListener {
 	sc.setAttribute(RrsConstants.CORPUS_DB_CONNECTION_ATTRIBUTE, corpusDbConnection);
 	sc.setAttribute(RrsConstants.ARCHIVE_OBJECTS_DB_CONNECTION_ATTRIBUTE, corpusDbConnection);
 
+	
+	String archiveUsersIdpName = sc.getInitParameter("ARCHIVE_USERS_IDP_NAME");
+	if (archiveUsersIdpName != null && archiveUsersIdpName.length() == 0) {
+	    archiveUsersIdpName = null;
+	}
+
+	sc.setAttribute(RrsConstants.ARCHIVE_USERS_IDP_NAME, archiveUsersIdpName);
     }
 
     public void contextDestroyed(ServletContextEvent sce) {
@@ -136,7 +143,7 @@ public class RrsContextListener implements ServletContextListener {
 	}
 
 	logger.info("initializing new (ams2)user-generator...");
-	
+
 	springConfigPaths = Text.notEmpty(springConfigPaths)
 		? springConfigPaths
 		: "spring-ams2-auth.xml";
