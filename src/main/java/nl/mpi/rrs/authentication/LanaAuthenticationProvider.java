@@ -1,7 +1,7 @@
 package nl.mpi.rrs.authentication;
 
 import javax.servlet.http.HttpServletRequest;
-import mpi.lana2.auth.AuthFilter;
+import nl.mpi.lat.auth.lana2.LanaAuthFilter;
 import nl.mpi.rrs.model.user.RegistrationUser;
 
 /**
@@ -11,11 +11,11 @@ import nl.mpi.rrs.model.user.RegistrationUser;
 public class LanaAuthenticationProvider implements AuthenticationProvider {
 
     public String getLoggedInUser(HttpServletRequest request) {
-        return (String) request.getSession().getAttribute(AuthFilter.ATTRIBUTE_UID);
+        return (String) request.getSession().getAttribute(LanaAuthFilter.ATTRIBUTE_UID);
     }
 
     public boolean isUserLoggedIn(HttpServletRequest request) {
-        return null != request.getSession().getAttribute(AuthFilter.ATTRIBUTE_UID);
+        return null != request.getSession().getAttribute(LanaAuthFilter.ATTRIBUTE_UID);
     }
 
     public String getIdentityProviderId(HttpServletRequest request) {

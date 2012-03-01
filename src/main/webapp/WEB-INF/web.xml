@@ -24,30 +24,34 @@
     <!-- End SHHAA authentication filter -->
 
 
-<!-- ** lana2 auth :: sso **** -->
+    <!-- ** lana2 auth :: sso **** -->
     <filter>
-	<filter-name>SsoFilter</filter-name>
-	<filter-class>mpi.lana2.auth.AuthFilter</filter-class><!-- lana2 -->
-	<init-param>
-	    <param-name>freepages</param-name>
-	    <param-value>/imdi_browser_header.jsp,/imdiToMets</param-value>
-	</init-param>
-	<init-param>
-	    <param-name>ssowebapps</param-name>
-	    <param-value>/ds/imdi_browser,/ds/ams2,/ds/annex,/ds/annex2</param-value>
-	</init-param>
+        <filter-name>SsoFilter</filter-name>
+        <filter-class>nl.mpi.lat.auth.lana2.LanaAuthFilter</filter-class><!-- lana2 -->
+        <init-param>
+            <param-name>freepages</param-name>
+            <param-value>/RrsIndex,/RrsRegistration,/css/error.css,/css/request.css</param-value>
+        </init-param>
+        <init-param> 
+            <param-name>ssowebapps</param-name>
+            <param-value>/ds/RRS_V1,/ds/imdi_browser,/ds/ams2,/ds/annex,/ds/annex2</param-value>
+        </init-param>
     <!-- spec. lana2 options: comment this in/out accordingly -->
-	<init-param>
-	    <param-name>authenticationService</param-name>
-	    <param-value>integratedAuthenticationSrv</param-value>
-            <!--param-value>amsAuthenticationSrv</param-value-->
-	</init-param>
-	<init-param>
-	    <param-name>super</param-name>
-	    <param-value>damlr_check</param-value>
-	</init-param>
+        <init-param>
+            <param-name>authenticationService</param-name>
+            <param-value>integratedAuthenticationSrv</param-value>
+            <!--param-value>amsAuthenticationSrv</param-value-->  
+        </init-param>
+        <init-param> 
+            <param-name>super</param-name>
+            <param-value>damlr_check</param-value>
+        </init-param>
     <!-- /lana2-options -->
     </filter>
+    <filter-mapping>
+	<filter-name>SsoFilter</filter-name>
+	<url-pattern>/*</url-pattern>
+    </filter-mapping>
 
     <context-param>
 	<param-name>contextConfigLocation</param-name>

@@ -1,7 +1,7 @@
 package nl.mpi.rrs.authentication;
 
+import nl.mpi.lat.auth.lana2.LanaAuthFilter;
 import org.junit.Ignore;
-import mpi.lana2.auth.AuthFilter;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockServletContext;
 
@@ -36,7 +36,7 @@ public class LanaAuthenticationProviderTest {
     @Ignore(value = "Some dependecy issue for the test(?)")
     public void UserLoggedIn() {
         MockHttpServletRequest request = new MockHttpServletRequest(servletContext);
-        request.setAttribute(AuthFilter.ATTRIBUTE_UID, LOGGEDIN_USERNAME);
+        request.setAttribute(LanaAuthFilter.ATTRIBUTE_UID, LOGGEDIN_USERNAME);
         assertTrue(authProvider.isUserLoggedIn(request));
         assertEquals(authProvider.getLoggedInUser(request), LOGGEDIN_USERNAME);
     }

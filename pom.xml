@@ -82,12 +82,6 @@
             <version>1.0.0</version>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>nl.mpi</groupId>
-            <artifactId>lana2</artifactId>
-            <version>1.0.2</version>
-            <scope>compile</scope>
-        </dependency>
 
         <dependency>
             <groupId>javax.mail</groupId>
@@ -271,23 +265,6 @@
             <groupId>com.google.code.findbugs</groupId>
             <artifactId>annotations</artifactId>
             <version>1.3.9</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>lana2</artifactId>
-            <version>1.0.2</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>lana2</artifactId>
-            <version>1.0.2</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>lana2</artifactId>
-            <version>1.0.2</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
