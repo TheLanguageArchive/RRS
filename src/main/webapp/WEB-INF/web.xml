@@ -2,11 +2,21 @@
 <web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
     <description>Resource Request System Version 1</description>
     <display-name>RRS</display-name>
+    
     <!-- Begin SHHAA authentication filter -->
     <context-param>
 	<description>Location shhaa.xml for SHIB</description>
 	<param-name>ShhaaConfigLocation</param-name>
 	<param-value>/WEB-INF/shhaa.xml</param-value>
+    </context-param>
+    <context-param>
+	<description>
+	    Whether shibboleth environment is federated, i.e. there is a discovery service rather than a single IdP. 'True' or 'False'.
+	    If set to 'True', user can choose to login before registration and register on their external credentials rather than for a
+	    new internal account.
+	</description>
+	<param-name>shibIsFederated</param-name>
+	<param-value>True</param-value>
     </context-param>
     <filter>
 	<description>SHIB filter</description>
@@ -26,26 +36,26 @@
 
     <!-- ** lana2 auth :: sso **** -->
     <filter>
-        <filter-name>SsoFilter</filter-name>
-        <filter-class>nl.mpi.lat.auth.lana2.LanaAuthFilter</filter-class><!-- lana2 -->
-        <init-param>
-            <param-name>freepages</param-name>
-            <param-value>/RrsIndex,/RrsRegistration,/css/error.css,/css/request.css</param-value>
-        </init-param>
-        <init-param> 
-            <param-name>ssowebapps</param-name>
-            <param-value>/ds/RRS_V1,/ds/imdi_browser,/ds/ams2,/ds/annex,/ds/annex2</param-value>
-        </init-param>
+	<filter-name>SsoFilter</filter-name>
+	<filter-class>nl.mpi.lat.auth.lana2.LanaAuthFilter</filter-class><!-- lana2 -->
+	<init-param>
+	    <param-name>freepages</param-name>
+	    <param-value>/RrsIndex,/RrsRegistration,/css/error.css,/css/request.css</param-value>
+	</init-param>
+	<init-param> 
+	    <param-name>ssowebapps</param-name>
+	    <param-value>/ds/RRS_V1,/ds/imdi_browser,/ds/ams2,/ds/annex,/ds/annex2</param-value>
+	</init-param>
     <!-- spec. lana2 options: comment this in/out accordingly -->
-        <init-param>
-            <param-name>authenticationService</param-name>
-            <param-value>integratedAuthenticationSrv</param-value>
+	<init-param>
+	    <param-name>authenticationService</param-name>
+	    <param-value>integratedAuthenticationSrv</param-value>
             <!--param-value>amsAuthenticationSrv</param-value-->  
-        </init-param>
-        <init-param> 
-            <param-name>super</param-name>
-            <param-value>damlr_check</param-value>
-        </init-param>
+	</init-param>
+	<init-param> 
+	    <param-name>super</param-name>
+	    <param-value>damlr_check</param-value>
+	</init-param>
     <!-- /lana2-options -->
     </filter>
     <filter-mapping>

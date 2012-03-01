@@ -4,12 +4,13 @@
 	"http://www.springframework.org/dtd/spring-beans.dtd">
 
 <beans>
+    <bean class="org.springframework.web.context.support.ServletContextPropertyPlaceholderConfigurer" />
     <bean id="authenticationProvider" class="nl.mpi.rrs.authentication.ShibbolethAuthenticationProvider">
         <!--
             Federation support can be optionally turned off by setting the below
-            value to False.
+            value to False. Can also insert placeholder for context parameter, e.g. ${shibIsFederated}.
         -->
-        <property name="federated" value="True" />
+        <property name="federated" value="${shibIsFederated}" />
 
         <!--
             The attribute lists below determine which fields (provided order determines priority)
