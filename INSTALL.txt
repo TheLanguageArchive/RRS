@@ -1,0 +1,17 @@
+Resource Request System Installation
+------------------------------------
+
+= Requirements =
+
+* RRS package
+* Tomcat 5
+* Ams2 installed and configured
+* Either Shibboleth or Lana2 authentication installed and configured
+
+= Installation of RRS =
+
+TODO
+
+= Configuration of RRS =
+
+TODO
