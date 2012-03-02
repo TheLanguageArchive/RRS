@@ -58,8 +58,8 @@
     <!-- External system links -->
 	
     <Parameter name="AMS_INTERFACE_LINK" 	
-	value="http://lux16.mpi.nl/am/ams2/index.face?nodeid=MPI0%23" 
-	description="URL AMS lat access management system"  />
+	value="http://lux16.mpi.nl/am/ams2/pages/welcome.face" 
+	description="URL AMS lat access management system, will be the destination of the link in the 'Thank you' page at the end of the registration process"  />
 	
     <Parameter name="OPENPATH_PREFIX" 
 	value="http://corpus1.mpi.nl/ds/imdi_browser?openpath=" 
