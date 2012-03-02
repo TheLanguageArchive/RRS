@@ -48,9 +48,6 @@ public class RegistrationUser extends User {
         StringBuilder userInfoStringBuilder = new StringBuilder();
 
         userInfoStringBuilder.append("User Id: ").append(this.getUserName()).append(newLine);
-        if (!getPassword().isEmpty()) {
-            userInfoStringBuilder.append("Password: ").append(this.getPassword()).append(newLine);
-        }
         userInfoStringBuilder.append("First Name: ").append(this.getFirstName()).append(newLine);
         userInfoStringBuilder.append("Last Name: ").append(this.getLastName()).append(newLine);
         userInfoStringBuilder.append("Organisation: ").append(this.getOrganization()).append(newLine);
