@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+    <description>Resource Request System Version 1 (DUMMY AUTHENTICATION!!!)</description>
+    <display-name>RRS</display-name>
+
+    <context-param>
+	<param-name>contextConfigLocation</param-name>
+	<!-- Using TEST AUTHENTICATION provider. Not for production! -->
+	<param-value>/WEB-INF/spring-rrs-auth-test.xml</param-value>
+    </context-param>
+
+    <listener>
+	<description>Spring framework context loader listener</description>
+	<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
+    <listener>
+	<description>Context listener</description>
+	<listener-class>nl.mpi.rrs.RrsContextListener</listener-class>
+    </listener>
+
+
+
+    <servlet>
+	<servlet-name>RRSServlet</servlet-name>
+	<servlet-class>nl.mpi.rrs.controller.RrsServlet</servlet-class>
+    </servlet>
+    <servlet>
+	<description>Test Context listener</description>
+	<servlet-name>RrsContextListener</servlet-name>
+	<servlet-class>nl.mpi.rrs.controller.RrsContextListenerTester</servlet-class>
+    </servlet>
+    <servlet>
+	<servlet-name>RrsIndex</servlet-name>
+	<servlet-class>nl.mpi.rrs.controller.RrsIndex</servlet-class>
+    </servlet>
+    <servlet>
+	<servlet-name>RrsIndex2</servlet-name>
+	<servlet-class>nl.mpi.rrs.controller.RrsIndex2</servlet-class>
+    </servlet>
+    <servlet>
+	<servlet-name>RrsRegis</servlet-name>
+	<servlet-class>nl.mpi.rrs.controller.RrsRegis</servlet-class>
+    </servlet>
+    <servlet>
+	<servlet-name>RrsDoRegis</servlet-name>
+	<servlet-class>nl.mpi.rrs.controller.RrsDoRegis</servlet-class>
+    </servlet>
+    <servlet>
+	<servlet-name>RrsDoCoc</servlet-name>
+	<servlet-class>nl.mpi.rrs.controller.RrsDoCoc</servlet-class>
+    </servlet>
+    <servlet>
+	<servlet-name>RrsDoRegisEmailCheck</servlet-name>
+	<servlet-class>nl.mpi.rrs.controller.RrsDoRegisEmailCheck</servlet-class>
+    </servlet>
+    <servlet>
+	<servlet-name>RrsLogin</servlet-name>
+	<servlet-class>nl.mpi.rrs.controller.RrsLogin</servlet-class>
+    </servlet>
+    <servlet-mapping>
+	<servlet-name>RRSServlet</servlet-name>
+	<url-pattern>/Rrs.do</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+	<servlet-name>RrsContextListener</servlet-name>
+	<url-pattern>/RrsContextListener.do</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+	<servlet-name>RrsIndex</servlet-name>
+	<url-pattern>/RrsIndex</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+	<servlet-name>RrsIndex2</servlet-name>
+	<url-pattern>/RrsIndex2</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+	<servlet-name>RrsRegis</servlet-name>
+	<url-pattern>/RrsRegistration</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+	<servlet-name>RrsDoRegis</servlet-name>
+	<url-pattern>/RrsRegis.do</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+	<servlet-name>RrsDoCoc</servlet-name>
+	<url-pattern>/RrsCoc.do</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+	<servlet-name>RrsDoRegisEmailCheck</servlet-name>
+	<url-pattern>/RrsRegisEmailCheck.do</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+	<servlet-name>RrsLogin</servlet-name>
+	<url-pattern>/RrsLogin</url-pattern>
+    </servlet-mapping>
+
+
+    <servlet>
+	<servlet-name>ShibTest</servlet-name>
+	<servlet-class>nl.mpi.rrs.model.utilities.ShibTest</servlet-class>
+    </servlet>
+    <servlet-mapping>
+	<servlet-name>ShibTest</servlet-name>
+	<url-pattern>/ShibTest</url-pattern>
+    </servlet-mapping>
+
+    <session-config>
+	<session-timeout>
+            30
+	</session-timeout>
+    </session-config>
+    <error-page>
+	<exception-type>nl.mpi.rrs.model.errors.RrsGeneralException</exception-type>
+	<location>/view/error/error.jsp</location>
+    </error-page>
+    <error-page>
+	<exception-type>java.lang.Throwable</exception-type>
+	<location>/view/error/errorUnknown.jsp</location>
+    </error-page>
+</web-app>

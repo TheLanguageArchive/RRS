@@ -3,7 +3,7 @@
     	
    <!-- Application settings -->
    
-   <Parameter name="nl.mpi.rrs.allowNewInternalUsers"
+    <Parameter name="nl.mpi.rrs.allowNewInternalUsers"
 	value="true"
 	description="If set to true, RRS will allow users to register without login in first. Setting it to false only makes sense in a federated Shibboleth context." />
 	

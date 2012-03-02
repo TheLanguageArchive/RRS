@@ -10,8 +10,74 @@ Resource Request System Installation
 
 = Installation of RRS =
 
-TODO
+---------------------------------------------------------------------------
+IMPORTANT: The RRS package does NOT contain a WEB-INF/web.xml file. Instead
+it has templates from which you must choose when first installing RRS,
+depending on the authentication mode to use! See below for details.
+---------------------------------------------------------------------------
+
+Deploy the RRS .war file to a Tomcat instance. Make sure the contents of
+META-INF/context.xml are copied over to a context element that gets
+processed by Tomcat (either in the common /conf/context.xml or the
+application context file in conf/Catalina/...).
+
+Go to the WEB-INF directory of the unpacked application directory, and do
+one of the following options:
+
+1) For SHIBBOLETH authentication:
+   - Rename (or copy) web-shib.xml to web.xml
+   - Rename (or copy) shhaa-example.xml shhaa.xml
+2) For LANA2 authentication:
+   - Rename (or copy) web-lana2.xml to web.xml
+
+Then proceed to the general configuration of RRS and configuration for the
+chosen authentication mode.
 
 = Configuration of RRS =
 
-TODO
+See below for section on configuring RRS for either Shibboleth or Lana2.
+
+== General configuration ==
+
+== Configure for Shibboleth ==
+
+In WEB-INF/web.xml, locate the following section:
+
+    <context-param>
+	<description>
+	    Whether shibboleth environment is federated, i.e. there is a discovery service rather than a single IdP. 'True' or 'False'.
+	    If set to 'True', user can choose to login before registration and register on their external credentials rather than for a
+	    new internal account.
+	</description>
+	<param-name>shibIsFederated</param-name>
+	<param-value>True</param-value>
+    </context-param>
+
+Set the param-value to either True or False depending on whether users
+should be able to register with a federated account. If set to true, the
+registration page will contain a link to the SSO page. If logged in, the
+user will not be able to choose a user name and password but instead will
+be registered on its external credentials. If set to false, users will
+always have to create a new account with a self-chosen username.
+
+To configure the shibboleth authentication filter, open the file
+WEB-INF/shhaa.xml and configure it according to your shibboleth environment.
+For information on how to configure the filter, see
+<https://aai2.rzg.mpg.de/>. Do not modifiy the composition, authorization,
+and handler settings.
+
+== Configure for Lana2 ==
+
+In WEB-INF/web.xml, make sure that the values in the init-param elements for
+the SsoFilter are set according to the environment. They are contained in
+the element that starts with:
+
+    <!-- Begin Lana2 authentication filter -->
+    <filter>
+	<filter-name>SsoFilter</filter-name>
+	<filter-class>nl.mpi.lat.auth.lana2.LanaAuthFilter</filter-class><!-- lana2 -->
+
+and ends with:
+
+    </filter>
+    <!-- End Lana2 authentication filter -->

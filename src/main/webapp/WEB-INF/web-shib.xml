@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
-    <description>Resource Request System Version 1</description>
+    <description>Resource Request System Version 1 (Shibboleth authentication)</description>
     <display-name>RRS</display-name>
     
     <!-- Begin SHHAA authentication filter -->
@@ -32,42 +32,10 @@
 	<listener-class>de.mpg.aai.shhaa.config.ConfigContextListener</listener-class>
     </listener>
     <!-- End SHHAA authentication filter -->
-
-
-    <!-- ** lana2 auth :: sso **** -->
-    <filter>
-	<filter-name>SsoFilter</filter-name>
-	<filter-class>nl.mpi.lat.auth.lana2.LanaAuthFilter</filter-class><!-- lana2 -->
-	<init-param>
-	    <param-name>freepages</param-name>
-	    <param-value>/RrsIndex,/RrsRegistration,/css/error.css,/css/request.css</param-value>
-	</init-param>
-	<init-param> 
-	    <param-name>ssowebapps</param-name>
-	    <param-value>/ds/RRS_V1,/ds/imdi_browser,/ds/ams2,/ds/annex,/ds/annex2</param-value>
-	</init-param>
-    <!-- spec. lana2 options: comment this in/out accordingly -->
-	<init-param>
-	    <param-name>authenticationService</param-name>
-	    <param-value>integratedAuthenticationSrv</param-value>
-            <!--param-value>amsAuthenticationSrv</param-value-->  
-	</init-param>
-	<init-param> 
-	    <param-name>super</param-name>
-	    <param-value>damlr_check</param-value>
-	</init-param>
-    <!-- /lana2-options -->
-    </filter>
-    <filter-mapping>
-	<filter-name>SsoFilter</filter-name>
-	<url-pattern>/*</url-pattern>
-    </filter-mapping>
-
+    
     <context-param>
 	<param-name>contextConfigLocation</param-name>
 	<param-value>/WEB-INF/spring-rrs-auth-shib.xml</param-value>
-<!--        <param-value>/WEB-INF/spring-rrs-auth-lana.xml</param-value>-->
-<!--        <param-value>/WEB-INF/spring-rrs-auth-test.xml</param-value>-->
     </context-param>
 
     <listener>
@@ -79,8 +47,6 @@
 	<description>Context listener</description>
 	<listener-class>nl.mpi.rrs.RrsContextListener</listener-class>
     </listener>
-
-
 
     <servlet>
 	<servlet-name>RRSServlet</servlet-name>
