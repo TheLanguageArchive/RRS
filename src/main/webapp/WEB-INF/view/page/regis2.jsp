@@ -58,8 +58,23 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
                         <c:if test="${federated}">
                             <c:choose>
                                 <c:when test="${empty uid}">
-                                    <p>If you have an account with any of the federated organizations, you can try logging in first, so that
-                                        your registration will be linked to that account. Otherwise you can go ahead and register for a new account using the form below.</p>
+                                    <p>
+					<c:choose>
+					    <c:when test="${newInternalUser}">
+						If you have an account with any of the federated organizations, you can try logging in first,
+						so that your registration will be linked to that account. Click the link below to review the 
+						list of federated organizations, then select your organization and use your credentials to 
+						login. If your organization is not in the list, register for a new account using the form 
+						below.
+					    </c:when>
+					    <c:otherwise>
+						In order to register, you need to login using an account of any of the federated organizations.
+						Click the link below to review the list of federated organizations, then select your 
+						organization and use your credentials to login. If your organization is not in the list, 
+						please contact the <a href="mailto:${corpmanEmail}">archive manager</a>.
+					    </c:otherwise>
+					</c:choose>
+				    </p>
                                     <a href="RrsLogin?redirect=<%= RrsLogin.RedirectLocation.RrsRegistration%>">Click here to log in</a>.
                                 </c:when>
                                 <c:otherwise>
@@ -72,56 +87,64 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
                         </c:if>
                     </td>
                 </tr>
-                <tr>
-                    <c:choose>
-                        <c:when test="${empty uid}">
-                            <td>User ID (choose one yourself):</td>
-                            <td><input type="text" id="paramUserNewUserName" name="paramUserNewUserName" value="${paramUserNewUserName}" size="90" /></td>
-                        </c:when>
-                        <c:otherwise>
-                            <td>User ID:</td>
-                            <td>${uid}</td>
-                        </c:otherwise>
-                    </c:choose>
-                </tr>
-                <tr> 
-                    <td>First name:</td>
-                    <td><input type="text" id="paramUserNewFirstName" name="paramUserNewFirstName" value="${paramUserNewFirstName}" size="90" /></td>
-                </tr>
+		<c:if test="${newInternalUser || federated && not empty uid}">
+		    <tr>
+			<c:choose>
+			    <c:when test="${empty uid}">
+				<td>User ID (choose one yourself):</td>
+				<td><input type="text" id="paramUserNewUserName" name="paramUserNewUserName" value="${paramUserNewUserName}" size="90" /></td>
+				</c:when>
+				<c:otherwise>
+				<td>User ID:</td>
+				<td>${uid}</td>
+			    </c:otherwise>
+			</c:choose>
+		    </tr>
+		    <tr> 
+			<td>First name:</td>
+			<td><input type="text" id="paramUserNewFirstName" name="paramUserNewFirstName" value="${paramUserNewFirstName}" size="90" /></td>
+		    </tr>
 
-                <tr> 
-                    <td>Last name:</td>
-                    <td><input type="text" id="paramUserNewLastName" name="paramUserNewLastName" value="${paramUserNewLastName}" size="90" /></td>
-                </tr>
+		    <tr> 
+			<td>Last name:</td>
+			<td><input type="text" id="paramUserNewLastName" name="paramUserNewLastName" value="${paramUserNewLastName}" size="90" /></td>
+		    </tr>
 
-                <tr> 
-                    <td>Email:</td>
-                    <td><input type="text" id="paramUserNewEmail" name="paramUserNewEmail" value="${paramUserNewEmail}" size="90" /></td>
-                </tr>
+		    <tr> 
+			<td>Email:</td>
+			<td><input type="text" id="paramUserNewEmail" name="paramUserNewEmail" value="${paramUserNewEmail}" size="90" /></td>
+		    </tr>
 
-                <tr> 
-                    <td>Organization:</td>
-                    <td><input type="text" id="paramUserNewOrganization" name="paramUserNewOrganization" value="${paramUserNewOrganization}" size="90" /></td>
-                </tr>
-                <% if (request.getAttribute("uid") == null) {%>
-                <tr> 
-                    <td>Password (choose one yourself):</td>
-                    <td><input type="password" id="paramUserNewPassword_1" name="paramUserNewPassword_1" value="${paramUserNewPassword_1}" size="90" /></td>
-                </tr>
+		    <tr> 
+			<td>Organization:</td>
+			<td><input type="text" id="paramUserNewOrganization" name="paramUserNewOrganization" value="${paramUserNewOrganization}" size="90" /></td>
+		    </tr>
+		    <% if (request.getAttribute("uid") == null) {%>
+		    <tr> 
+			<td>Password (choose one yourself):</td>
+			<td><input type="password" id="paramUserNewPassword_1" name="paramUserNewPassword_1" value="${paramUserNewPassword_1}" size="90" /></td>
+		    </tr>
 
-                <tr> 
-                    <td>Password (Enter again for verification):</td>
-                    <td><input type="password" id="paramUserNewPassword_2" name="paramUserNewPassword_2" value="${paramUserNewPassword_2}" size="90" /></td>
-                </tr>
-                <% }%>
+		    <tr> 
+			<td>Password (Enter again for verification):</td>
+			<td><input type="password" id="paramUserNewPassword_2" name="paramUserNewPassword_2" value="${paramUserNewPassword_2}" size="90" /></td>
+		    </tr>
+		    <% }%>
+		</c:if>
+		<c:if test="${not federated && not newInternalUser}">
+		    <tr>
+			<td><strong>WARNING: RRS was configured not to allow any registration! Please check the configuration or contact the administrator!</strong></td>
+		    </tr>
+		</c:if>
             </table>
 
             <p />
 
-            <div id="buttons"> 
-                <input type="submit" value="Register" />
-            </div>
-
+	    <c:if test="${newInternalUser || federated && not empty uid}">
+		<div id="buttons"> 
+		    <input type="submit" value="Register" />
+		</div>
+	    </c:if>
         </form>
 
     </body>

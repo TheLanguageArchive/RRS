@@ -55,10 +55,12 @@ public class RrsContextListener implements ServletContextListener {
 	sc.setAttribute(RrsConstants.AMS_INTERFACE_LINK, amsInterfaceLink);
 
 	String emailAddressCorpman = sc.getInitParameter("EMAIL_ADDRESS_CORPMAN");
-	sc.setAttribute("emailAddressCorpman", emailAddressCorpman);
+	sc.setAttribute(RrsConstants.EMAIL_ADDRESS_CORPMAN_ATTRIBUTE, emailAddressCorpman);
 
 	String emailHost = sc.getInitParameter("EMAIL_HOST");
 	sc.setAttribute("emailHost", emailHost);
+
+	setBooleanAttributeFromContextParam(sc, RrsConstants.ALLOW_NEW_INTERNAL_USERS_ATTRIBUTE);
 
 	logger.debug("RrsContextListener contextInitialized");
 
@@ -100,13 +102,35 @@ public class RrsContextListener implements ServletContextListener {
 	sc.setAttribute(RrsConstants.CORPUS_DB_CONNECTION_ATTRIBUTE, corpusDbConnection);
 	sc.setAttribute(RrsConstants.ARCHIVE_OBJECTS_DB_CONNECTION_ATTRIBUTE, corpusDbConnection);
 
-	
+
 	String archiveUsersIdpName = sc.getInitParameter("ARCHIVE_USERS_IDP_NAME");
 	if (archiveUsersIdpName != null && archiveUsersIdpName.length() == 0) {
 	    archiveUsersIdpName = null;
 	}
 
 	sc.setAttribute(RrsConstants.ARCHIVE_USERS_IDP_NAME, archiveUsersIdpName);
+    }
+
+    private void setAttributeFromContextParam(ServletContext servletContext, String name) {
+	final String initParamString = getContextParam(name, servletContext);
+	servletContext.setAttribute(name, initParamString);
+	logger.debug("Stored into servlet context attribute " + name);
+    }
+
+    private void setBooleanAttributeFromContextParam(ServletContext servletContext, String name) {
+	final String initParamString = getContextParam(name, servletContext);
+	final boolean initParamValue = Boolean.parseBoolean(initParamString);
+	logger.debug("Parsed to boolean value " + initParamValue);
+	servletContext.setAttribute(name, initParamValue);
+	logger.debug("Stored into servlet context attribute " + name);
+    }
+
+    private String getContextParam(String name, ServletContext servletContext) {
+	final String initParamName = RrsConstants.RRS_CONTEXT_PARAM_PREFIX + name;
+	logger.debug("Reading context parameter " + initParamName);
+	final String initParamString = servletContext.getInitParameter(initParamName);
+	logger.debug("Read value string " + initParamString);
+	return initParamString;
     }
 
     public void contextDestroyed(ServletContextEvent sce) {
