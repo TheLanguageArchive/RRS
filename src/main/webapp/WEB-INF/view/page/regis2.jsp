@@ -119,17 +119,24 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
 			<td>Organization:</td>
 			<td><input type="text" id="paramUserNewOrganization" name="paramUserNewOrganization" value="${paramUserNewOrganization}" size="90" /></td>
 		    </tr>
-		    <% if (request.getAttribute("uid") == null) {%>
-		    <tr> 
-			<td>Password (choose one yourself):</td>
-			<td><input type="password" id="paramUserNewPassword_1" name="paramUserNewPassword_1" value="${paramUserNewPassword_1}" size="90" /></td>
-		    </tr>
+		    <c:if test="${empty uid}"> 
+			<tr> 
+			    <td>Password (choose one yourself):</td>
+			    <td><input type="password" id="paramUserNewPassword_1" name="paramUserNewPassword_1" value="${paramUserNewPassword_1}" size="90" /></td>
+			</tr>
 
-		    <tr> 
-			<td>Password (Enter again for verification):</td>
-			<td><input type="password" id="paramUserNewPassword_2" name="paramUserNewPassword_2" value="${paramUserNewPassword_2}" size="90" /></td>
-		    </tr>
-		    <% }%>
+			<tr> 
+			    <td>Password (Enter again for verification):</td>
+			    <td><input type="password" id="paramUserNewPassword_2" name="paramUserNewPassword_2" value="${paramUserNewPassword_2}" size="90" /></td>
+			</tr>
+			<tr>  
+			    <td></td>
+			    <td>
+				The password should have a length of 6-20 characters, and consist of only letters and numbers.<br />
+				The password must contain at least one numeral and at least one letter.
+			    </td>
+			</tr>
+		    </c:if>
 		</c:if>
 		<c:if test="${not federated && not newInternalUser}">
 		    <tr>
