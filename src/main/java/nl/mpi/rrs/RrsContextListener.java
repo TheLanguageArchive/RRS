@@ -46,17 +46,13 @@ public class RrsContextListener implements ServletContextListener {
 
 	ServletContext sc = sce.getServletContext();
 
-	String maxFormNodeIds = sc.getInitParameter("MAX_FORM_NODE_IDS");
-	sc.setAttribute("maxFormNodeIds", maxFormNodeIds);
-
-	String amsInterfaceLink = sc.getInitParameter("AMS_INTERFACE_LINK");
-	sc.setAttribute(RrsConstants.AMS_INTERFACE_LINK, amsInterfaceLink);
-
+	setAttributeFromContextParam(sc, RrsConstants.AMS_INTERFACE_LINK_ATTRIBUTE);
 	setAttributeFromContextParam(sc, RrsConstants.EMAIL_ADDRESS_CORPMAN_ATTRIBUTE);
 	setAttributeFromContextParam(sc, RrsConstants.EMAIL_HOST_ATTRIBUTE);
 	setBooleanAttributeFromContextParam(sc, RrsConstants.ALLOW_NEW_INTERNAL_USERS_ATTRIBUTE);
 	setAttributeFromContextParam(sc, RrsConstants.DOBES_COC_LINK_ATTRIBUTE);
 	setAttributeFromContextParam(sc, RrsConstants.DOBES_COC_LICENSE_NAME_ATTRIBUTE);
+	setAttributeFromContextParam(sc, RrsConstants.OPEN_PATH_PREFIX_ATTRIBUTE);
 
 	logger.debug("RrsContextListener contextInitialized");
 

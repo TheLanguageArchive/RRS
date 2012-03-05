@@ -22,6 +22,7 @@ public class RrsConstants {
     public final static String CORPUS_SERVER_DB_USER_ATTRIBUTE = "corpusServerDb.username";
     public final static String CORPUS_SERVER_DB_PASS_ATTRIBUTE = "corpusServerDb.password";
     public final static String EMAIL_HOST_ATTRIBUTE = "emailHost";
-    public final static String AMS_INTERFACE_LINK = "amsInterfaceLink";
+    public final static String OPEN_PATH_PREFIX_ATTRIBUTE = "openPathPrefix";
+    public final static String AMS_INTERFACE_LINK_ATTRIBUTE = "amsInterfaceLink";
     public final static String REGIS_FILE_IO = "regisFileIO";
 }

@@ -46,7 +46,7 @@ public class RrsDoRegisEmailCheck extends HttpServlet {
     @Override
     public void init() throws ServletException {
 	regisFileIO = (RegisFileIO) this.getServletContext().getAttribute(RrsConstants.REGIS_FILE_IO);
-	amsInterfaceLink = (String) this.getServletContext().getAttribute(RrsConstants.AMS_INTERFACE_LINK);
+	amsInterfaceLink = (String) this.getServletContext().getAttribute(RrsConstants.AMS_INTERFACE_LINK_ATTRIBUTE);
 	authenticationProvider = (AuthenticationProvider) getServletContext().getAttribute(RrsConstants.AUTHENTICATION_PROVIDER_ATTRIBUTE);
 	archiveUsersIdpName = (String) this.getServletContext().getAttribute(RrsConstants.ARCHIVE_USERS_IDP_NAME_ATTRIBUTE);
     }
