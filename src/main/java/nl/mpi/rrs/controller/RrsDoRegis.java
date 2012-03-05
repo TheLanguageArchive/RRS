@@ -193,9 +193,11 @@ public class RrsDoRegis extends HttpServlet {
 		    if (urlRrsDobesCoc.contentEquals("default")) {
 			urlRrsDobesCoc = request.getContextPath() + "/dobes_coc_v2.html";
 			request.setAttribute("urlRrsDobesCoc", urlRrsDobesCoc);
+		    } else if (urlRrsDobesCoc.contentEquals("none")) {
+			request.setAttribute("urlRrsDobesCoc", null);
+		    } else {
+			request.setAttribute("urlRrsDobesCoc", urlRrsDobesCoc);
 		    }
-
-		    request.setAttribute("urlRrsDobesCoc", urlRrsDobesCoc);
 		    return request.getRequestDispatcher("/WEB-INF/view/page/dobesCoc.jsp");
 		}
 	    }

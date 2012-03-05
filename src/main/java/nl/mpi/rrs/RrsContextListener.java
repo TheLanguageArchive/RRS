@@ -29,10 +29,6 @@ import org.apache.commons.logging.LogFactory;
 public class RrsContextListener implements ServletContextListener {
 
     static Log logger = LogFactory.getLog(RrsContextListener.class);
-    private String corpusDbName;
-    private String corpusJdbcURL;
-    private String corpusUser;
-    private String corpusPass;
     private CorpusStructureDBImpl corpusDbConnection;
     private UserGenerator mUserGenerator;
     private String rrsRegistrationFileName;
@@ -46,17 +42,14 @@ public class RrsContextListener implements ServletContextListener {
 
 	ServletContext sc = sce.getServletContext();
 
-	String maxFormNodeIds = sc.getInitParameter("MAX_FORM_NODE_IDS");
-	sc.setAttribute("maxFormNodeIds", maxFormNodeIds);
-
-	String amsInterfaceLink = sc.getInitParameter("AMS_INTERFACE_LINK");
-	sc.setAttribute(RrsConstants.AMS_INTERFACE_LINK, amsInterfaceLink);
-
+	setAttributeFromContextParam(sc, RrsConstants.AMS_INTERFACE_LINK_ATTRIBUTE);
 	setAttributeFromContextParam(sc, RrsConstants.EMAIL_ADDRESS_CORPMAN_ATTRIBUTE);
 	setAttributeFromContextParam(sc, RrsConstants.EMAIL_HOST_ATTRIBUTE);
-	setBooleanAttributeFromContextParam(sc, RrsConstants.ALLOW_NEW_INTERNAL_USERS_ATTRIBUTE);
 	setAttributeFromContextParam(sc, RrsConstants.DOBES_COC_LINK_ATTRIBUTE);
 	setAttributeFromContextParam(sc, RrsConstants.DOBES_COC_LICENSE_NAME_ATTRIBUTE);
+	setAttributeFromContextParam(sc, RrsConstants.OPEN_PATH_PREFIX_ATTRIBUTE);
+	setAttributeFromContextParam(sc, RrsConstants.REGISTRATION_STATIC_PAGE_ATTRIBUTE);
+	setBooleanAttributeFromContextParam(sc, RrsConstants.ALLOW_NEW_INTERNAL_USERS_ATTRIBUTE);
 
 	logger.debug("RrsContextListener contextInitialized");
 
@@ -67,28 +60,29 @@ public class RrsContextListener implements ServletContextListener {
 	    //ex.printStackTrace();
 	}
 
-	corpusDbName = getContextParam(sc, RrsConstants.CORPUS_DB_CONNECTION_ATTRIBUTE);
-	corpusJdbcURL = sc.getInitParameter(RrsConstants.CORPUS_SERVER_DB_JDBC_URL_ATTRIBUTE);
-	corpusUser = sc.getInitParameter(RrsConstants.CORPUS_SERVER_DB_USER_ATTRIBUTE);
-	corpusPass = sc.getInitParameter(RrsConstants.CORPUS_SERVER_DB_PASS_ATTRIBUTE);
-
+	final String corpusDbName = getContextParam(sc, RrsConstants.CORPUS_SERVER_DB_JNDI_NAME_ATTRIBUTE);
 
 	//try {
 	if (corpusDbName != null) {
 	    logger.info("Connecting to database by name " + corpusDbName);
 	    corpusDbConnection = new CorpusStructureDBImpl(corpusDbName);
 	}
+
 	if (corpusDbConnection == null) {
+	    final String corpusJdbcURL = getContextParam(sc, RrsConstants.CORPUS_SERVER_DB_JDBC_URL_ATTRIBUTE);
+	    final String corpusUser = getContextParam(sc, RrsConstants.CORPUS_SERVER_DB_USER_ATTRIBUTE);
+	    final String corpusPass = getContextParam(sc, RrsConstants.CORPUS_SERVER_DB_PASS_ATTRIBUTE);
+
 	    logger.info("Connecting to database by url " + corpusJdbcURL + " and provided username/password");
 	    boolean bootstrapMode = false;
 	    corpusDbConnection = new CorpusStructureDBImpl(corpusJdbcURL, bootstrapMode, corpusUser, corpusPass);
-	}
-	if (corpusDbConnection == null) {
-	    logger.fatal("************ corpusDbConnection is null");
-	    logger.fatal("corpusJdbcURL: " + corpusJdbcURL);
-	    logger.fatal("corpusUser: " + corpusUser);
-	}
 
+	    if (corpusDbConnection == null) {
+		logger.fatal("************ corpusDbConnection is null");
+		logger.fatal("corpusJdbcURL: " + corpusJdbcURL);
+		logger.fatal("corpusUser: " + corpusUser);
+	    }
+	}
 	rrsRegistrationFileName = getContextParam(sc, RrsConstants.REGISTRATION_FILE_ATTRIBUTE);
 	RegisFileIO rfio = this.getRegisFileIO();
 	sc.setAttribute(RrsConstants.REGIS_FILE_IO, rfio);

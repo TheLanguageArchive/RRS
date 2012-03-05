@@ -1,6 +1,13 @@
 Resource Request System Installation
 ------------------------------------
 
+Contents:
+- Requirements
+- Installation of RRS
+- Configuration of RRS
+  - General configuration
+  - Authentication configuration
+
 = Requirements =
 
 * RRS package
@@ -25,10 +32,10 @@ application context file in conf/Catalina/...).
 Go to the WEB-INF directory of the unpacked application directory, and do
 one of the following options:
 
-1) For SHIBBOLETH authentication:
+a) For SHIBBOLETH authentication:
    - Rename (or copy) web-shib.xml to web.xml
    - Rename (or copy) shhaa-example.xml shhaa.xml
-2) For LANA2 authentication:
+b) For LANA2 authentication:
    - Rename (or copy) web-lana2.xml to web.xml
 
 Then proceed to the general configuration of RRS and configuration for the
@@ -40,7 +47,79 @@ See below for section on configuring RRS for either Shibboleth or Lana2.
 
 == General configuration ==
 
-== Configure for Shibboleth ==
+Apart from authentication settings, RRS is configured through context parameters. All RRS-specific
+paramaters are prefixed with 'nl.mpi.rrs' to prevent collisions. This prefix must always be included
+in the name of the context parameter, e.g.:
+
+	    <Parameter name="nl.mpi.rrs.allowNewInternalUsers" value="true" />
+
+=== Corpus structure database connection configuration: (REQUIRED) ===
+
+There are two ways of configuring the conncetion to the corpus structure database:
+
+(a) The first is by setting the JNDI connection name:
+
+- nl.mpi.rrs.corpusServerDb.jndiName	(JNDI name)
+	JNDI name of the database connection. Specify the actual conncetion elsewhere.
+	Example: java:comp/env/jdbc/CSDB
+		
+(b) The second way is by setting the database URL, username and password manually
+
+- nl.mpi.rrs.corpusServerDb.jdbcUrl		(JDBC url)
+	Example: dbc:postgresql://lux16.mpi.nl:5432/corpusstructure
+	
+- nl.mpi.rrs.corpusServerDb.username	(text)
+	Username to connect with
+	
+- nl.mpi.rrs.corpusServerDb.password	(text)
+	Password for the specified username
+
+=== The following other parameters are REQUIRED: ===
+
+- nl.mpi.rrs.allowNewInternalUsers		('true'|'false')	
+	If set to true, RRS will allow users to register without login in first. Setting it to false 
+	only makes sense in a federated Shibboleth context.
+
+- nl.mpi.rrs.registrationFile			(writable file location)
+	The specified file will be used by RRS to temporary store user information in the time between
+	registration and verification. After verification the entry gets removed from this file and
+	inserted in AMS.
+	
+- nl.mpi.rrs.dobesCocLink				(text|'default'|'none')
+	Link to location of file with DoBES Code of Conduct.
+	If set to 'default', it will use the built-in default location /ds/RRS_V1/dobes_coc_v2.html.
+	If set to 'none', the signing of the code of conduct step is skipped. Instead, a confirmation
+	page will be shown.
+	
+- nl.mpi.rrs.dobesCocLicenseName		(text)
+	Name of the license to show. Will be ignored if nl.mpi.rrs.dobesCocLink is set to 'none'.
+	
+- nl.mpi.rrs.emailHost					(host name)
+	Host name of the SMTP server that should be used for sending e-mails to the user and to 
+	corpman.
+	
+- nl.mpi.rrs.emailAddressCorpman		(e-mail address)
+	E-mail address that will recieve access requests and a copy of the verification e-mail for newly
+	registered users.
+	
+- nl.mpi.rrs.amsInterfaceLink			(URL)
+	URL AMS lat access management system, will be the destination of the link in the 'Thank you' 
+	page at the end of the registration process.
+	Example: http://corpus1.mpi.nl/am/ams2/pages/welcome.face
+
+- nl.mpi.rrs.openPathPrefix				(URL)
+	Prefix for http link to nodeId in the IMDI browser. 
+	Example: http://corpus1.mpi.nl/ds/imdi_browser?openpath=
+	
+** The following parameters are OPTIONAL: **
+
+- nl.mpi.rrs.archiveUsersIdpName		(text)
+	Name of IdP to be shown to users that have registered unauthenticated. Leave empty to have none 
+	shown (e.g. if there is only one or non-shibboleth mode).
+
+== Authentication configuration ==
+
+=== Configuration for Shibboleth ===
 
 In WEB-INF/web.xml, locate the following section:
 
@@ -67,7 +146,7 @@ For information on how to configure the filter, see
 <https://aai2.rzg.mpg.de/>. Do not modifiy the composition, authorization,
 and handler settings.
 
-== Configure for Lana2 ==
+=== Configuration for Lana2 ===
 
 In WEB-INF/web.xml, make sure that the values in the init-param elements for
 the SsoFilter are set according to the environment. They are contained in

@@ -1,13 +1,11 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package nl.mpi.rrs.controller;
 
-import java.io.*;
-
-import javax.servlet.*;
-import javax.servlet.http.*;
+import java.io.IOException;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import nl.mpi.rrs.RrsConstants;
 import nl.mpi.rrs.model.errors.ErrorRequest;
 import nl.mpi.rrs.model.errors.ErrorsRequest;
@@ -39,9 +37,13 @@ public class RrsRegis extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
 	    throws ServletException, IOException {
-	ErrorsRequest errorsRequest = new ErrorsRequest();
-	checkCurrentUser(request, response, errorsRequest);
-	dispatchServlet(request, response, errorsRequest);
+	request.setAttribute("corpmanEmail", this.getServletContext().getAttribute(RrsConstants.EMAIL_ADDRESS_CORPMAN_ATTRIBUTE));
+
+	if (!dispatchStaticPage(request, response)) {
+	    ErrorsRequest errorsRequest = new ErrorsRequest();
+	    checkCurrentUser(request, response, errorsRequest);
+	    dispatchServlet(request, response, errorsRequest);
+	}
     }
 
     /**
@@ -80,7 +82,6 @@ public class RrsRegis extends HttpServlet {
 	}
 	request.setAttribute("federated", authenticationProvider.isFederated());
 	request.setAttribute("newInternalUser", this.getServletContext().getAttribute(RrsConstants.ALLOW_NEW_INTERNAL_USERS_ATTRIBUTE));
-	request.setAttribute("corpmanEmail", this.getServletContext().getAttribute(RrsConstants.EMAIL_ADDRESS_CORPMAN_ATTRIBUTE));
     }
 
     /** 
@@ -105,6 +106,25 @@ public class RrsRegis extends HttpServlet {
 	}
     }
 
+    /**
+     * Dispatches static page if it is configured as context attribute
+     * @return Whether static page was dispatched
+     * @see nl.mpi.rrs.RrsConstants#REGISTRATION_STATIC_PAGE_ATTRIBUTE
+     * @see nl.mpi.rrs.RrsContextListener
+     */
+    private boolean dispatchStaticPage(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+	final Object staticPage = getServletContext().getAttribute(RrsConstants.REGISTRATION_STATIC_PAGE_ATTRIBUTE);
+	if (staticPage instanceof String) {
+	    String staticPageString = (String) staticPage;
+	    if (staticPageString.length() > 0) {
+		RequestDispatcher view = request.getRequestDispatcher(staticPageString);
+		view.forward(request, response);
+		return true;
+	    }
+	}
+	return false;
+    }
+    
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /** 
      * Handles the HTTP <code>GET</code> method.
