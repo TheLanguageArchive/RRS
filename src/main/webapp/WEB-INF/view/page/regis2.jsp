@@ -140,7 +140,7 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
 		</c:if>
 		<c:if test="${not federated && not newInternalUser}">
 		    <tr>
-			<td><strong>WARNING: RRS was configured not to allow any registration! Please check the configuration or contact the administrator!</strong></td>
+			<td><strong>WARNING: RRS was configured not to allow any registration! Please check the configuration or contact the <a href="mailto:${corpmanEmail}">administrator</a>!</strong></td>
 		    </tr>
 		</c:if>
             </table>

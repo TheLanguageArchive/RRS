@@ -27,7 +27,7 @@
         <div id="contents-erroremailcheck">
             <p>
                 Dear user, <br />
-                You have clicked on an invalid link!            
+                An error has occurred while completing the registration!            
             </p>
             
             
