@@ -5,11 +5,11 @@
    
     <Parameter name="nl.mpi.rrs.allowNewInternalUsers"
 	value="true"
-	description="If set to true, RRS will allow users to register without login in first. Setting it to false only makes sense in a federated Shibboleth context." />
+	description="REQUIRED - If set to true, RRS will allow users to register without login in first. Setting it to false only makes sense in a federated Shibboleth context." />
 	
     <Parameter name="nl.mpi.rrs.registrationFile" 
 	value="/tmp/registration.txt" 
-	description="For saving RRS registrations temporarily" />
+	description="REQUIRED - For saving RRS registrations temporarily" />
 	
     <Parameter name="nl.mpi.rrs.archiveUsersIdpName"
 	value="'MPI Nijmegen' from the 'Damlr federation'"
@@ -25,7 +25,7 @@
 	
     <Parameter name="nl.mpi.rrs.dobesCocLink" 
 	value="default" 
-	description="Link to location of file with DoBES Code of Conduct. /ds/RRS_V1/dobes_coc_v2.html" />
+	description="Link to location of file with DoBES Code of Conduct. Or 'default' for /ds/RRS_V1/dobes_coc_v2.html, or 'none' for skipping the code of conduct step." />
 	
     <Parameter name="nl.mpi.rrs.dobesCocLicenseName" 
 	value="Dobes Code of Conduct v2" 
@@ -35,7 +35,7 @@
     
     <Parameter name="nl.mpi.rrs.emailHost" 
 	value="mailhost.mpi.nl"
-	description="default imap mail host" />
+	description="SMTP server for sending e-mails to user and corpman" />
 	
     <Parameter name="nl.mpi.rrs.emailAddressCorpman" 
 	value="twan.goosen@mpi.nl" 
@@ -64,7 +64,7 @@
     <!-- External system links -->
 	
     <Parameter name="nl.mpi.rrs.amsInterfaceLink" 	
-	value="http://lux16.mpi.nl/am/ams2/pages/welcome.face" 
+	value="http://corpus1.mpi.nl/am/ams2/pages/welcome.face" 
 	description="URL AMS lat access management system, will be the destination of the link in the 'Thank you' page at the end of the registration process"  />
 	
     <Parameter name="nl.mpi.rrs.openPathPrefix" 
