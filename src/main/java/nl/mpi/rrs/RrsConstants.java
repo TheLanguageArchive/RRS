@@ -17,6 +17,10 @@ public class RrsConstants {
     public final static String ARCHIVE_USERS_IDP_NAME_ATTRIBUTE = "archiveUsersIdpName";
     public final static String DOBES_COC_LINK_ATTRIBUTE = "dobesCocLink";
     public final static String DOBES_COC_LICENSE_NAME_ATTRIBUTE = "dobesCocLicenseName";
+    public final static String CORPUS_SERVER_DB_JNDI_NAME_ATTRIBUTE = "corpusServerDb.jndiName";
+    public final static String CORPUS_SERVER_DB_JDBC_URL_ATTRIBUTE = "corpusServerDb.jdbcUrl";
+    public final static String CORPUS_SERVER_DB_USER_ATTRIBUTE = "corpusServerDb.username";
+    public final static String CORPUS_SERVER_DB_PASS_ATTRIBUTE = "corpusServerDb.password";
     public final static String EMAIL_HOST_ATTRIBUTE = "emailHost";
     public final static String AMS_INTERFACE_LINK = "amsInterfaceLink";
     public final static String REGIS_FILE_IO = "regisFileIO";

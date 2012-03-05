@@ -37,21 +37,21 @@
 	
     <!-- Corpus structure database -->
 	
-    <Parameter name="RRS_V1_CORPUS_SERVER_DB_NAME" 
+    <Parameter name="nl.mpi.rrs.corpusServerDb.jndiName"
 	value="java:comp/env/jdbc/CSDB" 
 	description="Corpus DB name e.g. java:comp/env/jdbc/CSDB. If provided, JDBC url, username, password will be ignored!" />
 	
     <!-- Corpus structure settings below this can be removed if above (db name) is provided -->
 	
-    <Parameter name="RRS_V1_CORPUS_SERVER_JDBC_URL" 
+    <Parameter name="nl.mpi.rrs.corpusServerDb.jdbcUrl" 
 	value="jdbc:postgresql://lux16.mpi.nl:5432/corpusstructure" 
 	description="Corpus DB connection string. Only " />
 	
-    <Parameter name="RRS_V1_CORPUS_SERVER_DB_USER" 
+    <Parameter name="nl.mpi.rrs.corpusServerDb.username" 
 	value="username" 
 	description="Corpus DB username" />
 	
-    <Parameter name="RRS_V1_CORPUS_SERVER_DB_PASS" 
+    <Parameter name="nl.mpi.rrs.corpusServerDb.password" 
 	value="password" 
 	description="Corpus DB webuser password" />
 	

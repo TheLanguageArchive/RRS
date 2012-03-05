@@ -67,10 +67,10 @@ public class RrsContextListener implements ServletContextListener {
 	    //ex.printStackTrace();
 	}
 
-	corpusDbName = sc.getInitParameter("RRS_V1_CORPUS_SERVER_DB_NAME");
-	corpusJdbcURL = sc.getInitParameter("RRS_V1_CORPUS_SERVER_JDBC_URL");
-	corpusUser = sc.getInitParameter("RRS_V1_CORPUS_SERVER_DB_USER");
-	corpusPass = sc.getInitParameter("RRS_V1_CORPUS_SERVER_DB_PASS");
+	corpusDbName = getContextParam(sc, RrsConstants.CORPUS_DB_CONNECTION_ATTRIBUTE);
+	corpusJdbcURL = sc.getInitParameter(RrsConstants.CORPUS_SERVER_DB_JDBC_URL_ATTRIBUTE);
+	corpusUser = sc.getInitParameter(RrsConstants.CORPUS_SERVER_DB_USER_ATTRIBUTE);
+	corpusPass = sc.getInitParameter(RrsConstants.CORPUS_SERVER_DB_PASS_ATTRIBUTE);
 
 
 	//try {
