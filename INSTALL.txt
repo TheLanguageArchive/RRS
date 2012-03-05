@@ -1,6 +1,13 @@
 Resource Request System Installation
 ------------------------------------
 
+Contents:
+- Requirements
+- Installation of RRS
+- Configuration of RRS
+  - General configuration
+  - Authentication configuration
+
 = Requirements =
 
 * RRS package
@@ -46,7 +53,7 @@ in the name of the context parameter, e.g.:
 
 	    <Parameter name="nl.mpi.rrs.allowNewInternalUsers" value="true" />
 
-=== Corpuse structure database connection configuration: (REQUIRED) ===
+=== Corpus structure database connection configuration: (REQUIRED) ===
 
 There are two ways of configuring the conncetion to the corpus structure database:
 
@@ -110,9 +117,9 @@ There are two ways of configuring the conncetion to the corpus structure databas
 	Name of IdP to be shown to users that have registered unauthenticated. Leave empty to have none 
 	shown (e.g. if there is only one or non-shibboleth mode).
 
-== Configure authentication ==
+== Authentication configuration ==
 
-=== Configure for Shibboleth ===
+=== Configuration for Shibboleth ===
 
 In WEB-INF/web.xml, locate the following section:
 
@@ -139,7 +146,7 @@ For information on how to configure the filter, see
 <https://aai2.rzg.mpg.de/>. Do not modifiy the composition, authorization,
 and handler settings.
 
-=== Configure for Lana2 ===
+=== Configuration for Lana2 ===
 
 In WEB-INF/web.xml, make sure that the values in the init-param elements for
 the SsoFilter are set according to the environment. They are contained in
