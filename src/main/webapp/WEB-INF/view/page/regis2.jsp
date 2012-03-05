@@ -35,7 +35,7 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
         </c:if>
         --%>
 
-        <h2>${rrsRegisErrorMessage} &nbsp;</h2>
+        <h2 class="error">${rrsRegisErrorMessage} &nbsp;</h2>
 
 
         <form id="resource_request_registration_form" method="post" action="RrsRegis.do" onsubmit="return validateForm( this )">

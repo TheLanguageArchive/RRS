@@ -57,6 +57,10 @@ public class RrsDoRegis extends HttpServlet {
 	RegisFileIO regisFileIO = initRegisFileIO();
 	RegistrationUser userInfo = initUserInfo(request, errorsRequest);
 
+	request.setAttribute("federated", authenticationProvider.isFederated());
+	request.setAttribute("newInternalUser", this.getServletContext().getAttribute(RrsConstants.ALLOW_NEW_INTERNAL_USERS_ATTRIBUTE));
+	request.setAttribute("corpmanEmail", this.getServletContext().getAttribute(RrsConstants.EMAIL_ADDRESS_CORPMAN_ATTRIBUTE));
+
 	if (userInfo.validate()) {
 	    RequestDispatcher view = doRegistration(request, response, regisFileIO, userInfo, errorsRequest);
 	    view.forward(request, response);
@@ -82,12 +86,10 @@ public class RrsDoRegis extends HttpServlet {
 
     private RegisFileIO initRegisFileIO() {
 	// ams2 : using defaults : user-data provider and authentication service
-	String rrsRegistrationFileName = this.getServletContext().getInitParameter("REGISTRATION_FILENAME");
-	RegisFileIO regisFileIO = (RegisFileIO) this.getServletContext().getAttribute("regisFileIO");
+	RegisFileIO regisFileIO = (RegisFileIO) this.getServletContext().getAttribute(RrsConstants.REGIS_FILE_IO);
 	if (regisFileIO == null) {
 	    logger.error("RegisFileIO is NOT initialized during deploy.");
-
-	    regisFileIO = new RegisFileIO(rrsRegistrationFileName);
+	    throw new RuntimeException("RegisFileIO is NOT initialized during deploy");
 	}
 	return regisFileIO;
     }

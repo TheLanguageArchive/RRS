@@ -203,3 +203,6 @@ table#regis {
     margin-left: 100px;
 }
 
+.error {
+    color: red;
+}

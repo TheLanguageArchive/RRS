@@ -13,6 +13,7 @@ public class RrsConstants {
     public final static String ARCHIVE_OBJECTS_DB_CONNECTION_ATTRIBUTE = "archiveObjectsDbConnection";
     public final static String ALLOW_NEW_INTERNAL_USERS_ATTRIBUTE = "allowNewInternalUsers";
     public final static String EMAIL_ADDRESS_CORPMAN_ATTRIBUTE = "emailAddressCorpman";
+    public final static String REGISTRATION_FILE_ATTRIBUTE = "registrationFile";
     public final static String ARCHIVE_USERS_IDP_NAME = "archiveUsersIdpName";
     public final static String AMS_INTERFACE_LINK = "amsInterfaceLink";
     public final static String REGIS_FILE_IO = "regisFileIO";

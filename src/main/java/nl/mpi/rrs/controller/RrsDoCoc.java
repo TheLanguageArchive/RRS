@@ -9,6 +9,7 @@ import java.io.*;
 import javax.servlet.*;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.*;
+import nl.mpi.rrs.RrsConstants;
 import nl.mpi.rrs.model.RrsRegistration;
 import nl.mpi.rrs.model.email.EmailBean;
 import nl.mpi.rrs.model.errors.ErrorRequest;
@@ -40,153 +41,152 @@ public class RrsDoCoc extends HttpServlet {
      * @param response servlet response
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        ErrorsRequest errorsRequest = new ErrorsRequest();
-        String userName = request.getParameter("userName");
+	    throws ServletException, IOException {
+	ErrorsRequest errorsRequest = new ErrorsRequest();
+	String userName = request.getParameter("userName");
 
-        request.setAttribute("userEmail", request.getParameter("userEmail"));
-        request.setAttribute("userName", request.getParameter("userName"));
-        request.setAttribute("userFirstName", request.getParameter("userFirstName"));
-        request.setAttribute("userLastName", request.getParameter("userLastName"));
+	request.setAttribute("userEmail", request.getParameter("userEmail"));
+	request.setAttribute("userName", request.getParameter("userName"));
+	request.setAttribute("userFirstName", request.getParameter("userFirstName"));
+	request.setAttribute("userLastName", request.getParameter("userLastName"));
 
-        RegisFileIO regisFileIO = (RegisFileIO) this.getServletContext().getAttribute("regisFileIO");
-        if (regisFileIO == null) {
-            logger.error("RegisFileIO is NOT initialized during deploy.");
-            String rrsRegistrationFileName = this.getServletContext().getInitParameter("REGISTRATION_FILENAME");
-            regisFileIO = new RegisFileIO(rrsRegistrationFileName);
-        }
+	RegisFileIO regisFileIO = (RegisFileIO) this.getServletContext().getAttribute(RrsConstants.REGIS_FILE_IO);
+	if (regisFileIO == null) {
+	    logger.error("RegisFileIO is NOT initialized during deploy.");
+	    throw new RuntimeException("RegisFileIO is NOT initialized during deploy");
+	}
 
-        RegistrationUser userInfo = regisFileIO.getRegistrationFromFile(userName);
+	RegistrationUser userInfo = regisFileIO.getRegistrationFromFile(userName);
 
-        if (userInfo == null || RrsUtil.isEmpty(userInfo.getUserName())) {
-            ErrorRequest errorRequest = new ErrorRequest();
+	if (userInfo == null || RrsUtil.isEmpty(userInfo.getUserName())) {
+	    ErrorRequest errorRequest = new ErrorRequest();
 
-            errorRequest.setErrorFormFieldLabel("Sign DObes Code of Conduct");
-            errorRequest.setErrorMessage("Missing User Info");
-            errorRequest.setErrorValue("Probably submit after complete registration");
-            errorRequest.setErrorException(null);
-            errorRequest.setErrorType("MISSING_USER_INFO_IN_REGISTRATION_FILE");
-            errorRequest.setErrorRecoverable(false);
+	    errorRequest.setErrorFormFieldLabel("Sign DObes Code of Conduct");
+	    errorRequest.setErrorMessage("Missing User Info");
+	    errorRequest.setErrorValue("Probably submit after complete registration");
+	    errorRequest.setErrorException(null);
+	    errorRequest.setErrorType("MISSING_USER_INFO_IN_REGISTRATION_FILE");
+	    errorRequest.setErrorRecoverable(false);
 
-            errorsRequest.addError(errorRequest);
+	    errorsRequest.addError(errorRequest);
 
-            errorsRequest.setErrorsHtmlTable();
+	    errorsRequest.setErrorsHtmlTable();
 
-            String htmlErrorTable = errorsRequest.getErrorsHtmlTable();
+	    String htmlErrorTable = errorsRequest.getErrorsHtmlTable();
 
-            request.setAttribute("htmlErrorTable", htmlErrorTable);
+	    request.setAttribute("htmlErrorTable", htmlErrorTable);
 
-            logger.error("User tries to submit after registration");
+	    logger.error("User tries to submit after registration");
 
-            RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/error/errorOther.jsp");
-            view.forward(request, response);
-            return;
-        }
+	    RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/error/errorOther.jsp");
+	    view.forward(request, response);
+	    return;
+	}
 
-        boolean cocAgree = "ON".equals(request.getParameter("coc_agree"));
-        if (cocAgree) {
-            regisFileIO.updateCocSigned(userInfo);
-        }
+	boolean cocAgree = "ON".equals(request.getParameter("coc_agree"));
+	if (cocAgree) {
+	    regisFileIO.updateCocSigned(userInfo);
+	}
 
-        StringBuilder checkEmailLinkBase = new StringBuilder();
-        String urlFields[] = request.getRequestURL().toString().split("/");
+	StringBuilder checkEmailLinkBase = new StringBuilder();
+	String urlFields[] = request.getRequestURL().toString().split("/");
 
-        for (int i = 0; i < urlFields.length - 1; i++) {
-            checkEmailLinkBase.append(urlFields[i]);
-            checkEmailLinkBase.append("/");
-        }
+	for (int i = 0; i < urlFields.length - 1; i++) {
+	    checkEmailLinkBase.append(urlFields[i]);
+	    checkEmailLinkBase.append("/");
+	}
 
-        regisFileIO.removeOldRegistrationsFromFile(REGISTRATION_EXPIRATION_DAYS);
+	regisFileIO.removeOldRegistrationsFromFile(REGISTRATION_EXPIRATION_DAYS);
 
-        RrsRegistration rrsRegistration = new RrsRegistration();
-        rrsRegistration.setUser(userInfo);
-        rrsRegistration.setBaseUrl(checkEmailLinkBase.toString());
+	RrsRegistration rrsRegistration = new RrsRegistration();
+	rrsRegistration.setUser(userInfo);
+	rrsRegistration.setBaseUrl(checkEmailLinkBase.toString());
 
-        logger.info("checkEmailLinkBase: " + checkEmailLinkBase);
+	logger.info("checkEmailLinkBase: " + checkEmailLinkBase);
 
-        String checkEmailLink = rrsRegistration.getCheckEmailLink();
+	String checkEmailLink = rrsRegistration.getCheckEmailLink();
 
-        request.setAttribute("serverInfo", checkEmailLink);
-        logger.info("checkEmailLink: " + checkEmailLink);
+	request.setAttribute("serverInfo", checkEmailLink);
+	logger.info("checkEmailLink: " + checkEmailLink);
 
-        EmailBean emailer = new EmailBean();
+	EmailBean emailer = new EmailBean();
 
 
-        rrsRegistration.setEmailAddressCheckContent();
+	rrsRegistration.setEmailAddressCheckContent();
 
-        emailer.setSubject("Max Planck Institute registration check");
+	emailer.setSubject("Max Planck Institute registration check");
 
-        emailer.setContent(rrsRegistration.getEmailAddressCheckContent());
+	emailer.setContent(rrsRegistration.getEmailAddressCheckContent());
 
-        String corpmanEmail = (String) this.getServletContext().getAttribute("emailAddressCorpman");
-        String emailHost = (String) this.getServletContext().getAttribute("emailHost");
-        String userEmail = rrsRegistration.getUser().getEmail();
+	String corpmanEmail = (String) this.getServletContext().getAttribute("emailAddressCorpman");
+	String emailHost = (String) this.getServletContext().getAttribute("emailHost");
+	String userEmail = rrsRegistration.getUser().getEmail();
 
-        emailer.setTo(corpmanEmail);
-        emailer.setCc(userEmail);
-        emailer.setFrom(corpmanEmail);
-        emailer.setSmtpHost(emailHost);
+	emailer.setTo(corpmanEmail);
+	emailer.setCc(userEmail);
+	emailer.setFrom(corpmanEmail);
+	emailer.setSmtpHost(emailHost);
 
-        try {
-            emailer.sendMessage();
-        } catch (javax.mail.SendFailedException e) {
-            ErrorRequest errorRequest = new ErrorRequest();
+	try {
+	    emailer.sendMessage();
+	} catch (javax.mail.SendFailedException e) {
+	    ErrorRequest errorRequest = new ErrorRequest();
 
-            errorRequest.setErrorFormFieldLabel("Form field: Email");
-            errorRequest.setErrorMessage("Invalid Email address");
-            errorRequest.setErrorValue(userEmail);
-            errorRequest.setErrorException(null);
-            errorRequest.setErrorType("INVALID_USER_EMAIL");
-            errorRequest.setErrorRecoverable(true);
+	    errorRequest.setErrorFormFieldLabel("Form field: Email");
+	    errorRequest.setErrorMessage("Invalid Email address");
+	    errorRequest.setErrorValue(userEmail);
+	    errorRequest.setErrorException(null);
+	    errorRequest.setErrorType("INVALID_USER_EMAIL");
+	    errorRequest.setErrorRecoverable(true);
 
-            errorsRequest.addError(errorRequest);
+	    errorsRequest.addError(errorRequest);
 
-            errorsRequest.setErrorsHtmlTable();
+	    errorsRequest.setErrorsHtmlTable();
 
-            String htmlErrorTable = errorsRequest.getErrorsHtmlTable();
+	    String htmlErrorTable = errorsRequest.getErrorsHtmlTable();
 
-            request.setAttribute("htmlErrorTable", htmlErrorTable);
+	    request.setAttribute("htmlErrorTable", htmlErrorTable);
 
-            logger.error("RrsServlet javax.mail.SendFailedException: can't send email", e);
+	    logger.error("RrsServlet javax.mail.SendFailedException: can't send email", e);
 
-            RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/error/error.jsp");
-            view.forward(request, response);
-            return;
+	    RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/error/error.jsp");
+	    view.forward(request, response);
+	    return;
 
-        } catch (java.lang.Exception e) {
-            // catch all other possible email errors
-            ErrorRequest errorRequest = new ErrorRequest();
+	} catch (java.lang.Exception e) {
+	    // catch all other possible email errors
+	    ErrorRequest errorRequest = new ErrorRequest();
 
-            errorRequest.setErrorFormFieldLabel("Form field: Email");
-            errorRequest.setErrorMessage("Invalid Email address (3)");
-            errorRequest.setErrorValue(userEmail);
-            errorRequest.setErrorException(null);
-            errorRequest.setErrorType("INVALID_USER_EMAIL");
-            errorRequest.setErrorRecoverable(true);
+	    errorRequest.setErrorFormFieldLabel("Form field: Email");
+	    errorRequest.setErrorMessage("Invalid Email address (3)");
+	    errorRequest.setErrorValue(userEmail);
+	    errorRequest.setErrorException(null);
+	    errorRequest.setErrorType("INVALID_USER_EMAIL");
+	    errorRequest.setErrorRecoverable(true);
 
-            errorsRequest.addError(errorRequest);
+	    errorsRequest.addError(errorRequest);
 
-            errorsRequest.setErrorsHtmlTable();
+	    errorsRequest.setErrorsHtmlTable();
 
-            String htmlErrorTable = errorsRequest.getErrorsHtmlTable();
+	    String htmlErrorTable = errorsRequest.getErrorsHtmlTable();
 
-            request.setAttribute("htmlErrorTable", htmlErrorTable);
+	    request.setAttribute("htmlErrorTable", htmlErrorTable);
 
-            logger.error("RrsServlet java.lang.Exception: can't send email", e);
+	    logger.error("RrsServlet java.lang.Exception: can't send email", e);
 
-            RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/error/error.jsp");
-            view.forward(request, response);
-            return;
-            /*
-            RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/error/errorUnknown.jsp");
-            view.forward(request, response);
-            return;
-             */
+	    RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/error/error.jsp");
+	    view.forward(request, response);
+	    return;
+	    /*
+	    RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/error/errorUnknown.jsp");
+	    view.forward(request, response);
+	    return;
+	     */
 
-        }
+	}
 
-        RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/page/dobesCocReply.jsp");
-        view.forward(request, response);
+	RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/page/dobesCocReply.jsp");
+	view.forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -196,8 +196,8 @@ public class RrsDoCoc extends HttpServlet {
      * @param response servlet response
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
+	    throws ServletException, IOException {
+	processRequest(request, response);
     }
 
     /** 
@@ -206,15 +206,15 @@ public class RrsDoCoc extends HttpServlet {
      * @param response servlet response
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
+	    throws ServletException, IOException {
+	processRequest(request, response);
     }
 
     /** 
      * Returns a short description of the servlet.
      */
     public String getServletInfo() {
-        return "Short description";
+	return "Short description";
     }
     // </editor-fold>
 }

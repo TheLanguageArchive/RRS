@@ -46,8 +46,6 @@ public class RrsContextListener implements ServletContextListener {
 
 	ServletContext sc = sce.getServletContext();
 
-	rrsRegistrationFileName = sc.getInitParameter("REGISTRATION_FILENAME");
-
 	String maxFormNodeIds = sc.getInitParameter("MAX_FORM_NODE_IDS");
 	sc.setAttribute("maxFormNodeIds", maxFormNodeIds);
 
@@ -92,6 +90,8 @@ public class RrsContextListener implements ServletContextListener {
 	    logger.fatal("corpusJdbcURL: " + corpusJdbcURL);
 	    logger.fatal("corpusUser: " + corpusUser);
 	}
+
+	rrsRegistrationFileName = getContextParam(sc, RrsConstants.REGISTRATION_FILE_ATTRIBUTE);
 	RegisFileIO rfio = this.getRegisFileIO();
 	sc.setAttribute(RrsConstants.REGIS_FILE_IO, rfio);
 
@@ -112,20 +112,20 @@ public class RrsContextListener implements ServletContextListener {
     }
 
     private void setAttributeFromContextParam(ServletContext servletContext, String name) {
-	final String initParamString = getContextParam(name, servletContext);
+	final String initParamString = getContextParam(servletContext, name);
 	servletContext.setAttribute(name, initParamString);
 	logger.debug("Stored into servlet context attribute " + name);
     }
 
     private void setBooleanAttributeFromContextParam(ServletContext servletContext, String name) {
-	final String initParamString = getContextParam(name, servletContext);
+	final String initParamString = getContextParam(servletContext, name);
 	final boolean initParamValue = Boolean.parseBoolean(initParamString);
 	logger.debug("Parsed to boolean value " + initParamValue);
 	servletContext.setAttribute(name, initParamValue);
 	logger.debug("Stored into servlet context attribute " + name);
     }
 
-    private String getContextParam(String name, ServletContext servletContext) {
+    private String getContextParam(ServletContext servletContext, String name) {
 	final String initParamName = RrsConstants.RRS_CONTEXT_PARAM_PREFIX + name;
 	logger.debug("Reading context parameter " + initParamName);
 	final String initParamString = servletContext.getInitParameter(initParamName);

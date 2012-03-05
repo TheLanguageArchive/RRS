@@ -7,7 +7,7 @@
 	value="true"
 	description="If set to true, RRS will allow users to register without login in first. Setting it to false only makes sense in a federated Shibboleth context." />
 	
-    <Parameter name="REGISTRATION_FILENAME" 
+    <Parameter name="nl.mpi.rrs.registrationFile" 
 	value="/tmp/registration.txt" 
 	description="For saving RRS registrations temporarily" />
 	
