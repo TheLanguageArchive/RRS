@@ -52,13 +52,11 @@ public class RrsContextListener implements ServletContextListener {
 	String amsInterfaceLink = sc.getInitParameter("AMS_INTERFACE_LINK");
 	sc.setAttribute(RrsConstants.AMS_INTERFACE_LINK, amsInterfaceLink);
 
-	String emailAddressCorpman = sc.getInitParameter("EMAIL_ADDRESS_CORPMAN");
-	sc.setAttribute(RrsConstants.EMAIL_ADDRESS_CORPMAN_ATTRIBUTE, emailAddressCorpman);
-
-	String emailHost = sc.getInitParameter("EMAIL_HOST");
-	sc.setAttribute("emailHost", emailHost);
-
+	setAttributeFromContextParam(sc, RrsConstants.EMAIL_ADDRESS_CORPMAN_ATTRIBUTE);
+	setAttributeFromContextParam(sc, RrsConstants.EMAIL_HOST_ATTRIBUTE);
 	setBooleanAttributeFromContextParam(sc, RrsConstants.ALLOW_NEW_INTERNAL_USERS_ATTRIBUTE);
+	setAttributeFromContextParam(sc, RrsConstants.DOBES_COC_LINK_ATTRIBUTE);
+	setAttributeFromContextParam(sc, RrsConstants.DOBES_COC_LICENSE_NAME_ATTRIBUTE);
 
 	logger.debug("RrsContextListener contextInitialized");
 
@@ -103,12 +101,12 @@ public class RrsContextListener implements ServletContextListener {
 	sc.setAttribute(RrsConstants.ARCHIVE_OBJECTS_DB_CONNECTION_ATTRIBUTE, corpusDbConnection);
 
 
-	String archiveUsersIdpName = sc.getInitParameter("ARCHIVE_USERS_IDP_NAME");
+	String archiveUsersIdpName = getContextParam(sc, RrsConstants.ARCHIVE_USERS_IDP_NAME_ATTRIBUTE);
 	if (archiveUsersIdpName != null && archiveUsersIdpName.length() == 0) {
 	    archiveUsersIdpName = null;
 	}
 
-	sc.setAttribute(RrsConstants.ARCHIVE_USERS_IDP_NAME, archiveUsersIdpName);
+	sc.setAttribute(RrsConstants.ARCHIVE_USERS_IDP_NAME_ATTRIBUTE, archiveUsersIdpName);
     }
 
     private void setAttributeFromContextParam(ServletContext servletContext, String name) {

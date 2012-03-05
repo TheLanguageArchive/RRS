@@ -48,7 +48,7 @@ public class RrsDoRegisEmailCheck extends HttpServlet {
 	regisFileIO = (RegisFileIO) this.getServletContext().getAttribute(RrsConstants.REGIS_FILE_IO);
 	amsInterfaceLink = (String) this.getServletContext().getAttribute(RrsConstants.AMS_INTERFACE_LINK);
 	authenticationProvider = (AuthenticationProvider) getServletContext().getAttribute(RrsConstants.AUTHENTICATION_PROVIDER_ATTRIBUTE);
-	archiveUsersIdpName = (String) this.getServletContext().getAttribute(RrsConstants.ARCHIVE_USERS_IDP_NAME);
+	archiveUsersIdpName = (String) this.getServletContext().getAttribute(RrsConstants.ARCHIVE_USERS_IDP_NAME_ATTRIBUTE);
     }
 
     /**
@@ -173,7 +173,7 @@ public class RrsDoRegisEmailCheck extends HttpServlet {
 	AmsLicense al = new AmsLicense();
 	logger.info(al.getLicenseInfo(userInfo.getUserName(), null));
 	NodeID targetNodeID = null;
-	String dobesCodeOfConductLicenseName = this.getServletContext().getInitParameter("DOBES_COC_LICENSE_NAME");
+	String dobesCodeOfConductLicenseName = (String) this.getServletContext().getAttribute(RrsConstants.DOBES_COC_LICENSE_NAME_ATTRIBUTE);
 	logger.info("dobesCodeOfConductLicenseName: " + dobesCodeOfConductLicenseName);
 	if (al.acceptLicenseInfo(userInfo.getUserName(), targetNodeID, dobesCodeOfConductLicenseName)) {
 	    logger.info("*** END OF REGISTRATION for user: " + userInfo.getUserName());
@@ -219,8 +219,8 @@ public class RrsDoRegisEmailCheck extends HttpServlet {
     private boolean sendRegistrationEmail(HttpServletRequest request, HttpServletResponse response, RrsRegistration rrsRegistration) throws ServletException, IOException {
 	ErrorsRequest errorsRequestEmail = new ErrorsRequest();
 
-	String corpmanEmail = (String) this.getServletContext().getAttribute("emailAddressCorpman");
-	String emailHost = (String) this.getServletContext().getAttribute("emailHost");
+	String corpmanEmail = (String) this.getServletContext().getAttribute(RrsConstants.EMAIL_ADDRESS_CORPMAN_ATTRIBUTE);
+	String emailHost = (String) this.getServletContext().getAttribute(RrsConstants.EMAIL_HOST_ATTRIBUTE);
 	String userEmail = rrsRegistration.getUser().getEmail();
 
 	EmailBean emailer = new EmailBean();

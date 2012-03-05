@@ -354,8 +354,8 @@ public class RrsServlet extends HttpServlet {
         rrsRequest.setEmailContent();
         emailer.setSubject("Resource Request System");
         emailer.setContent(rrsRequest.getEmailContent());
-        String corpmanEmail = (String) this.getServletContext().getAttribute("emailAddressCorpman");
-        String emailHost = (String) this.getServletContext().getAttribute("emailHost");
+        String corpmanEmail = (String) this.getServletContext().getAttribute(RrsConstants.EMAIL_ADDRESS_CORPMAN_ATTRIBUTE);
+        String emailHost = (String) this.getServletContext().getAttribute(RrsConstants.EMAIL_HOST_ATTRIBUTE);
         String userEmail = rrsRequest.getUser().getEmail();
         request.setAttribute("emailAddressCorpman", corpmanEmail);
         request.setAttribute("emailHost", emailHost);

@@ -11,27 +11,27 @@
 	value="/tmp/registration.txt" 
 	description="For saving RRS registrations temporarily" />
 	
-    <Parameter name="ARCHIVE_USERS_IDP_NAME"
+    <Parameter name="nl.mpi.rrs.archiveUsersIdpName"
 	value="'MPI Nijmegen' from the 'Damlr federation'"
 	description="Name of IdP to be shown to users that have registered unauthenticated. Leave empty to have none shown (e.g. if there is only one)." />
 	
     <!-- Code of conduct -->
 	
-    <Parameter name="DOBES_COC_LINK" 
+    <Parameter name="nl.mpi.rrs.dobesCocLink" 
 	value="default" 
 	description="Link to location of file with DoBES Code of Conduct. /ds/RRS_V1/dobes_coc_v2.html" />
 	
-    <Parameter name="DOBES_COC_LICENSE_NAME" 
+    <Parameter name="nl.mpi.rrs.dobesCocLicenseName" 
 	value="Dobes Code of Conduct v2" 
 	description="Name of the Dobes code of conduct license as stored in the AMS database" />
 	
     <!-- Email configuration -->
     
-    <Parameter name="EMAIL_HOST" 
+    <Parameter name="nl.mpi.rrs.emailHost" 
 	value="mailhost.mpi.nl"
 	description="default imap mail host" />
 	
-    <Parameter name="EMAIL_ADDRESS_CORPMAN" 
+    <Parameter name="nl.mpi.rrs.emailAddressCorpman" 
 	value="twan.goosen@mpi.nl" 
 	description="email address of user corpman corpman@mpi.nl" />
 	
@@ -41,7 +41,7 @@
 	value="java:comp/env/jdbc/CSDB" 
 	description="Corpus DB name e.g. java:comp/env/jdbc/CSDB. If provided, JDBC url, username, password will be ignored!" />
 	
-	<!-- Corpus structure settings below this can be removed if above (db name) is provided -->
+    <!-- Corpus structure settings below this can be removed if above (db name) is provided -->
 	
     <Parameter name="RRS_V1_CORPUS_SERVER_JDBC_URL" 
 	value="jdbc:postgresql://lux16.mpi.nl:5432/corpusstructure" 

@@ -188,7 +188,7 @@ public class RrsDoRegis extends HttpServlet {
 		    request.setAttribute("rrsRegisErrorMessage", "Error adding  user to registration file: " + regisFileIO.getRegistrationFilename());
 		    return request.getRequestDispatcher("/WEB-INF/view/page/regis2.jsp");
 		} else {
-		    String urlRrsDobesCoc = this.getServletContext().getInitParameter("DOBES_COC_LINK");
+		    String urlRrsDobesCoc = (String) this.getServletContext().getAttribute(RrsConstants.DOBES_COC_LINK_ATTRIBUTE);
 
 		    if (urlRrsDobesCoc.contentEquals("default")) {
 			urlRrsDobesCoc = request.getContextPath() + "/dobes_coc_v2.html";

@@ -14,7 +14,10 @@ public class RrsConstants {
     public final static String ALLOW_NEW_INTERNAL_USERS_ATTRIBUTE = "allowNewInternalUsers";
     public final static String EMAIL_ADDRESS_CORPMAN_ATTRIBUTE = "emailAddressCorpman";
     public final static String REGISTRATION_FILE_ATTRIBUTE = "registrationFile";
-    public final static String ARCHIVE_USERS_IDP_NAME = "archiveUsersIdpName";
+    public final static String ARCHIVE_USERS_IDP_NAME_ATTRIBUTE = "archiveUsersIdpName";
+    public final static String DOBES_COC_LINK_ATTRIBUTE = "dobesCocLink";
+    public final static String DOBES_COC_LICENSE_NAME_ATTRIBUTE = "dobesCocLicenseName";
+    public final static String EMAIL_HOST_ATTRIBUTE = "emailHost";
     public final static String AMS_INTERFACE_LINK = "amsInterfaceLink";
     public final static String REGIS_FILE_IO = "regisFileIO";
 }
