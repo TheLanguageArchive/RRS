@@ -13,8 +13,14 @@
 	
     <Parameter name="nl.mpi.rrs.archiveUsersIdpName"
 	value="'MPI Nijmegen' from the 'Damlr federation'"
-	description="Name of IdP to be shown to users that have registered unauthenticated. Leave empty to have none shown (e.g. if there is only one)." />
-	
+	description="Name of IdP to be shown to users that have registered unauthenticated. Leave empty to have none shown (e.g. if there is only one or non-shibboleth mode)." />
+
+<!--
+    <Parameter name="nl.mpi.rrs.registrationStaticPage"
+	value="/WEB-INF/view/page/registrationStatic.jsp"
+	description="If set to a non-empty value, this page will be shown INSTEAD of the user registration form (useful if AMS2 link is not available)"/>
+-->
+
     <!-- Code of conduct -->
 	
     <Parameter name="nl.mpi.rrs.dobesCocLink" 

@@ -24,5 +24,6 @@ public class RrsConstants {
     public final static String EMAIL_HOST_ATTRIBUTE = "emailHost";
     public final static String OPEN_PATH_PREFIX_ATTRIBUTE = "openPathPrefix";
     public final static String AMS_INTERFACE_LINK_ATTRIBUTE = "amsInterfaceLink";
+    public final static String REGISTRATION_STATIC_PAGE_ATTRIBUTE = "registrationStaticPage";
     public final static String REGIS_FILE_IO = "regisFileIO";
 }
