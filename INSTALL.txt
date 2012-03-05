@@ -5,7 +5,8 @@ Resource Request System Installation
 
 * RRS package
 * Tomcat 5
-* Ams2 installed and configured
+* Ams2 version 1.4.6 database connection available
+* IMDI browser and Ams2 web locations available (for frontend integration)
 * Either Shibboleth or Lana2 authentication installed and configured
 
 = Installation of RRS =
