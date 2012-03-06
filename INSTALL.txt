@@ -27,7 +27,7 @@ depending on the authentication mode to use! See below for details.
 Deploy the RRS .war file to a Tomcat instance. Make sure the contents of
 META-INF/context.xml are copied over to a context element that gets
 processed by Tomcat (either in the common /conf/context.xml or the
-application context file in conf/Catalina/...).
+application context file in conf/Catalina/...). 
 
 Go to the WEB-INF directory of the unpacked application directory, and do
 one of the following options:
@@ -52,6 +52,8 @@ paramaters are prefixed with 'nl.mpi.rrs' to prevent collisions. This prefix mus
 in the name of the context parameter, e.g.:
 
 	    <Parameter name="nl.mpi.rrs.allowNewInternalUsers" value="true" />
+
+See META-INF/context.xml for examples.
 
 === Corpus structure database connection configuration: (REQUIRED) ===
 
@@ -110,7 +112,10 @@ There are two ways of configuring the conncetion to the corpus structure databas
 - nl.mpi.rrs.openPathPrefix				(URL)
 	Prefix for http link to nodeId in the IMDI browser. 
 	Example: http://corpus1.mpi.nl/ds/imdi_browser?openpath=
-	
+
+- nl.mpi.archiveName					(String)
+	The value of this archive-wide parameter will be used as a header for all view pages of RRS.
+
 ** The following parameters are OPTIONAL: **
 
 - nl.mpi.rrs.archiveUsersIdpName		(text)

@@ -39,23 +39,8 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
                 
                 <hr />
             </c:if>
-            
-            <%--
-            <p>&nbsp;</p>
-            
-            <p class="strong">Login: (if you don't have a &quot;User Id&quot; and &quot;Password&quot; please register <a href="${urlRrsRegistration}" onclick="window.open(this.href); return false;">here</a>)</p>            
-            --%>
+		
             <table>
-                <%--
-                <tr> 
-                    <td>User Id:</td>
-                    <td><input type="text" name="paramUserOldUserName" size="90" /></td>
-                </tr>
-                <tr> 
-                    <td>Password</td>
-                    <td><input type="password" name="paramUserOldPassword" size="90" /></td>
-                </tr>   
-                --%>
                 
                 <tr> 
                     <td colspan="2" class="align-left"><p class="strong">Indicate the aim of the usage:</p></td>

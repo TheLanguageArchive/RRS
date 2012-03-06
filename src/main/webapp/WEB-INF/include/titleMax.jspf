@@ -1,1 +1,1 @@
-<h2>Max Planck Institute for Psycholinguistics</h2> 
+<h2><%= getServletContext().getInitParameter("nl.mpi.instituteName") %></h2> 

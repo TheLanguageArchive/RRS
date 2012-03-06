@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context crossContext="true" debug="0" docBase="webapps/RRS" path="/ds/RRS_V1" privileged="true" reloadable="true">
     	
+	
+   <!-- Archive settings -->
+
+  <Parameter name="nl.mpi.archiveName" 
+	value="MPI Language Archive"
+	description="Name of the archive as it should appear in web applications" />
+
+	
    <!-- Application settings -->
    
     <Parameter name="nl.mpi.rrs.allowNewInternalUsers"
