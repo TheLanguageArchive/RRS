@@ -39,7 +39,7 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
                 To modify your account details, please go to the page below, log in and select <br />
                 &quot;My Account&quot; -> &quot;My UserAccount&quot; from the menu: <br />
                 <br />
-                <a href="${initParam.AMS_INTERFACE_LINK}" onclick="window.open(this.href); return false;">Access Management System</a>
+                <a href="${amsInterfaceLink}" onclick="window.open(this.href); return false;">Access Management System</a>
             </p>
 	    <c:if test="${!empty idpName}">
 		<p>

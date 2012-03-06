@@ -3,9 +3,6 @@
     Created on : Apr 25, 2008, 10:12:43 AM
     Author     : kees
     /RRS_V1/dobes_coc_v2.html
-    <iframe  height="500" width="98%" 
-                 name="coc" src="${initParam.DOBES_COC_LINK}" >
-        </iframe>
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@include file="/WEB-INF/include/doctypeStrict.jspf" %>

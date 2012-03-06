@@ -74,6 +74,7 @@ public class RrsDoRegisEmailCheck extends HttpServlet {
 		    && !authenticationProvider.isUserLoggedIn(request)) {
 		request.setAttribute("idpName", archiveUsersIdpName);
 	    }
+	    request.setAttribute("amsInterfaceLink", getServletContext().getAttribute(RrsConstants.AMS_INTERFACE_LINK_ATTRIBUTE));
 	    view.forward(request, response);
 	} else {
 	    // Registration failed. Show errors table
