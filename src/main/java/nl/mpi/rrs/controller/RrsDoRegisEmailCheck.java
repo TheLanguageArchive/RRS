@@ -142,7 +142,7 @@ public class RrsDoRegisEmailCheck extends HttpServlet {
 	    if (addUser(request, response, errorsRequest, userInfo)) {
 		logger.info("User: " + userName + " successfuly added to AMS2 DB.");
 		if (regisFileIO.removeRegistrationFromFile(userInfo)) {
-		    logger.info("User: " + userName + " successfuly removed from registration file.");
+		    logger.debug("User: " + userName + " successfuly removed from registration file.");
 		} else {
 		    logger.error("User: " + userName + " can't be removed from registration file.");
 		}
@@ -171,10 +171,10 @@ public class RrsDoRegisEmailCheck extends HttpServlet {
     private boolean acceptLicenseForUser(HttpServletRequest request, HttpServletResponse response, ErrorsRequest errorsRequest, RegistrationUser userInfo, int userRegisId) throws ServletException, IOException {
 	//AmsServices services = new AmsServices();
 	AmsLicense al = new AmsLicense();
-	logger.info(al.getLicenseInfo(userInfo.getUserName(), null));
+	logger.debug(al.getLicenseInfo(userInfo.getUserName(), null));
 	NodeID targetNodeID = null;
 	String dobesCodeOfConductLicenseName = (String) this.getServletContext().getAttribute(RrsConstants.DOBES_COC_LICENSE_NAME_ATTRIBUTE);
-	logger.info("dobesCodeOfConductLicenseName: " + dobesCodeOfConductLicenseName);
+	logger.debug("dobesCodeOfConductLicenseName: " + dobesCodeOfConductLicenseName);
 	if (al.acceptLicenseInfo(userInfo.getUserName(), targetNodeID, dobesCodeOfConductLicenseName)) {
 	    logger.info("*** END OF REGISTRATION for user: " + userInfo.getUserName());
 	    logger.info("");

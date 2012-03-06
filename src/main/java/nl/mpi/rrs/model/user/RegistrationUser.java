@@ -96,7 +96,7 @@ public class RegistrationUser extends User {
                         char ch = (char) charVal;
                         result += ch;
                     } catch (NumberFormatException e) {
-                        _log.info("Invalid cryptic password: " + crypticPassword);
+                        _log.error("Invalid cryptic password: " + crypticPassword);
                         return null;
                     }
 

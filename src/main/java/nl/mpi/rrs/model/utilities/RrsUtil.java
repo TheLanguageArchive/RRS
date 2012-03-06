@@ -125,7 +125,7 @@ public class RrsUtil {
     public static boolean execCommand(String command) {
         try {
 
-            _log.info("Executing: " + command);
+            _log.debug("Executing: " + command);
 
             Runtime r = Runtime.getRuntime();
             Process p = r.exec(command);

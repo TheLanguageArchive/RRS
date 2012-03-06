@@ -64,7 +64,7 @@ public class RrsContextListener implements ServletContextListener {
 
 	//try {
 	if (corpusDbName != null) {
-	    logger.info("Connecting to database by name " + corpusDbName);
+	    logger.debug("Connecting to database by name " + corpusDbName);
 	    corpusDbConnection = new CorpusStructureDBImpl(corpusDbName);
 	}
 
@@ -73,7 +73,7 @@ public class RrsContextListener implements ServletContextListener {
 	    final String corpusUser = getContextParam(sc, RrsConstants.CORPUS_SERVER_DB_USER_ATTRIBUTE);
 	    final String corpusPass = getContextParam(sc, RrsConstants.CORPUS_SERVER_DB_PASS_ATTRIBUTE);
 
-	    logger.info("Connecting to database by url " + corpusJdbcURL + " and provided username/password");
+	    logger.debug("Connecting to database by url " + corpusJdbcURL + " and provided username/password");
 	    boolean bootstrapMode = false;
 	    corpusDbConnection = new CorpusStructureDBImpl(corpusJdbcURL, bootstrapMode, corpusUser, corpusPass);
 
@@ -88,7 +88,7 @@ public class RrsContextListener implements ServletContextListener {
 	sc.setAttribute(RrsConstants.REGIS_FILE_IO, rfio);
 
 	UserGenerator ug = this.getUserGenerator(null, null, null);	// ams2 : using defaults
-	logger.info("using UserGenerator " + ug.getInfo());
+	logger.debug("using UserGenerator " + ug.getInfo());
 
 	sc.setAttribute(RrsConstants.AMS2_DB_CONNECTION_ATTRIBUTE, ug);
 	sc.setAttribute(RrsConstants.CORPUS_DB_CONNECTION_ATTRIBUTE, corpusDbConnection);
@@ -126,9 +126,9 @@ public class RrsContextListener implements ServletContextListener {
     }
 
     public void contextDestroyed(ServletContextEvent sce) {
-	logger.info("contextDestroyed");
+	logger.debug("contextDestroyed");
 	if (corpusDbConnection != null) {
-	    logger.info("Closing Corpus DB");
+	    logger.debug("Closing Corpus DB");
 	    corpusDbConnection.close();
 	}
 
@@ -158,24 +158,24 @@ public class RrsContextListener implements ServletContextListener {
 	    return mUserGenerator;
 	}
 
-	logger.info("initializing new (ams2)user-generator...");
+	logger.debug("initializing new (ams2)user-generator...");
 
 	springConfigPaths = Text.notEmpty(springConfigPaths)
 		? springConfigPaths
 		: "spring-ams2-auth.xml";
-	logger.info("Spring config paths: " + springConfigPaths);
+	logger.debug("Spring config paths: " + springConfigPaths);
 
 	SpringContextLoader spring = new SpringContextLoader();
 	spring.init(springConfigPaths);
-	logger.info("Spring context loader: " + spring.toString());
+	logger.debug("Spring context loader: " + spring.toString());
 
 	PrincipalService principalService = (PrincipalService) spring.getBean(Text.notEmpty(principalSrv) ? principalSrv : Constants.BEAN_PRINCIPAL_SRV);
-	logger.info("Principal service: " + principalService.toString());
+	logger.debug("Principal service: " + principalService.toString());
 	AuthenticationService authenticationService = (AuthenticationService) spring.getBean(Text.notEmpty(authenticationSrv) ? authenticationSrv : Constants.BEAN_INTEGRATED_AUTHENTICATION_SRV);
-	logger.info("Authentication service: " + authenticationService.toString());
+	logger.debug("Authentication service: " + authenticationService.toString());
 
 	Ams2UserGenerator userGenerator = new Ams2UserGenerator(principalService, authenticationService);
-	logger.info("User generator initialized: " + userGenerator.getInfo());
+	logger.debug("User generator initialized: " + userGenerator.getInfo());
 
 	this.setUserGenerator(userGenerator);
 	//mUserGenerator = ug2;

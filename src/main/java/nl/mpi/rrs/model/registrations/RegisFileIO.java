@@ -97,7 +97,7 @@ public class RegisFileIO implements Serializable {
                 if (success) {
                     success = RrsUtil.execCommand(cmd);
                     if (success) {
-                        _log.info("Successful execute of cmd: " + cmd);
+                        _log.debug("Successful execute of cmd: " + cmd);
                     } else {
                         _log.error("Can't execute cmd: " + cmd);
                     }
@@ -166,7 +166,7 @@ public class RegisFileIO implements Serializable {
                 if (success) {
                     success = RrsUtil.execCommand(cmd);
                     if (success) {
-                        _log.info("Successful execute of cmd: " + cmd);
+                        _log.debug("Successful execute of cmd: " + cmd);
                     } else {
                         _log.error("Can't execute cmd: " + cmd);
                     }
@@ -247,7 +247,7 @@ public class RegisFileIO implements Serializable {
                 if (success) {
                     success = RrsUtil.execCommand(cmd);
                     if (success) {
-                        _log.info("Successful execute of cmd: " + cmd);
+                        _log.debug("Successful execute of cmd: " + cmd);
                     } else {
                         _log.error("Can't execute cmd: " + cmd);
                     }
@@ -265,7 +265,7 @@ public class RegisFileIO implements Serializable {
 
         }
 
-        _log.info(recordsRemoved + " records removed from registration file.");
+        _log.debug(recordsRemoved + " records removed from registration file.");
 
         return recordsRemoved;
     }
@@ -326,15 +326,15 @@ public class RegisFileIO implements Serializable {
 
 
                         if (userInfo.getUserName().equalsIgnoreCase(userId)) {
-                            _log.info("Found registrated user:");
-                            _log.info("userId: " + userId);
-                            _log.info("userFirstName: " + userFirstName);
-                            _log.info("userLastName: " + userLastName);
-                            _log.info("userEmail: " + userEmail);
-                            _log.info("userOrganization: " + userOrganization);
-                            _log.info("userPassword: " + userPassword);
-                            _log.info("userDobesCocSigned: " + userDobesCocSigned);
-                            _log.info("userCreation: " + userCreation);
+                            _log.debug("Found registrated user:");
+                            _log.debug("userId: " + userId);
+                            _log.debug("userFirstName: " + userFirstName);
+                            _log.debug("userLastName: " + userLastName);
+                            _log.debug("userEmail: " + userEmail);
+                            _log.debug("userOrganization: " + userOrganization);
+                            _log.debug("userPassword: " + userPassword);
+                            _log.debug("userDobesCocSigned: " + userDobesCocSigned);
+                            _log.debug("userCreation: " + userCreation);
                             success = true;
                         }
                     }
@@ -389,15 +389,15 @@ public class RegisFileIO implements Serializable {
                             userInfo.setDobesCocSigned(Boolean.valueOf(userDobesCocSigned));
                             userInfo.setCreation_ts(userCreation);
 
-                            _log.info("Found registrated user:");
-                            _log.info("userId: " + userId);
-                            _log.info("userFirstName: " + userFirstName);
-                            _log.info("userLastName: " + userLastName);
-                            _log.info("userEmail: " + userEmail);
-                            _log.info("userOrganization: " + userOrganization);
+                            _log.debug("Found registrated user:");
+                            _log.debug("userId: " + userId);
+                            _log.debug("userFirstName: " + userFirstName);
+                            _log.debug("userLastName: " + userLastName);
+                            _log.debug("userEmail: " + userEmail);
+                            _log.debug("userOrganization: " + userOrganization);
                             //_log.info("userPassword: " + userPassword);
-                            _log.info("userDobesCocSigned: " + userDobesCocSigned);
-                            _log.info("userCreation: " + userCreation);
+                            _log.debug("userDobesCocSigned: " + userDobesCocSigned);
+                            _log.debug("userCreation: " + userCreation);
                             found = true;
                         }
                     }

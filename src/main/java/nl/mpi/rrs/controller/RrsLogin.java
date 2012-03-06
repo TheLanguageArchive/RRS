@@ -29,14 +29,14 @@ public class RrsLogin extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        logger.info("RrsLogin");
+        logger.debug("RrsLogin");
         String redirectString = request.getParameter("redirect");
         if (redirectString != null && !redirectString.isEmpty()) {
             try {
                 // check against allowed redirect locations
                 RedirectLocation location = RedirectLocation.valueOf(redirectString);
                 // no exception thrown, so valid redirect location
-                logger.info("Redirecting to " + location.toString());
+                logger.debug("Redirecting to " + location.toString());
                 response.sendRedirect(location.toString());
                 return;
             } catch (IllegalArgumentException ex) {

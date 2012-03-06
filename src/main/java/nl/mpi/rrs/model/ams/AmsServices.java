@@ -43,9 +43,9 @@ public class AmsServices {
         // to lookup the bean definitions
         spring.init("spring-ams2-core.xml");
         
-        logger.info("Constants.BEAN_PRINCIPAL_SRV: " + Constants.BEAN_PRINCIPAL_SRV);
-        logger.info("Constants.BEAN_AUTHORIZATION_SRV: " + Constants.BEAN_AUTHORIZATION_SRV);
-        logger.info("Constants.BEAN_FABRIC_SRV: " + Constants.BEAN_FABRIC_SRV);
+        logger.debug("Constants.BEAN_PRINCIPAL_SRV: " + Constants.BEAN_PRINCIPAL_SRV);
+        logger.debug("Constants.BEAN_AUTHORIZATION_SRV: " + Constants.BEAN_AUTHORIZATION_SRV);
+        logger.debug("Constants.BEAN_FABRIC_SRV: " + Constants.BEAN_FABRIC_SRV);
         
         
         // load a bean by its id/name:

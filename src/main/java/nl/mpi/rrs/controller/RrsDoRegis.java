@@ -88,7 +88,7 @@ public class RrsDoRegis extends HttpServlet {
 	// ams2 : using defaults : user-data provider and authentication service
 	RegisFileIO regisFileIO = (RegisFileIO) this.getServletContext().getAttribute(RrsConstants.REGIS_FILE_IO);
 	if (regisFileIO == null) {
-	    logger.error("RegisFileIO is NOT initialized during deploy.");
+	    logger.fatal("RegisFileIO is NOT initialized during deploy.");
 	    throw new RuntimeException("RegisFileIO is NOT initialized during deploy");
 	}
 	return regisFileIO;
@@ -158,7 +158,7 @@ public class RrsDoRegis extends HttpServlet {
 
 	    errorsRequest.addError(errorRequest);
 
-	    logger.debug("User ID is already taken: " + userId);
+	    logger.info("User ID is already taken: " + userId);
 	    return request.getRequestDispatcher("/WEB-INF/view/page/regis2.jsp");
 	} else {
 	    if (regisFileIO.isRegistrationInFile(userInfo)) {
@@ -175,7 +175,7 @@ public class RrsDoRegis extends HttpServlet {
 
 		errorsRequest.addError(errorRequest);
 
-		logger.debug("User ID is already reserved: " + userId);
+		logger.info("User ID is already reserved: " + userId);
 		return request.getRequestDispatcher("/WEB-INF/view/page/regis2.jsp");
 	    } else {
 		request.setAttribute("user", userInfo);
@@ -185,6 +185,7 @@ public class RrsDoRegis extends HttpServlet {
 		boolean success = regisFileIO.writeRegistrationToFile(userInfo);
 
 		if (!success) {
+		    logger.error("Error adding  user to registration file: " + regisFileIO.getRegistrationFilename());
 		    request.setAttribute("rrsRegisErrorMessage", "Error adding  user to registration file: " + regisFileIO.getRegistrationFilename());
 		    return request.getRequestDispatcher("/WEB-INF/view/page/regis2.jsp");
 		} else {

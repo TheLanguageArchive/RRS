@@ -102,12 +102,12 @@ public class RrsDoCoc extends HttpServlet {
 	rrsRegistration.setUser(userInfo);
 	rrsRegistration.setBaseUrl(checkEmailLinkBase.toString());
 
-	logger.info("checkEmailLinkBase: " + checkEmailLinkBase);
+	logger.debug("checkEmailLinkBase: " + checkEmailLinkBase);
 
 	String checkEmailLink = rrsRegistration.getCheckEmailLink();
 
 	request.setAttribute("serverInfo", checkEmailLink);
-	logger.info("checkEmailLink: " + checkEmailLink);
+	logger.debug("checkEmailLink: " + checkEmailLink);
 
 	EmailBean emailer = new EmailBean();
 
@@ -122,13 +122,14 @@ public class RrsDoCoc extends HttpServlet {
 	String emailHost = (String) this.getServletContext().getAttribute(RrsConstants.EMAIL_HOST_ATTRIBUTE);
 	String userEmail = rrsRegistration.getUser().getEmail();
 
-	emailer.setTo(corpmanEmail);
-	emailer.setCc(userEmail);
+	emailer.setTo(userEmail);
+	emailer.setCc(corpmanEmail);
 	emailer.setFrom(corpmanEmail);
 	emailer.setSmtpHost(emailHost);
 
 	try {
 	    emailer.sendMessage();
+	    logger.info("Verification e-mail sent to " + userEmail);
 	} catch (javax.mail.SendFailedException e) {
 	    ErrorRequest errorRequest = new ErrorRequest();
 

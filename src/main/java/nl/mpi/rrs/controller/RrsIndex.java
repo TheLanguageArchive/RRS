@@ -42,13 +42,13 @@ public class RrsIndex extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        logger.info("RrsIndex: *************** start *****************");
-        logger.info("getContextPath :" + request.getContextPath());
-        logger.info("getPathInfo :" + request.getPathInfo());
-        logger.info("getPathTranslated :" + request.getPathTranslated());
-        logger.info("getRequestURI :" + request.getRequestURI());
-        logger.info("getRequestURL :" + request.getRequestURL());
-        logger.info("getServletPath :" + request.getServletPath());
+        logger.debug("RrsIndex: *************** start *****************");
+        logger.debug("getContextPath :" + request.getContextPath());
+        logger.debug("getPathInfo :" + request.getPathInfo());
+        logger.debug("getPathTranslated :" + request.getPathTranslated());
+        logger.debug("getRequestURI :" + request.getRequestURI());
+        logger.debug("getRequestURL :" + request.getRequestURL());
+        logger.debug("getServletPath :" + request.getServletPath());
 
         String urlRrsRegistration = request.getContextPath() + "/RrsRegistration";
         request.setAttribute("urlRrsRegistration", urlRrsRegistration);
@@ -81,7 +81,7 @@ public class RrsIndex extends HttpServlet {
 
                 for (int i = 0; i < values.length; i++) {
                     if (values[i] != null && !(values[i].equalsIgnoreCase(""))) {
-                        logger.info("RrsIndex: *************** Param nodeId: " + values[i]);
+                        logger.debug("RrsIndex: *************** Param nodeId: " + values[i]);
                         ImdiNode imdiNode = new ImdiNode();
                         imdiNode.setImdiNodeIdWithPrefix(values[i]);
                         String nodeIdWithPrefix = imdiNode.getImdiNodeIdWithPrefix();

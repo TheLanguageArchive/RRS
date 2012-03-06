@@ -161,8 +161,8 @@ public class RrsServlet extends HttpServlet {
 	if (authenticationProvider.isUserLoggedIn(request) && ug.isExistingUserName(authenticationProvider.getLoggedInUser(request))) {
 	    rrsRequest.setUserStatus("Existing user");
 	    String userName = authenticationProvider.getLoggedInUser(request);
-	    logger.info("Username: " + userName);
-	    logger.info("using UserGenerator " + ug.getInfo());
+	    logger.debug("Username: " + userName);
+	    logger.debug("using UserGenerator " + ug.getInfo());
 	    /*
 	    user.setPassword(request.getParameter("paramUserOldPassword"));
 	    String passWord = user.getPassword();
@@ -175,9 +175,9 @@ public class RrsServlet extends HttpServlet {
 		userInfo.setEmail(userDB.getEmail());
 		userInfo.setOrganization(userDB.getOrganization());
 		userInfo.setUserName(userDB.getUserName());
-		logger.info("** Got AMS2 connection for user: " + userInfo.getFullName());
+		logger.debug("** Got AMS2 connection for user: " + userInfo.getFullName());
 		logger.debug("** name: " + userInfo.getLastName());
-		logger.info("** email address: " + userInfo.getEmail());
+		logger.debug("** email address: " + userInfo.getEmail());
 	    } else {
 		ErrorRequest errorRequest = new ErrorRequest();
 		errorRequest.setErrorFormFieldLabel("Form field: Username");
@@ -262,7 +262,7 @@ public class RrsServlet extends HttpServlet {
 	    if (values.length > 0) {
 		for (int i = 0; i < values.length; i++) {
 		    if (values[i] != null && !(values[i].equalsIgnoreCase(""))) {
-			logger.info("Param values: " + values[i]);
+			logger.debug("Param values: " + values[i]);
 			ImdiNode imdiNode = new ImdiNode();
 			imdiNode.setImdiNodeIdWithPrefix(values[i]);
 			NodeID nodeId = AmsServicesSingleton.getInstance().getFabricSrv().newNodeID(imdiNode.getImdiNodeIdWithPrefix());
@@ -331,10 +331,10 @@ public class RrsServlet extends HttpServlet {
 		errorsRequest.setErrorsHtmlTable();
 		String htmlErrorTable = errorsRequest.getErrorsHtmlTable();
 		request.setAttribute("htmlErrorTable", htmlErrorTable);
-		logger.info("errorsRequest.isErrorRecoverable: call view/error/error.jsp");
+		logger.debug("errorsRequest.isErrorRecoverable: call view/error/error.jsp");
 		view = request.getRequestDispatcher("/WEB-INF/view/error/error.jsp");
 	    } else {
-		logger.info("NOT errorsRequest.isErrorRecoverable: call view/error/errorUnknown.jsp");
+		logger.debug("NOT errorsRequest.isErrorRecoverable: call view/error/errorUnknown.jsp");
 		view = request.getRequestDispatcher("/WEB-INF/view/error/errorUnknown.jsp");
 	    }
 	    view.forward(request, response);
@@ -362,7 +362,7 @@ public class RrsServlet extends HttpServlet {
 	emailer.setCc(userEmail);
 	emailer.setFrom(corpmanEmail);
 	emailer.setSmtpHost(emailHost);
-	logger.info("From: " + corpmanEmail);
+	logger.debug("From: " + corpmanEmail);
 	try {
 	    emailer.sendMessage();
 	} catch (javax.mail.SendFailedException e) {
