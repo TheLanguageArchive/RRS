@@ -1,1 +1,1 @@
-<h2><%= getServletContext().getInitParameter("nl.mpi.instituteName") %></h2> 
+<h2><%= getServletContext().getInitParameter("nl.mpi.archiveName") %></h2> 
