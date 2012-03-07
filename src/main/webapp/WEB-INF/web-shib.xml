@@ -33,9 +33,18 @@
     </listener>
     <!-- End SHHAA authentication filter -->
     
+    <!-- Spring application context location -->
+    
     <context-param>
 	<param-name>contextConfigLocation</param-name>
 	<param-value>/WEB-INF/spring-rrs-auth-shib.xml</param-value>
+    </context-param>
+    
+    <!-- Corpus DB name e.g. java:comp/env/jdbc/CSDB. If provided, JDBC url, username, password will be ignored! -->
+    
+    <context-param>
+	<param-name>nl.mpi.rrs.corpusServerDb.jndiName</param-name>
+	<param-value>java:comp/env/jdbc/CSDB</param-value>
     </context-param>
 
     <listener>

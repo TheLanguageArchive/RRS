@@ -62,26 +62,12 @@ public class RrsContextListener implements ServletContextListener {
 
 	final String corpusDbName = getContextParam(sc, RrsConstants.CORPUS_SERVER_DB_JNDI_NAME_ATTRIBUTE);
 
-	//try {
+	logger.debug("Connecting to database by name " + corpusDbName);
 	if (corpusDbName != null) {
-	    logger.debug("Connecting to database by name " + corpusDbName);
 	    corpusDbConnection = new CorpusStructureDBImpl(corpusDbName);
 	}
-
 	if (corpusDbConnection == null) {
-	    final String corpusJdbcURL = getContextParam(sc, RrsConstants.CORPUS_SERVER_DB_JDBC_URL_ATTRIBUTE);
-	    final String corpusUser = getContextParam(sc, RrsConstants.CORPUS_SERVER_DB_USER_ATTRIBUTE);
-	    final String corpusPass = getContextParam(sc, RrsConstants.CORPUS_SERVER_DB_PASS_ATTRIBUTE);
-
-	    logger.debug("Connecting to database by url " + corpusJdbcURL + " and provided username/password");
-	    boolean bootstrapMode = false;
-	    corpusDbConnection = new CorpusStructureDBImpl(corpusJdbcURL, bootstrapMode, corpusUser, corpusPass);
-
-	    if (corpusDbConnection == null) {
-		logger.fatal("************ corpusDbConnection is null");
-		logger.fatal("corpusJdbcURL: " + corpusJdbcURL);
-		logger.fatal("corpusUser: " + corpusUser);
-	    }
+	    logger.fatal("************ corpusDbConnection is null. corpusDbName = " + corpusDbName);
 	}
 	rrsRegistrationFileName = getContextParam(sc, RrsConstants.REGISTRATION_FILE_ATTRIBUTE);
 	RegisFileIO rfio = this.getRegisFileIO();

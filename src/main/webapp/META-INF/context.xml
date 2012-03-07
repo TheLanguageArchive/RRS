@@ -4,7 +4,7 @@
 	
    <!-- Archive settings -->
 
-  <Parameter name="nl.mpi.archiveName" 
+    <Parameter name="nl.mpi.archiveName" 
 	value="MPI Language Archive"
 	description="Name of the archive as it should appear in web applications" />
 
@@ -48,26 +48,6 @@
     <Parameter name="nl.mpi.rrs.emailAddressCorpman" 
 	value="twan.goosen@mpi.nl" 
 	description="email address of user corpman corpman@mpi.nl" />
-	
-    <!-- Corpus structure database -->
-	
-    <Parameter name="nl.mpi.rrs.corpusServerDb.jndiName"
-	value="java:comp/env/jdbc/CSDB" 
-	description="Corpus DB name e.g. java:comp/env/jdbc/CSDB. If provided, JDBC url, username, password will be ignored!" />
-	
-    <!-- Corpus structure settings below this can be removed if above (db name) is provided -->
-	
-    <Parameter name="nl.mpi.rrs.corpusServerDb.jdbcUrl" 
-	value="jdbc:postgresql://lux16.mpi.nl:5432/corpusstructure" 
-	description="Corpus DB connection string. Only " />
-	
-    <Parameter name="nl.mpi.rrs.corpusServerDb.username" 
-	value="username" 
-	description="Corpus DB username" />
-	
-    <Parameter name="nl.mpi.rrs.corpusServerDb.password" 
-	value="password" 
-	description="Corpus DB webuser password" />
 	
     <!-- External system links -->
 	

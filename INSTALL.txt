@@ -6,6 +6,8 @@ Contents:
 - Installation of RRS
 - Configuration of RRS
   - General configuration
+    - Database connection
+    - Context parameters
   - Authentication configuration
 
 = Requirements =
@@ -47,6 +49,16 @@ See below for section on configuring RRS for either Shibboleth or Lana2.
 
 == General configuration ==
 
+=== Database connection ===
+
+RRS expects a named database resource 'java:comp/env/jdbc/CSDB' to be available for accessing
+the corpus database. If you really must use another name, the used name can be configured in the
+application's WEB-INF/web.xml file.
+
+Setting up the 
+
+=== Context parameters ===
+
 Apart from authentication settings, RRS is configured through context parameters. All RRS-specific
 paramaters are prefixed with 'nl.mpi.rrs' to prevent collisions. This prefix must always be included
 in the name of the context parameter, e.g.:
@@ -55,28 +67,7 @@ in the name of the context parameter, e.g.:
 
 See META-INF/context.xml for examples.
 
-=== Corpus structure database connection configuration: (REQUIRED) ===
-
-There are two ways of configuring the conncetion to the corpus structure database:
-
-(a) The first is by setting the JNDI connection name:
-
-- nl.mpi.rrs.corpusServerDb.jndiName	(JNDI name)
-	JNDI name of the database connection. Specify the actual conncetion elsewhere.
-	Example: java:comp/env/jdbc/CSDB
-		
-(b) The second way is by setting the database URL, username and password manually
-
-- nl.mpi.rrs.corpusServerDb.jdbcUrl		(JDBC url)
-	Example: dbc:postgresql://lux16.mpi.nl:5432/corpusstructure
-	
-- nl.mpi.rrs.corpusServerDb.username	(text)
-	Username to connect with
-	
-- nl.mpi.rrs.corpusServerDb.password	(text)
-	Password for the specified username
-
-=== The following other parameters are REQUIRED: ===
+==== The following other parameters are REQUIRED: ====
 
 - nl.mpi.rrs.allowNewInternalUsers		('true'|'false')	
 	If set to true, RRS will allow users to register without login in first. Setting it to false 
@@ -116,15 +107,15 @@ There are two ways of configuring the conncetion to the corpus structure databas
 - nl.mpi.archiveName					(String)
 	The value of this archive-wide parameter will be used as a header for all view pages of RRS.
 
-** The following parameters are OPTIONAL: **
-
+==== The following other parameters are OPTIONAL: ====
+	
 - nl.mpi.rrs.archiveUsersIdpName		(text)
 	Name of IdP to be shown to users that have registered unauthenticated. Leave empty to have none 
 	shown (e.g. if there is only one or non-shibboleth mode).
 
-== Authentication configuration ==
+=== Authentication configuration ===
 
-=== Configuration for Shibboleth ===
+==== Configuration for Shibboleth ====
 
 In WEB-INF/web.xml, locate the following section:
 
@@ -151,7 +142,7 @@ For information on how to configure the filter, see
 <https://aai2.rzg.mpg.de/>. Do not modifiy the composition, authorization,
 and handler settings.
 
-=== Configuration for Lana2 ===
+==== Configuration for Lana2 ====
 
 In WEB-INF/web.xml, make sure that the values in the init-param elements for
 the SsoFilter are set according to the environment. They are contained in
