@@ -67,7 +67,20 @@ in the name of the context parameter, e.g.:
 
 See META-INF/context.xml for examples.
 
-==== The following other parameters are REQUIRED: ====
+==== The following general archive parameters are REQUIRED: ====
+
+- nl.mpi.emailHost					(host name)
+	Host name of the SMTP server that should be used for sending e-mails to the user and to 
+	corpman.
+	
+- nl.mpi.emailAddressCorpman		(e-mail address)
+	E-mail address that will recieve access requests and a copy of the verification e-mail for newly
+	registered users.
+	
+- nl.mpi.archiveName					(String)
+	The value of this archive-wide parameter will be used as a header for all view pages of RRS.
+
+==== The following RRS parameters are REQUIRED: ====
 
 - nl.mpi.rrs.allowNewInternalUsers		('true'|'false')	
 	If set to true, RRS will allow users to register without login in first. Setting it to false 
@@ -87,14 +100,6 @@ See META-INF/context.xml for examples.
 - nl.mpi.rrs.dobesCocLicenseName		(text)
 	Name of the license to show. Will be ignored if nl.mpi.rrs.dobesCocLink is set to 'none'.
 	
-- nl.mpi.rrs.emailHost					(host name)
-	Host name of the SMTP server that should be used for sending e-mails to the user and to 
-	corpman.
-	
-- nl.mpi.rrs.emailAddressCorpman		(e-mail address)
-	E-mail address that will recieve access requests and a copy of the verification e-mail for newly
-	registered users.
-	
 - nl.mpi.rrs.amsInterfaceLink			(URL)
 	URL AMS lat access management system, will be the destination of the link in the 'Thank you' 
 	page at the end of the registration process.
@@ -104,10 +109,7 @@ See META-INF/context.xml for examples.
 	Prefix for http link to nodeId in the IMDI browser. 
 	Example: http://corpus1.mpi.nl/ds/imdi_browser?openpath=
 
-- nl.mpi.archiveName					(String)
-	The value of this archive-wide parameter will be used as a header for all view pages of RRS.
-
-==== The following other parameters are OPTIONAL: ====
+==== The following RRS parameters are OPTIONAL: ====
 	
 - nl.mpi.rrs.archiveUsersIdpName		(text)
 	Name of IdP to be shown to users that have registered unauthenticated. Leave empty to have none 
