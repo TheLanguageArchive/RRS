@@ -44,9 +44,13 @@ public class RrsIndex2 extends HttpServlet {
 
 	ErrorsRequest errorsRequest = new ErrorsRequest();
 
+	String htmlSelectedNodesTable = (String) request.getSession().getAttribute("htmlSelectedNodesTable");
+	if (htmlSelectedNodesTable == null) {
+	    htmlSelectedNodesTable = "";
+	}
 	CorpusStructureDB corpusDbConnection = (CorpusStructureDB) this.getServletContext().getAttribute(RrsConstants.CORPUS_DB_CONNECTION_ATTRIBUTE);
 
-	if (RrsIndex.createNodesTable(request, response, corpusDbConnection, errorsRequest, "")) {
+	if (RrsIndex.createNodesTable(request, response, corpusDbConnection, errorsRequest, htmlSelectedNodesTable)) {
 	    RrsIndex.createCalendarDropdowns(request);
 	}
 
