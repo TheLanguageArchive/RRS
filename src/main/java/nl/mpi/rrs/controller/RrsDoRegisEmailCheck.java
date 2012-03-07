@@ -221,7 +221,7 @@ public class RrsDoRegisEmailCheck extends HttpServlet {
 	ErrorsRequest errorsRequestEmail = new ErrorsRequest();
 
 	String corpmanEmail = (String) this.getServletContext().getAttribute(RrsConstants.EMAIL_ADDRESS_CORPMAN_ATTRIBUTE);
-	String emailHost = (String) this.getServletContext().getAttribute(RrsConstants.EMAIL_HOST_ATTRIBUTE);
+	String emailHost = (String) this.getServletContext().getAttribute(RrsConstants.SMTP_HOST_ATTRIBUTE);
 	String userEmail = rrsRegistration.getUser().getEmail();
 
 	EmailBean emailer = new EmailBean();

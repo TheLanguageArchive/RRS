@@ -119,7 +119,7 @@ public class RrsDoCoc extends HttpServlet {
 	emailer.setContent(rrsRegistration.getEmailAddressCheckContent());
 
 	String corpmanEmail = (String) this.getServletContext().getAttribute(RrsConstants.EMAIL_ADDRESS_CORPMAN_ATTRIBUTE);
-	String emailHost = (String) this.getServletContext().getAttribute(RrsConstants.EMAIL_HOST_ATTRIBUTE);
+	String emailHost = (String) this.getServletContext().getAttribute(RrsConstants.SMTP_HOST_ATTRIBUTE);
 	String userEmail = rrsRegistration.getUser().getEmail();
 
 	emailer.setTo(userEmail);

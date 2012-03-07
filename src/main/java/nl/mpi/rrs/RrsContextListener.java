@@ -44,7 +44,7 @@ public class RrsContextListener implements ServletContextListener {
 
 	setAttributeFromContextParam(sc, RrsConstants.AMS_INTERFACE_LINK_ATTRIBUTE);
 	setAttributeFromContextParam(sc, RrsConstants.EMAIL_ADDRESS_CORPMAN_ATTRIBUTE);
-	setAttributeFromContextParam(sc, RrsConstants.EMAIL_HOST_ATTRIBUTE);
+	setAttributeFromContextParam(sc, RrsConstants.SMTP_HOST_ATTRIBUTE);
 	setAttributeFromContextParam(sc, RrsConstants.DOBES_COC_LINK_ATTRIBUTE);
 	setAttributeFromContextParam(sc, RrsConstants.DOBES_COC_LICENSE_NAME_ATTRIBUTE);
 	setAttributeFromContextParam(sc, RrsConstants.OPEN_PATH_PREFIX_ATTRIBUTE);
@@ -103,8 +103,7 @@ public class RrsContextListener implements ServletContextListener {
 	logger.debug("Stored into servlet context attribute " + name);
     }
 
-    private String getContextParam(ServletContext servletContext, String name) {
-	final String initParamName = RrsConstants.RRS_CONTEXT_PARAM_PREFIX + name;
+    private String getContextParam(ServletContext servletContext, String initParamName) {
 	logger.debug("Reading context parameter " + initParamName);
 	final String initParamString = servletContext.getInitParameter(initParamName);
 	logger.debug("Read value string " + initParamString);

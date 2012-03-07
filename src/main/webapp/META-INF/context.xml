@@ -8,6 +8,15 @@
 	value="MPI Language Archive"
 	description="Name of the archive as it should appear in web applications" />
 
+    <!-- Email configuration -->
+    
+    <Parameter name="nl.mpi.smtpHost" 
+	value="mailhost.mpi.nl"
+	description="SMTP server for sending e-mails to user and corpman" />
+	
+    <Parameter name="nl.mpi.emailAddressCorpman" 
+	value="twan.goosen@mpi.nl" 
+	description="email address of user corpman corpman@mpi.nl" />
 	
    <!-- Application settings -->
    
@@ -39,16 +48,6 @@
 	value="Dobes Code of Conduct v2" 
 	description="Name of the Dobes code of conduct license as stored in the AMS database" />
 	
-    <!-- Email configuration -->
-    
-    <Parameter name="nl.mpi.rrs.emailHost" 
-	value="mailhost.mpi.nl"
-	description="SMTP server for sending e-mails to user and corpman" />
-	
-    <Parameter name="nl.mpi.rrs.emailAddressCorpman" 
-	value="twan.goosen@mpi.nl" 
-	description="email address of user corpman corpman@mpi.nl" />
-	
     <!-- External system links -->
 	
     <Parameter name="nl.mpi.rrs.amsInterfaceLink" 	
@@ -58,11 +57,4 @@
     <Parameter name="nl.mpi.rrs.openPathPrefix" 
 	value="http://corpus1.mpi.nl/ds/imdi_browser?openpath=" 
 	description="Prefix for http link to nodeId e.g.: /corpus1.mpi.nl/ds/imdi_browser?openpath=MPI177915%23" />
-    
-    <!-- OTHER CONNECTIONS -->
-    
-    <!-- damlr ldap for authentication -->
-<!--    <Resource auth="Container" factory="org.apache.naming.factory.BeanFactory" name="ldap/DAMLR" password="secret" principal="cn=Administrator,dc=mpi.nl" type="nl.mpi.common.catalina.impl.LdapJndiRes" url="ldap://lux17.mpi.nl:389/dc=mpi.nl"/> -->
-    <!-- mpi active-directory/kdc  for authentication -->
-<!--    <Resource auth="Container" factory="org.apache.naming.factory.BeanFactory" kdc="NT01.MPI.NL" name="kdc/MPI-NL" realm="MPI.NL" type="nl.mpi.common.catalina.impl.KerberosJndiRes"/> -->
 </Context>
