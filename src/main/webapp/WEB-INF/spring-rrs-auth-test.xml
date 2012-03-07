@@ -6,21 +6,21 @@
 <beans>
 
     <bean id="authenticationProvider" class="nl.mpi.rrs.authentication.DummyAuthenticationProvider">
-        <property name="loggedIn" value="false" />
-        <property name="firstName" value="Jack"/>
-        <property name="lastName" value="Johnson"/>
-        <property name="userName" value="jack.johnson@example.com"/>
-        <property name="organization" value="Example Co."/>
-        <property name="email" value="t.goosen@gmail.com"/>
-        <property name="federated" value="false" />
+	<property name="loggedIn" value="false" />
+	<property name="firstName" value="Jack"/>
+	<property name="lastName" value="Johnson"/>
+	<property name="userName" value="jack.johnson@example.com"/>
+	<property name="organization" value="Example Co."/>
+	<property name="email" value="t.goosen@gmail.com"/>
+	<property name="federated" value="false" />
     </bean>
 
     <bean class="org.springframework.web.context.support.ServletContextAttributeExporter">
-        <property name="attributes">
-            <map>
-                <entry key="authenticationProvider" value-ref="authenticationProvider"/>
-            </map>
-        </property>
+	<property name="attributes">
+	    <map>
+		<entry key="nl.mpi.rrs.authenticationProvider" value-ref="authenticationProvider"/>
+	    </map>
+	</property>
     </bean>
 
 

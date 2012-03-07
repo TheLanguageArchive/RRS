@@ -10,49 +10,49 @@
             Federation support can be optionally turned off by setting the below
             value to False. Can also insert placeholder for context parameter, e.g. ${shibIsFederated}.
         -->
-        <property name="federated" value="${shibIsFederated}" />
+	<property name="federated" value="${shibIsFederated}" />
 
         <!--
             The attribute lists below determine which fields (provided order determines priority)
             will be checked to find values to pre-fill the registration form.
         -->
-        <property name="emailAttributes">
-            <list>
-                <value>mail</value>
-                <value>email</value>
-            </list>
-        </property>
-        <property name="firstNameAttributes">
-            <list>
-                <value>givenName</value>
-                <value>cn</value>
-                <value>displayName</value>
-                <value>eduPersonNickname</value>
-            </list>
-        </property>
-        <property name="lastNameAttributes">
-            <list>
-                <value>surName</value>
-                <value>sn</value>
-            </list>
-        </property>
-        <property name="organizationAttributes">
-            <list>
-                <value>organizationName</value>
-                <value>o</value>
-                <value>eduPersonAffiliation</value>
-                <value>damlrPersonAffiliation</value>
-                <value>damlrPersonHostingInstitute</value>
-            </list>
-        </property>
+	<property name="emailAttributes">
+	    <list>
+		<value>mail</value>
+		<value>email</value>
+	    </list>
+	</property>
+	<property name="firstNameAttributes">
+	    <list>
+		<value>givenName</value>
+		<value>cn</value>
+		<value>displayName</value>
+		<value>eduPersonNickname</value>
+	    </list>
+	</property>
+	<property name="lastNameAttributes">
+	    <list>
+		<value>surName</value>
+		<value>sn</value>
+	    </list>
+	</property>
+	<property name="organizationAttributes">
+	    <list>
+		<value>organizationName</value>
+		<value>o</value>
+		<value>eduPersonAffiliation</value>
+		<value>damlrPersonAffiliation</value>
+		<value>damlrPersonHostingInstitute</value>
+	    </list>
+	</property>
     </bean>
 
     <bean class="org.springframework.web.context.support.ServletContextAttributeExporter">
-        <property name="attributes">
-            <map>
-                <entry key="authenticationProvider" value-ref="authenticationProvider"/>
-            </map>
-        </property>
+	<property name="attributes">
+	    <map>
+		<entry key="nl.mpi.rrs.authenticationProvider" value-ref="authenticationProvider"/>
+	    </map>
+	</property>
     </bean>
 
 
