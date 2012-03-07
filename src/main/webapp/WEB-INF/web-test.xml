@@ -2,11 +2,19 @@
 <web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
     <description>Resource Request System Version 1 (DUMMY AUTHENTICATION!!!)</description>
     <display-name>RRS</display-name>
-
+    
+    <!-- Spring application context location -->
+    
     <context-param>
 	<param-name>contextConfigLocation</param-name>
-	<!-- Using TEST AUTHENTICATION provider. Not for production! -->
 	<param-value>/WEB-INF/spring-rrs-auth-test.xml</param-value>
+    </context-param>
+    
+    <!-- Corpus DB name e.g. java:comp/env/jdbc/CSDB -->
+    
+    <context-param>
+	<param-name>nl.mpi.rrs.corpusServerDb.jndiName</param-name>
+	<param-value>java:comp/env/jdbc/CSDB</param-value>
     </context-param>
 
     <listener>

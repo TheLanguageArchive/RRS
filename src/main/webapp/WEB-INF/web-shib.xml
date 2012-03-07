@@ -40,7 +40,7 @@
 	<param-value>/WEB-INF/spring-rrs-auth-shib.xml</param-value>
     </context-param>
     
-    <!-- Corpus DB name e.g. java:comp/env/jdbc/CSDB. If provided, JDBC url, username, password will be ignored! -->
+    <!-- Corpus DB name e.g. java:comp/env/jdbc/CSDB -->
     
     <context-param>
 	<param-name>nl.mpi.rrs.corpusServerDb.jndiName</param-name>
