@@ -69,7 +69,7 @@ See META-INF/context.xml for examples.
 
 ==== The following general archive parameters are REQUIRED: ====
 
-- nl.mpi.emailHost					(host name)
+- nl.mpi.smtpHost					(host name)
 	Host name of the SMTP server that should be used for sending e-mails to the user and to 
 	corpman.
 	
