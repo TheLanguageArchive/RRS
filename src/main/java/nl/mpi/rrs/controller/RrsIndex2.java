@@ -19,7 +19,6 @@ import nl.mpi.rrs.model.errors.ErrorsRequest;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-
 /**
  * Show Resource Request Form
  * @author kees
@@ -34,28 +33,24 @@ public class RrsIndex2 extends HttpServlet {
      * @param response servlet response
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        logger.debug("RrsIndex2: *************** start *****************");
-        logger.debug("getContextPath :" + request.getContextPath());
-        logger.debug("getPathInfo :" + request.getPathInfo());
-        logger.debug("getPathTranslated :" + request.getPathTranslated());
-        logger.debug("getRequestURI :" + request.getRequestURI());
-        logger.debug("getRequestURL :" + request.getRequestURL());
-        logger.debug("getServletPath :" + request.getServletPath());
+	    throws ServletException, IOException {
+	logger.debug("RrsIndex2: *************** start *****************");
+	logger.debug("getContextPath :" + request.getContextPath());
+	logger.debug("getPathInfo :" + request.getPathInfo());
+	logger.debug("getPathTranslated :" + request.getPathTranslated());
+	logger.debug("getRequestURI :" + request.getRequestURI());
+	logger.debug("getRequestURL :" + request.getRequestURL());
+	logger.debug("getServletPath :" + request.getServletPath());
 
-        ErrorsRequest errorsRequest = new ErrorsRequest();
+	ErrorsRequest errorsRequest = new ErrorsRequest();
 
-        CorpusStructureDB corpusDbConnection = (CorpusStructureDB) this.getServletContext().getAttribute(RrsConstants.CORPUS_DB_CONNECTION_ATTRIBUTE);
-        String htmlSelectedNodesTable = (String) request.getSession().getAttribute("htmlSelectedNodesTable");
-        if (htmlSelectedNodesTable == null) {
-            htmlSelectedNodesTable = "";
-        }
+	CorpusStructureDB corpusDbConnection = (CorpusStructureDB) this.getServletContext().getAttribute(RrsConstants.CORPUS_DB_CONNECTION_ATTRIBUTE);
 
-        if (RrsIndex.createNodesTable(request, response, corpusDbConnection, errorsRequest, htmlSelectedNodesTable)) {
-            RrsIndex.createCalendarDropdowns(request);
-        }
+	if (RrsIndex.createNodesTable(request, response, corpusDbConnection, errorsRequest, "")) {
+	    RrsIndex.createCalendarDropdowns(request);
+	}
 
-        RrsIndex.dispatchServlet(request, response, errorsRequest, getServletContext());
+	RrsIndex.dispatchServlet(request, response, errorsRequest, getServletContext());
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -65,8 +60,8 @@ public class RrsIndex2 extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
+	    throws ServletException, IOException {
+	processRequest(request, response);
     }
 
     /** Handles the HTTP <code>POST</code> method.
@@ -75,15 +70,15 @@ public class RrsIndex2 extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
+	    throws ServletException, IOException {
+	processRequest(request, response);
     }
 
     /** Returns a short description of the servlet.
      */
     @Override
     public String getServletInfo() {
-        return "Resource Request System Start Servlet phase 2";
+	return "Resource Request System Start Servlet phase 2";
     }
     // </editor-fold>
 }
