@@ -41,8 +41,8 @@
     <!-- Code of conduct -->
 	
     <Parameter name="nl.mpi.rrs.dobesCocLink" 
-	value="default" 
-	description="Link to location of file with DoBES Code of Conduct. Or 'default' for /ds/RRS_V1/dobes_coc_v2.html, or 'none' for skipping the code of conduct step." />
+	value="/ds/RRS_V1/dobes_coc_v2.html" 
+	description="Link to location of file with DoBES Code of Conduct. Set to 'none' for skipping the code of conduct step or 'default' for /ds/RRS_V1/dobes_coc_v2.html" />
 	
     <Parameter name="nl.mpi.rrs.dobesCocLicenseName" 
 	value="Dobes Code of Conduct v2" 
