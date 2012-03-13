@@ -28,10 +28,7 @@ import nl.mpi.rrs.model.errors.ErrorsRequest;
 import nl.mpi.rrs.model.errors.RrsGeneralException;
 import nl.mpi.rrs.model.user.RequestUser;
 import nl.mpi.rrs.model.user.User;
-import nl.mpi.rrs.model.ams.AmsServicesSingleton;
 import nl.mpi.rrs.model.user.UserGenerator;
-import nl.mpi.lat.fabric.NodeID;
-import nl.mpi.rrs.model.ams.AmsLicense;
 import nl.mpi.rrs.authentication.AuthenticationProvider;
 import nl.mpi.rrs.RrsConstants;
 
@@ -265,14 +262,6 @@ public class RrsServlet extends HttpServlet {
 			logger.debug("Param values: " + values[i]);
 			ImdiNode imdiNode = new ImdiNode();
 			imdiNode.setImdiNodeIdWithPrefix(values[i]);
-			NodeID nodeId = AmsServicesSingleton.getInstance().getFabricSrv().newNodeID(imdiNode.getImdiNodeIdWithPrefix());
-			assert authenticationProvider.isUserLoggedIn(request) : "Valid user logged in";
-
-			AmsLicense amsLicence = new AmsLicense();
-			logger.debug(amsLicence.getLicenseInfo(userInfo.getUserName(), nodeId));
-
-			//imdiNode.setImdiNodeName(corpusDbConnection.getNode(values[i]).getName());
-			//imdiNode.setImdiNodeFormat(corpusDbConnection.getNode(values[i]).getFormat());
 			imdiNodes.addImdiNode(imdiNode);
 		    }
 		}
