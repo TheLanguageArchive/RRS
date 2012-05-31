@@ -5,6 +5,15 @@ functions.js
 <script type="text/javascript">
 <!--
 
+function checkUsername(username) {
+	var pattern = /^[A-Za-z][A-Za-z0-9._-]{2,30}$/
+	if(!pattern.test(username)) {
+		alert("The username can only contain letters, numbers and the characters ._-, and cannot be longer than 30 characters");
+		return false;
+	}
+	return true;
+}
+
 function checkEmail(email) {
     
     var firstchunk,indx,secondchunk

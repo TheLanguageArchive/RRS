@@ -35,6 +35,11 @@ function validateForm ( form )
         }
     }     
     
+    if (! checkUsername(form["paramUserNewUserName"].value)) {
+        form["paramUserNewUserName"].focus();
+        return false;
+    }  
+    
     //if (document.resource_request_registration_form.paramUserNewPassword_1.value != document.resource_request_registration_form.paramUserNewPassword_2.value) {
     if (form["paramUserNewPassword_1"].value != form["paramUserNewPassword_2"].value) {
         alert( "Password verification error!");
