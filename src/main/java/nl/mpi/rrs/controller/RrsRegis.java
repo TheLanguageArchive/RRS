@@ -7,11 +7,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import nl.mpi.rrs.RrsConstants;
+import nl.mpi.rrs.authentication.AuthenticationProvider;
 import nl.mpi.rrs.model.errors.ErrorRequest;
 import nl.mpi.rrs.model.errors.ErrorsRequest;
 import nl.mpi.rrs.model.user.RegistrationUser;
 import nl.mpi.rrs.model.user.UserGenerator;
-import nl.mpi.rrs.authentication.AuthenticationProvider;
 
 /**
  * Show User Registration Form

@@ -4,20 +4,19 @@
  */
 package nl.mpi.rrs.controller;
 
-import java.io.*;
-
-import javax.servlet.*;
-import javax.servlet.http.*;
+import java.io.IOException;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import nl.mpi.rrs.RrsConstants;
-
+import nl.mpi.rrs.authentication.AuthenticationProvider;
 import nl.mpi.rrs.model.errors.ErrorRequest;
 import nl.mpi.rrs.model.errors.ErrorsRequest;
-
 import nl.mpi.rrs.model.registrations.RegisFileIO;
 import nl.mpi.rrs.model.user.RegistrationUser;
 import nl.mpi.rrs.model.user.UserGenerator;
-import nl.mpi.rrs.authentication.AuthenticationProvider;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
