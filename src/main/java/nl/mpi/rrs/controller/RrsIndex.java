@@ -6,6 +6,8 @@
 package nl.mpi.rrs.controller;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -16,7 +18,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import nl.mpi.corpusstructure.ArchiveObjectsDB;
 import nl.mpi.corpusstructure.CorpusStructureDB;
 import nl.mpi.corpusstructure.UnknownNodeException;
 import nl.mpi.rrs.RrsConstants;
@@ -57,26 +58,34 @@ public class RrsIndex extends HttpServlet {
 	logger.debug("getRequestURL :" + request.getRequestURL());
 	logger.debug("getServletPath :" + request.getServletPath());
 
-	String urlRrsRegistration = request.getContextPath() + "/RrsRegistration";
-	request.setAttribute("urlRrsRegistration", urlRrsRegistration);
-
 	ErrorsRequest errorsRequest = new ErrorsRequest();
 	CorpusStructureDB corpusDbConnection = (CorpusStructureDB) this.getServletContext().getAttribute(RrsConstants.CORPUS_DB_CONNECTION_ATTRIBUTE);
-	ArchiveObjectsDB archiveObjectsConnection = (ArchiveObjectsDB) this.getServletContext().getAttribute(RrsConstants.ARCHIVE_OBJECTS_DB_CONNECTION_ATTRIBUTE);
-	if (createNodesTable(request, response, corpusDbConnection, archiveObjectsConnection, errorsRequest, "")) {
+
+	List<String> nodeIds = getNodeIds(request);
+	createRegistrationURL(request, nodeIds);
+
+	if (createNodesTable(request, response, corpusDbConnection, errorsRequest, nodeIds, "")) {
 	    createCalendarDropdowns(request);
 	}
 	dispatchServlet(request, response, errorsRequest, getServletContext());
     }
 
-    static boolean createNodesTable(HttpServletRequest request, HttpServletResponse response, CorpusStructureDB corpusDbConnection, ArchiveObjectsDB archiveObjectsConnection, ErrorsRequest errorsRequest, String htmlSelectedNodesTable) throws IOException, ServletException {
+    private void createRegistrationURL(HttpServletRequest request, List<String> nodeIds) throws UnsupportedEncodingException {
+	StringBuilder urlRrsRegistration = new StringBuilder(request.getContextPath()).append("/RrsRegistration?");
+	for (String nodeId : nodeIds) {
+	    urlRrsRegistration.append("nodeId=").append(URLEncoder.encode(nodeId, "UTF-8")).append("&amp;");
+	}
+	request.setAttribute("urlRrsRegistration", urlRrsRegistration.toString());
+    }
+
+    static boolean createNodesTable(HttpServletRequest request, HttpServletResponse response, CorpusStructureDB corpusDbConnection,
+	    ErrorsRequest errorsRequest, List<String> nodeIds, String htmlSelectedNodesTable) throws IOException, ServletException {
 	logger.debug("RrsIndex2 Context: htmlSelectedNodesTable:" + htmlSelectedNodesTable);
 	if (htmlSelectedNodesTable == null) {
 	    htmlSelectedNodesTable = "";
 	}
 	if (htmlSelectedNodesTable.length() == 0) {
-	    List<String> values = getNodeIds(request, archiveObjectsConnection);
-	    if (values.size() > 0) {
+	    if (nodeIds.size() > 0) {
 		if (corpusDbConnection == null) {
 		    logger.warn("RrsIndex: *************** corpusDbConnection == null ");
 		    ErrorRequest errorRequest = new ErrorRequest();
@@ -92,7 +101,7 @@ public class RrsIndex extends HttpServlet {
 
 		//for (int i = 0; i < values.length; i++) {
 		int i = 0;
-		for (String nodeId : values) {
+		for (String nodeId : nodeIds) {
 		    if (nodeId != null && !(nodeId.equalsIgnoreCase(""))) {
 			logger.debug("RrsIndex: *************** Param nodeId: " + nodeId);
 			ImdiNode imdiNode = new ImdiNode();
@@ -206,7 +215,7 @@ public class RrsIndex extends HttpServlet {
 	}
     }
 
-    private static List<String> getNodeIds(HttpServletRequest request, ArchiveObjectsDB archiveObjectsConnection) {
+    protected static List<String> getNodeIds(HttpServletRequest request) {
 	List<String> values = new ArrayList<String>();
 
 	final String[] nodeIdValues = request.getParameterValues("nodeid");

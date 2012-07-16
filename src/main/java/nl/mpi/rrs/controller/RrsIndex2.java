@@ -6,11 +6,11 @@
 package nl.mpi.rrs.controller;
 
 import java.io.IOException;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import nl.mpi.corpusstructure.ArchiveObjectsDB;
 import nl.mpi.corpusstructure.CorpusStructureDB;
 import nl.mpi.rrs.RrsConstants;
 import nl.mpi.rrs.model.errors.ErrorsRequest;
@@ -51,9 +51,9 @@ public class RrsIndex2 extends HttpServlet {
 	    htmlSelectedNodesTable = "";
 	}
 	CorpusStructureDB corpusDbConnection = (CorpusStructureDB) this.getServletContext().getAttribute(RrsConstants.CORPUS_DB_CONNECTION_ATTRIBUTE);
-	ArchiveObjectsDB archiveObjectsConnection = (ArchiveObjectsDB) this.getServletContext().getAttribute(RrsConstants.ARCHIVE_OBJECTS_DB_CONNECTION_ATTRIBUTE);
 
-	if (RrsIndex.createNodesTable(request, response, corpusDbConnection, archiveObjectsConnection, errorsRequest, htmlSelectedNodesTable)) {
+	List<String> nodeIds = RrsIndex.getNodeIds(request);
+	if (RrsIndex.createNodesTable(request, response, corpusDbConnection, errorsRequest, nodeIds, htmlSelectedNodesTable)) {
 	    RrsIndex.createCalendarDropdowns(request);
 	}
 
