@@ -73,7 +73,7 @@ public class RrsIndex extends HttpServlet {
     private void createRegistrationURL(HttpServletRequest request, List<String> nodeIds) throws UnsupportedEncodingException {
 	StringBuilder urlRrsRegistration = new StringBuilder(request.getContextPath()).append("/RrsRegistration?");
 	for (String nodeId : nodeIds) {
-	    urlRrsRegistration.append("nodeId=").append(URLEncoder.encode(nodeId, "UTF-8")).append("&amp;");
+	    urlRrsRegistration.append("nodeid=").append(URLEncoder.encode(nodeId, "UTF-8")).append("&amp;");
 	}
 	request.setAttribute("urlRrsRegistration", urlRrsRegistration.toString());
     }

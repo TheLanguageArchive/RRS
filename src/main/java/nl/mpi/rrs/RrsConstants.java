@@ -26,4 +26,5 @@ public class RrsConstants {
     public final static String AMS_INTERFACE_LINK_ATTRIBUTE = RRS_PREFIX + "amsInterfaceLink";
     public final static String REGISTRATION_STATIC_PAGE_ATTRIBUTE = RRS_PREFIX + "registrationStaticPage";
     public final static String REGIS_FILE_IO = RRS_PREFIX + "regisFileIO";
+    public final static String SESSION_NODE_IDS = RRS_PREFIX + "nodeIds";
 }

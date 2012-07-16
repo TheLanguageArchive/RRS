@@ -1,6 +1,7 @@
 package nl.mpi.rrs.controller;
 
 import java.io.IOException;
+import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -30,14 +31,20 @@ public class RrsRegis extends HttpServlet {
 	authenticationProvider = (AuthenticationProvider) getServletContext().getAttribute(RrsConstants.AUTHENTICATION_PROVIDER_ATTRIBUTE);
     }
 
-    /** 
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+    /**
+     * Processes requests for both HTTP
+     * <code>GET</code> and
+     * <code>POST</code> methods.
+     *
      * @param request servlet request
      * @param response servlet response
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
 	    throws ServletException, IOException {
 	request.setAttribute("corpmanEmail", this.getServletContext().getAttribute(RrsConstants.EMAIL_ADDRESS_CORPMAN_ATTRIBUTE));
+
+	// Put node ids in request (if any) in a session attribute so that they can be retrieved later on in the registration process	
+	setNodeIdsAttribute(request);
 
 	if (!dispatchStaticPage(request, response)) {
 	    ErrorsRequest errorsRequest = new ErrorsRequest();
@@ -47,7 +54,19 @@ public class RrsRegis extends HttpServlet {
     }
 
     /**
+     * Retrieves node id list from request parameters and puts them in a session attribute for later reference
+     *
+     * @param request
+     * @see RrsConstants#SESSION_NODE_IDS
+     */
+    private void setNodeIdsAttribute(HttpServletRequest request) {
+	List<String> nodeIds = RrsIndex.getNodeIds(request);
+	request.getSession().setAttribute(RrsConstants.SESSION_NODE_IDS, nodeIds);
+    }
+
+    /**
      * Checks the current user (if there is one), and sets response properties accordingly
+     *
      * @param request Servlet request
      * @param response Servlet response
      */
@@ -84,8 +103,9 @@ public class RrsRegis extends HttpServlet {
 	request.setAttribute("newInternalUser", this.getServletContext().getAttribute(RrsConstants.ALLOW_NEW_INTERNAL_USERS_ATTRIBUTE));
     }
 
-    /** 
+    /**
      * View registration page
+     *
      * @param request servlet request
      * @param response servlet response
      */
@@ -108,6 +128,7 @@ public class RrsRegis extends HttpServlet {
 
     /**
      * Dispatches static page if it is configured as context attribute
+     *
      * @return Whether static page was dispatched
      * @see nl.mpi.rrs.RrsConstants#REGISTRATION_STATIC_PAGE_ATTRIBUTE
      * @see nl.mpi.rrs.RrsContextListener
@@ -124,10 +145,12 @@ public class RrsRegis extends HttpServlet {
 	}
 	return false;
     }
-    
+
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /** 
-     * Handles the HTTP <code>GET</code> method.
+    /**
+     * Handles the HTTP
+     * <code>GET</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      */
@@ -136,8 +159,10 @@ public class RrsRegis extends HttpServlet {
 	processRequest(request, response);
     }
 
-    /** 
-     * Handles the HTTP <code>POST</code> method.
+    /**
+     * Handles the HTTP
+     * <code>POST</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      */
@@ -146,7 +171,7 @@ public class RrsRegis extends HttpServlet {
 	processRequest(request, response);
     }
 
-    /** 
+    /**
      * Returns a short description of the servlet.
      */
     public String getServletInfo() {

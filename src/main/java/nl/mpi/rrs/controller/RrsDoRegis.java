@@ -5,6 +5,7 @@
 package nl.mpi.rrs.controller;
 
 import java.io.IOException;
+import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -23,12 +24,12 @@ import org.apache.commons.logging.LogFactory;
 /**
  * Verify user registration form
  * Show Dobes Code of Conduct license
- * 
+ *
  * Point in registration workflow:
- * User registration -> 
+ * User registration ->
  * Show Dobes Code of Conduct
  *
- * 
+ *
  * @author kees
  */
 public class RrsDoRegis extends HttpServlet {
@@ -45,7 +46,10 @@ public class RrsDoRegis extends HttpServlet {
     }
 
     /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+     * Processes requests for both HTTP
+     * <code>GET</code> and
+     * <code>POST</code> methods.
+     *
      * @param request servlet request
      * @param response servlet response
      */
@@ -93,6 +97,15 @@ public class RrsDoRegis extends HttpServlet {
 	return regisFileIO;
     }
 
+    private List<String> getSessionNodeIds(HttpServletRequest request) {
+	final Object nodeIdsObject = request.getSession().getAttribute(RrsConstants.SESSION_NODE_IDS);
+	if (nodeIdsObject instanceof List) {
+	    return (List<String>) nodeIdsObject;
+	} else {
+	    return null;
+	}
+    }
+
     private RegistrationUser initUserInfo(HttpServletRequest request, ErrorsRequest errorsRequest) {
 	boolean allowNewInternalUser = (Boolean) getServletContext().getAttribute(RrsConstants.ALLOW_NEW_INTERNAL_USERS_ATTRIBUTE);
 
@@ -127,6 +140,7 @@ public class RrsDoRegis extends HttpServlet {
 	userInfo.setEmail(request.getParameter("paramUserNewEmail"));
 	userInfo.setOrganization(request.getParameter("paramUserNewOrganization"));
 	userInfo.setPassword(request.getParameter("paramUserNewPassword_1"));
+	userInfo.setNodeIds(getSessionNodeIds(request));
 	userInfo.setCreation_ts();
 
 
@@ -205,8 +219,10 @@ public class RrsDoRegis extends HttpServlet {
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /** 
-     * Handles the HTTP <code>GET</code> method.
+    /**
+     * Handles the HTTP
+     * <code>GET</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      */
@@ -215,8 +231,10 @@ public class RrsDoRegis extends HttpServlet {
 	processRequest(request, response);
     }
 
-    /** 
-     * Handles the HTTP <code>POST</code> method.
+    /**
+     * Handles the HTTP
+     * <code>POST</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      */
@@ -225,7 +243,7 @@ public class RrsDoRegis extends HttpServlet {
 	processRequest(request, response);
     }
 
-    /** 
+    /**
      * Returns a short description of the servlet.
      */
     public String getServletInfo() {
