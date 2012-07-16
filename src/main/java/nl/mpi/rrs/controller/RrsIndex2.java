@@ -11,6 +11,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import nl.mpi.corpusstructure.ArchiveObjectsDB;
 
 import nl.mpi.corpusstructure.CorpusStructureDB;
 import nl.mpi.rrs.RrsConstants;
@@ -21,6 +22,7 @@ import org.apache.commons.logging.LogFactory;
 
 /**
  * Show Resource Request Form
+ *
  * @author kees
  * @version
  */
@@ -28,7 +30,10 @@ public class RrsIndex2 extends HttpServlet {
 
     private final static Log logger = LogFactory.getLog(RrsIndex2.class);
 
-    /** Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+    /** Processes requests for both HTTP
+     * <code>GET</code> and
+     * <code>POST</code> methods.
+     *
      * @param request servlet request
      * @param response servlet response
      */
@@ -49,8 +54,9 @@ public class RrsIndex2 extends HttpServlet {
 	    htmlSelectedNodesTable = "";
 	}
 	CorpusStructureDB corpusDbConnection = (CorpusStructureDB) this.getServletContext().getAttribute(RrsConstants.CORPUS_DB_CONNECTION_ATTRIBUTE);
+	ArchiveObjectsDB archiveObjectsConnection = (ArchiveObjectsDB) this.getServletContext().getAttribute(RrsConstants.ARCHIVE_OBJECTS_DB_CONNECTION_ATTRIBUTE);
 
-	if (RrsIndex.createNodesTable(request, response, corpusDbConnection, errorsRequest, htmlSelectedNodesTable)) {
+	if (RrsIndex.createNodesTable(request, response, corpusDbConnection, archiveObjectsConnection, errorsRequest, htmlSelectedNodesTable)) {
 	    RrsIndex.createCalendarDropdowns(request);
 	}
 
@@ -58,7 +64,9 @@ public class RrsIndex2 extends HttpServlet {
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /** Handles the HTTP <code>GET</code> method.
+    /** Handles the HTTP
+     * <code>GET</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      */
@@ -68,7 +76,9 @@ public class RrsIndex2 extends HttpServlet {
 	processRequest(request, response);
     }
 
-    /** Handles the HTTP <code>POST</code> method.
+    /** Handles the HTTP
+     * <code>POST</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      */

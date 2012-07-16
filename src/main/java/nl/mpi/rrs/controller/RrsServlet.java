@@ -6,9 +6,6 @@
 package nl.mpi.rrs.controller;
 
 import java.io.IOException;
-
-//import javax.mail.internet.AddressException;
-//import javax.mail.internet.InternetAddress;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -16,8 +13,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import nl.mpi.corpusstructure.ArchiveObjectsDB;
 import nl.mpi.corpusstructure.CorpusStructureDB;
-
 import nl.mpi.corpusstructure.UnknownNodeException;
+import nl.mpi.rrs.RrsConstants;
+import nl.mpi.rrs.authentication.AuthenticationProvider;
 import nl.mpi.rrs.model.RrsRequest;
 import nl.mpi.rrs.model.corpusdb.ImdiNode;
 import nl.mpi.rrs.model.corpusdb.ImdiNodes;
@@ -29,16 +27,13 @@ import nl.mpi.rrs.model.errors.RrsGeneralException;
 import nl.mpi.rrs.model.user.RequestUser;
 import nl.mpi.rrs.model.user.User;
 import nl.mpi.rrs.model.user.UserGenerator;
-import nl.mpi.rrs.authentication.AuthenticationProvider;
-import nl.mpi.rrs.RrsConstants;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
  * Verify Resource Request Form
  * Send email to user and corpman
- * 
+ *
  * @author kees
  * @version
  */
@@ -55,7 +50,10 @@ public class RrsServlet extends HttpServlet {
 	authenticationProvider = (AuthenticationProvider) getServletContext().getAttribute(RrsConstants.AUTHENTICATION_PROVIDER_ATTRIBUTE);
     }
 
-    /** Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+    /** Processes requests for both HTTP
+     * <code>GET</code> and
+     * <code>POST</code> methods.
+     *
      * @param request servlet request
      * @param response servlet response
      */
@@ -161,9 +159,9 @@ public class RrsServlet extends HttpServlet {
 	    logger.debug("Username: " + userName);
 	    logger.debug("using UserGenerator " + ug.getInfo());
 	    /*
-	    user.setPassword(request.getParameter("paramUserOldPassword"));
-	    String passWord = user.getPassword();
-	    if (ug.isValidPasswordForUsername(userName, passWord)) {
+	     * user.setPassword(request.getParameter("paramUserOldPassword"));
+	     * String passWord = user.getPassword();
+	     * if (ug.isValidPasswordForUsername(userName, passWord)) {
 	     */
 	    User userDB = ug.getUserInfoByUserName(userName);
 	    if (userDB != null) {
@@ -279,6 +277,7 @@ public class RrsServlet extends HttpServlet {
 		    imdiNode.setImdiNodeUri(archiveObjectsDbConnection.getObjectURI(nodeIdWithPrefix).toString());
 		    imdiNodes.setImdiNode(i, imdiNode);
 		} catch (UnknownNodeException ex) {
+		    logger.warn("Exception while processing access request nodes", ex);
 		    ErrorRequest errorRequest = new ErrorRequest();
 		    if (rrsRequest.isNodesEnteredInForm()) {
 			errorRequest.setErrorFormFieldLabel("Form field: Node Id");
@@ -291,7 +290,6 @@ public class RrsServlet extends HttpServlet {
 		    errorRequest.setErrorType("INVALID_NODE_ID");
 		    errorRequest.setErrorRecoverable(true);
 		    errorsRequest.addError(errorRequest);
-		    //ex.printStackTrace();
 		}
 	    }
 	}
@@ -392,7 +390,9 @@ public class RrsServlet extends HttpServlet {
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /** Handles the HTTP <code>GET</code> method.
+    /** Handles the HTTP
+     * <code>GET</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      */
@@ -402,7 +402,9 @@ public class RrsServlet extends HttpServlet {
 	processRequest(request, response);
     }
 
-    /** Handles the HTTP <code>POST</code> method.
+    /** Handles the HTTP
+     * <code>POST</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      */

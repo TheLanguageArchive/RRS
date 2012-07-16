@@ -94,7 +94,7 @@
 	<dependency>
 	    <groupId>nl.mpi</groupId>
 	    <artifactId>corpusstructure-api</artifactId>
-	    <version>1.7.4</version>
+	    <version>1.7.5</version>
 	    <scope>compile</scope>
 	    <exclusions>
 		<exclusion>
