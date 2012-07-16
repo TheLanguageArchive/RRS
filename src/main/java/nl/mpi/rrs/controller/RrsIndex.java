@@ -220,36 +220,7 @@ public class RrsIndex extends HttpServlet {
 	if (nodeIdValues != null) {
 	    values.addAll(Arrays.asList(nodeIdValues));
 	}
-	findNodeIdsInShibstate(values, request, archiveObjectsConnection);
-
 	return values;
-    }
-
-    private static void findNodeIdsInShibstate(List<String> values, HttpServletRequest request, ArchiveObjectsDB archiveObjectsConnection) {
-	for (Cookie cookie : request.getCookies()) {
-	    if (cookie.getName().startsWith(SHIBSTATE_COOKIE_PREFIX)) {
-		logger.debug("Found shibstate cookie, trying to extract node id");
-		final String resourceURLString = cookie.getValue();
-		if (resourceURLString != null) {
-		    try {
-			String decodedResourceURLString = URLDecoder.decode(resourceURLString, "UTF-8");
-			logger.debug("URL in shibstate: " + resourceURLString);
-			URI resourceURI = new URL(decodedResourceURLString).toURI();
-			String nodeId = archiveObjectsConnection.getObjectId(resourceURI);
-			if (nodeId != null) {
-			    logger.debug("URL in shibstate translates to node id: " + resourceURLString);
-			    values.add(nodeId);
-			}
-		    } catch (MalformedURLException ex) {
-			logger.warn("Skipping potential URI in shibstate header", ex);
-		    } catch (URISyntaxException ex) {
-			logger.warn("Skipping potential URI in shibstate header", ex);
-		    } catch (UnsupportedEncodingException ex) {
-			logger.warn("Skipping potential URI in shibstate header", ex);
-		    }
-		}
-	    }
-	}
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
