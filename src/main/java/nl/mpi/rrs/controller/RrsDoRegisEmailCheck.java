@@ -52,7 +52,10 @@ public class RrsDoRegisEmailCheck extends HttpServlet {
     }
 
     /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+     * Processes requests for both HTTP
+     * <code>GET</code> and
+     * <code>POST</code> methods.
+     *
      * @param request servlet request
      * @param response servlet response
      */
@@ -120,6 +123,7 @@ public class RrsDoRegisEmailCheck extends HttpServlet {
 	request.setAttribute("userFirstName", userInfo.getFirstName());
 	request.setAttribute("userLastName", userInfo.getLastName());
 	request.setAttribute("userEmail", userInfo.getEmail());
+	request.setAttribute("nodeIds", userInfo.getNodeIds());
 	if (rrsRegistration.getRegisId() == userRegisId) {
 	    return processNewUser(request, response, errorsRequest, rrsRegistration, userInfo);
 	} else {
@@ -277,7 +281,9 @@ public class RrsDoRegisEmailCheck extends HttpServlet {
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
-     * Handles the HTTP <code>GET</code> method.
+     * Handles the HTTP
+     * <code>GET</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      */
@@ -287,7 +293,9 @@ public class RrsDoRegisEmailCheck extends HttpServlet {
     }
 
     /**
-     * Handles the HTTP <code>POST</code> method.
+     * Handles the HTTP
+     * <code>POST</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      */

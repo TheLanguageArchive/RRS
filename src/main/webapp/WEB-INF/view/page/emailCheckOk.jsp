@@ -20,22 +20,36 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
     
     <body>
         <%@include file="/WEB-INF/include/headerTextRegis.jspf" %>
-        <h2>Thank you for your registration.</h2>
+        <h2>Thank you for your registration</h2>
         <hr />
         
         <div id="contents-emailcheck">
             <p>Dear ${userFirstName} ${userLastName}, </p>
             <p>
                 Your account has now been created. <br />
-                <strong>It may take up to 1 hour before it becomes active.</strong><br />
+                <strong>It may take up to 1 hour before it becomes active.</strong>
+            </p>
+            <p>
                 Note that for many resources, permission from the depositor <br />
                 is required before you are allowed to access them. <br />
                 Use the &quot;request resource access&quot; function in the IMDI browser <br />
-                if you want to access those resources. <br />
-                <br />
-                You will receive an email on the address: ${userEmail} with the account details.
-            </p>
-            <p>
+                if you want to access those resources.
+	    </p>
+
+	    <c:if test="${not empty nodeIds}">
+		<p>
+		    You have selected the following nodes:
+		    <ul>
+		    <c:forEach var="nodeId" items="${nodeIds}">
+			<li>${nodeId}</li>
+		    </c:forEach>
+		    </ul>
+		</p>
+	    </c:if>
+		
+	    <p>
+                You will receive an email on the address: ${userEmail} with the account details.<br/><br/>
+            
                 To modify your account details, please go to the page below, log in and select <br />
                 &quot;My Account&quot; -> &quot;My UserAccount&quot; from the menu: <br />
                 <br />
