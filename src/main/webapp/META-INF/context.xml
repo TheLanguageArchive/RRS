@@ -26,7 +26,7 @@
 	
     <Parameter name="nl.mpi.rrs.registrationFile" 
 	value="/tmp/registration.txt" 
-	description="REQUIRED - For saving RRS registrations temporarily" />
+	description="REQUIRED - Absolute path to a file for saving pending registrations data (needs read/write access)" />
 	
     <Parameter name="nl.mpi.rrs.archiveUsersIdpName"
 	value="'MPI Nijmegen' from the 'Damlr federation'"

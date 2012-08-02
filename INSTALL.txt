@@ -89,7 +89,7 @@ See META-INF/context.xml for examples.
 - nl.mpi.rrs.registrationFile			(writable file location)
 	The specified file will be used by RRS to temporary store user information in the time between
 	registration and verification. After verification the entry gets removed from this file and
-	inserted in AMS.
+	inserted in AMS. Needs read/write access.
 	
 - nl.mpi.rrs.dobesCocLink				(text|'default'|'none')
 	Link to location of file with DoBES Code of Conduct.
