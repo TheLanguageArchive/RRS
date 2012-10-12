@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package nl.mpi.rrs.controller;
 
 import java.io.IOException;
@@ -64,7 +60,7 @@ public class RrsDoRegis extends HttpServlet {
 	request.setAttribute("newInternalUser", this.getServletContext().getAttribute(RrsConstants.ALLOW_NEW_INTERNAL_USERS_ATTRIBUTE));
 	request.setAttribute("corpmanEmail", this.getServletContext().getAttribute(RrsConstants.EMAIL_ADDRESS_CORPMAN_ATTRIBUTE));
 
-	if (userInfo.validate()) {
+	if (userInfo.validate() && isValidUsername(userInfo, request)) {
 	    RequestDispatcher view = doRegistration(request, response, regisFileIO, userInfo, errorsRequest);
 	    view.forward(request, response);
 	} else {
@@ -85,6 +81,11 @@ public class RrsDoRegis extends HttpServlet {
 	    RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/page/regis2.jsp");
 	    view.forward(request, response);
 	}
+    }
+
+    private boolean isValidUsername(RegistrationUser userInfo, HttpServletRequest request) {
+	// if authenticated, accept the username provided by the auth provider. If custom, check the constraints.
+	return userInfo.isCustomUsernameValid() || authenticationProvider.isUserLoggedIn(request);
     }
 
     private RegisFileIO initRegisFileIO() {

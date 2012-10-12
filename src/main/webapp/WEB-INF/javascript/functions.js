@@ -6,9 +6,9 @@ functions.js
 <!--
 
 function checkUsername(username) {
-	var pattern = /^[A-Za-z][A-Za-z0-9._-]{2,30}$/
+	var pattern = /^[A-Za-z][A-Za-z0-9._-]{2,29}$/
 	if(!pattern.test(username)) {
-		alert("The username can only contain letters, numbers and the characters ._-, and cannot be longer than 30 characters");
+		alert("The username can only contain letters, numbers and the characters ._-, and cannot be longer than 30 characters. First character must be a letter.");
 		return false;
 	}
 	return true;
