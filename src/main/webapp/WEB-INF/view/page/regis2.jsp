@@ -93,8 +93,15 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
 			    <c:when test="${empty uid}">
 				<td>User ID (choose one yourself):</td>
 				<td><input type="text" id="paramUserNewUserName" name="paramUserNewUserName" value="${paramUserNewUserName}" size="90" /></td>
-				</c:when>
-				<c:otherwise>
+			    </tr>
+			    <tr>  
+				<td></td>
+				<td>
+				    The user ID should have a length of 3-30 characters, and can contain only letters, numbers, and
+				    the following characters: _-. It should start with a letter.
+				</td>
+			    </c:when>
+			    <c:otherwise>
 				<td>User ID:</td>
 				<td>${uid}</td>
 			    </c:otherwise>

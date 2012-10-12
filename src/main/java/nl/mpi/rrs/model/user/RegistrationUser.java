@@ -1,6 +1,7 @@
 package nl.mpi.rrs.model.user;
 
 import java.util.List;
+import java.util.regex.Pattern;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -14,6 +15,14 @@ public class RegistrationUser extends User {
 	super();
     }
     private final static Log _log = LogFactory.getLog(RegistrationUser.class);
+    /**
+     * ATTENTION: the following must match the client side check in WEB-INF/javascript/functions.js.
+     * 
+     * - Should start with an alphabetical character
+     * - After that, '.', '_' and '-' are also allowed
+     * - At least 3, at most 30 characters
+     */
+    public final static Pattern userNamePattern = Pattern.compile("^[A-Za-z][A-Za-z0-9._-]{2,29}$");
     private String userInfo;
     private List<String> nodeIds;
 
@@ -139,12 +148,20 @@ public class RegistrationUser extends User {
 		&& !isNullOrEmpty(getEmail())
 		&& !isNullOrEmpty(getOrganization());
     }
+    
+    public boolean isCustomUsernameValid() {
+	return isValidUserName(getUserName());
+    }
 
     private static boolean isNullOrEmpty(String string) {
 	if (string == null) {
-	    return false;
+	    return true;
 	} else {
 	    return string.isEmpty();
 	}
+    }
+
+    private static boolean isValidUserName(String userName) {
+	return userNamePattern.matcher(userName).matches();
     }
 }
