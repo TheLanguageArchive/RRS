@@ -1,0 +1,35 @@
+Below are instructions to upgrade from one version of RRS to another. The
+history is kept with the more recent versions coming first. Each section has a
+header indicating from which version or range of versions to which newer version
+the required changes apply.
+
+= Upgrading from any older version to 1.5-testing or later =
+
+- Most configuration options have changed. See INSTALL.txt for details on how to
+configure web.xml and (in the case of a shibboleth environment) shhaa.xml in the
+WEB-INF directory.
+
+- A large number of context parameters has been added. See INSTALL.TXT for an
+overview. The following parameters were available either in web.xml or as
+context parameters in previous versions and should be mapped to the
+corresponding new parameters:
+
+EMAIL_HOST -> nl.mpi.smtpHost 
+EMAIL_ADDRESS_CORPMAN -> nl.mpi.emailAddressCorpman 
+AMS_INTERFACE_LINK -> nl.mpi.rrs.amsInterfaceLink
+REGISTRATION_FILENAME -> nl.mpi.rrs.registrationFile 
+OPENPATH_PREFIX -> nl.mpi.rrs.openPathPrefix 
+DOBES_COC_LINK -> nl.mpi.rrs.dobesCocLink (semantics have changed!) 
+DOBES_COC_LICENSE_NAME -> nl.mpi.rrs.dobesCocLicenseName
+ARCHIVE_USERS_IDP_NAME -> nl.mpi.rrs.archiveUsersIdpName
+
+Please compare your configuration to the parameters mentioned in INSTALL.txt to
+see which parameters are missing!!
+
+- Remove any database connection information from the application specific
+configuration files if present. RRS now uses named database connections. The
+names of these are set in web.xml but should match the default names (AMS2DB and
+CSDB).
+
+- Be aware that RRS 1.5 depends on AMS2 version 1.4.9.1. It supplies the package
+but depends on a compatible database structure.
