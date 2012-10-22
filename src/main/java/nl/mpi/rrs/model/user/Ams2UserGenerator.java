@@ -7,11 +7,10 @@ import java.util.Set;
 import nl.mpi.lat.auth.authentication.AuthenticationException;
 import nl.mpi.lat.auth.authentication.AuthenticationService;
 import nl.mpi.lat.auth.federation.FedUID;
-import nl.mpi.lat.auth.principal.LatUser;
 import nl.mpi.lat.auth.principal.LatGroup;
 import nl.mpi.lat.auth.principal.LatPrincipal;
+import nl.mpi.lat.auth.principal.LatUser;
 import nl.mpi.lat.auth.principal.PrincipalService;
-
 import nl.mpi.lat.dao.DataSourceException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -160,6 +159,11 @@ public class Ams2UserGenerator implements UserGenerator {
             user.setName(userinfo.getLastName());
             user.setEmail(userinfo.getEmail());
             user.setOrganisation(userinfo.getOrganization());
+	    
+	    if(userinfo.getHostingInstitute() != null){
+		user.setHostingInstitute(userinfo.getHostingInstitute());
+	    }
+	    
             //user.setPasswd(userinfo.getPassword()); (deprecated; sets passwords unencrypted)
 
             // note: update (new) datasets' creator-/last-modifier-fields:

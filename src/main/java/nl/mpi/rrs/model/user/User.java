@@ -30,6 +30,7 @@ public class User {
     private String password;
     private String creator;
     private String creation_ts;
+    private String hostingInstitute;
     private boolean dobesCocSigned;
     private boolean valid;
 
@@ -230,7 +231,7 @@ public class User {
         this.creation_ts = creation_ts;
     }
 
-    public void setCreation_ts() {
+    public final void setCreation_ts() {
         this.creation_ts = RrsUtil.todayDateAsString();
     }
 
@@ -242,7 +243,7 @@ public class User {
         return false;
     }
 
-    public void setValid(boolean valid) {
+    public final void setValid(boolean valid) {
         this.valid = valid;
     }
 
@@ -274,7 +275,15 @@ public class User {
         return dobesCocSigned;
     }
 
-    public void setDobesCocSigned(boolean dobesCocSigned) {
+    public final void setDobesCocSigned(boolean dobesCocSigned) {
         this.dobesCocSigned = dobesCocSigned;
+    }
+
+    public String getHostingInstitute() {
+	return hostingInstitute;
+    }
+
+    public void setHostingInstitute(String hostingInstitution) {
+	this.hostingInstitute = hostingInstitution;
     }
 }

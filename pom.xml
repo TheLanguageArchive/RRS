@@ -296,7 +296,7 @@
 	<dependency>
 	    <groupId>${project.groupId}</groupId>
 	    <artifactId>ams2</artifactId>
-	    <version>1.4.6.1</version>
+	    <version>1.4.9.1</version>
 	</dependency>
     </dependencies>
 

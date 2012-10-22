@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package nl.mpi.rrs.controller;
 
 import java.io.IOException;
@@ -116,6 +112,9 @@ public class RrsDoRegisEmailCheck extends HttpServlet {
     private boolean processNewUserIfValid(HttpServletRequest request, HttpServletResponse response, ErrorsRequest errorsRequest, String userName, int userRegisId) throws ServletException, IOException {
 	RrsRegistration rrsRegistration = new RrsRegistration();
 	RegistrationUser userInfo = regisFileIO.getRegistrationFromFile(userName);
+	if (authenticationProvider.isUserLoggedIn(request)) {
+	    userInfo.setHostingInstitute(authenticationProvider.getIdentityProviderId(request));
+	}
 	rrsRegistration.setUser(userInfo);
 	rrsRegistration.setAmsInterfaceLink(amsInterfaceLink);
 	rrsRegistration.setArchiveUsersIdpName(archiveUsersIdpName);
