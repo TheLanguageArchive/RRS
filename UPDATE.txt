@@ -3,6 +3,13 @@ history is kept with the more recent versions coming first. Each section has a
 header indicating from which version or range of versions to which newer version
 the required changes apply.
 
+From version 1.5 on it is possible to review the exact version and revision
+number of a deployed RRS instance by browsing to the webapp's deploy
+location (e.g. /ds/RRS_V1).
+
+This information can also be found without deploying by inspecting the
+contents of the file index.jsp inside the WAR file from the deployment package.
+
 = Upgrading from any older version to 1.5-testing or later =
 
 - Most configuration options have changed. See INSTALL.txt for details on how to
