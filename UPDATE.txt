@@ -1,14 +1,28 @@
-Below are instructions to upgrade from one version of RRS to another. The
+INSTRCUTIONS FOR UPGRADING THE RESOURCE REQUEST SYSTEM
+
+Below are instructions for upgrading from one version of RRS to another. The
 history is kept with the more recent versions coming first. Each section has a
 header indicating from which version or range of versions to which newer version
 the required changes apply.
 
 From version 1.5 on it is possible to review the exact version and revision
 number of a deployed RRS instance by browsing to the webapp's deploy
-location (e.g. /ds/RRS_V1).
+location (e.g. /ds/RRS_V1). This information can also be found without deploying 
+by inspecting the contents of the file index.jsp inside the WAR file from the
+deployment package.
 
-This information can also be found without deploying by inspecting the
-contents of the file index.jsp inside the WAR file from the deployment package.
+= READ THIS FIRST: General update instructions =
+
+RRS provides several versions of the web.xml file. They can be found in the
+WEB-INF directory of the extracted WAR, which will initially contain no web.xml
+file. To make the application work, you will have to choose one of the web-*.xml
+files and rename or copy it to web.xml OR keep/copy the web.xml file of a 
+previous installation, in which case you should apply all changes made to the
+template file since the previously installed version to this file as well.
+
+In the case of a Shibboleth environment, you should also copy your existing
+shhaa.xml file to the new WEB-INF and apply all changes that have been made
+to the example file (shhaa-example.xml) to it.
 
 = Upgrading from any older version to 1.5-testing or later =
 
