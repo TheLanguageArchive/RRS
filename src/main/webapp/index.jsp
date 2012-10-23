@@ -14,7 +14,7 @@
         
         <h1>Resource Request System</h1>
 	
-	<p>Version: ${project.version}</p>
+	<p>Version: ${project.version} (revision ${buildNumber})</p>
     </body>
 </html>
         
