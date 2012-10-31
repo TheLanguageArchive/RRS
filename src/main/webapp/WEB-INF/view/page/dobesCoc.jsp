@@ -12,9 +12,14 @@
 	<%@include file="/WEB-INF/javascript/validateCoc.js" %>
 	<%@include file="/WEB-INF/include/headMeta.jspf" %>
 	<link rel="stylesheet" type="text/css" href="css/request.css" />
-	<title>DOBES Code of Conduct, version 2</title>
-    </head>
-
+	<c:choose>
+	    <c:when test="${empty urlRrsDobesCoc}">
+		<title>Submit registration request</title>		 
+	    </c:when>
+	    <c:otherwise>
+		<title>DOBES Code of Conduct, version 2</title>	   
+	    </c:otherwise>
+	</c:choose>
     <body>
         <%@include file="/WEB-INF/include/headerTextRegis.jspf" %>
 
