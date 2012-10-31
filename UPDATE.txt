@@ -24,7 +24,7 @@ In the case of a Shibboleth environment, you should also copy your existing
 shhaa.xml file to the new WEB-INF and apply all changes that have been made
 to the example file (shhaa-example.xml) to it.
 
-= Upgrading from any older version to 1.5-testing or later =
+= Upgrading to 1.5.x revision 33877 or higher =
 
 - Most configuration options have changed. See INSTALL.txt for details on how to
 configure web.xml and (in the case of a shibboleth environment) shhaa.xml in the
@@ -54,3 +54,4 @@ CSDB).
 
 - Be aware that RRS 1.5 depends on AMS2 version 1.4.9.1. It supplies the package
 but depends on a compatible database structure.
+
