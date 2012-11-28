@@ -371,9 +371,9 @@ public class RrsServlet extends HttpServlet {
 	} catch (java.lang.Exception e) {
 	    // catch all other possible email errors
 	    ErrorRequest errorRequest = new ErrorRequest();
-	    errorRequest.setErrorFormFieldLabel("Form field: Email");
+	    errorRequest.setErrorFormFieldLabel("Sending e-mail");
 	    errorRequest.setErrorMessage(e.getMessage());
-	    errorRequest.setErrorValue(userEmail);
+	    errorRequest.setErrorValue(emailHost);
 	    errorRequest.setErrorException(null);
 	    errorRequest.setErrorType("INVALID_USER_EMAIL");
 	    errorRequest.setErrorRecoverable(false);
