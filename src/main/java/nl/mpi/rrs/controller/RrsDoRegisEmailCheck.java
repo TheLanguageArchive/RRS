@@ -260,9 +260,9 @@ public class RrsDoRegisEmailCheck extends HttpServlet {
 	} catch (java.lang.Exception e) {
 	    // catch all other possible email errors
 	    ErrorRequest errorRequest = new ErrorRequest();
-	    errorRequest.setErrorFormFieldLabel("Form field: Email");
-	    errorRequest.setErrorMessage("Invalid Email address (3)");
-	    errorRequest.setErrorValue(userEmail);
+	    errorRequest.setErrorFormFieldLabel("Sending e-mail");
+	    errorRequest.setErrorMessage(e.getMessage());
+	    errorRequest.setErrorValue(emailHost);
 	    errorRequest.setErrorException(null);
 	    errorRequest.setErrorType("INVALID_USER_EMAIL");
 	    errorRequest.setErrorRecoverable(true);

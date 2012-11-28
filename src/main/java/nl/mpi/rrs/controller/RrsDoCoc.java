@@ -4,7 +4,6 @@
  */
 package nl.mpi.rrs.controller;
 
-
 import java.io.IOException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -25,11 +24,11 @@ import org.apache.commons.logging.LogFactory;
 /**
  * Verify that Dobes Code of Conduct has been signed
  * Send verification link to user
- * 
+ *
  * Point in registration workflow:
- * Show Dobes Code of Conduct -> 
+ * Show Dobes Code of Conduct ->
  * User gets email with link to verify email address
- * 
+ *
  * @author kees
  */
 public class RrsDoCoc extends HttpServlet {
@@ -37,8 +36,11 @@ public class RrsDoCoc extends HttpServlet {
     private static Log logger = LogFactory.getLog(RrsDoCoc.class);
     public final int REGISTRATION_EXPIRATION_DAYS = 30;
 
-    /** 
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+    /**
+     * Processes requests for both HTTP
+     * <code>GET</code> and
+     * <code>POST</code> methods.
+     *
      * @param request servlet request
      * @param response servlet response
      */
@@ -160,9 +162,9 @@ public class RrsDoCoc extends HttpServlet {
 	    // catch all other possible email errors
 	    ErrorRequest errorRequest = new ErrorRequest();
 
-	    errorRequest.setErrorFormFieldLabel("Form field: Email");
-	    errorRequest.setErrorMessage("Invalid Email address (3)");
-	    errorRequest.setErrorValue(userEmail);
+	    errorRequest.setErrorFormFieldLabel("Sending e-mail");
+	    errorRequest.setErrorMessage(e.getMessage());
+	    errorRequest.setErrorValue(emailHost);
 	    errorRequest.setErrorException(null);
 	    errorRequest.setErrorType("INVALID_USER_EMAIL");
 	    errorRequest.setErrorRecoverable(true);
@@ -181,9 +183,9 @@ public class RrsDoCoc extends HttpServlet {
 	    view.forward(request, response);
 	    return;
 	    /*
-	    RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/error/errorUnknown.jsp");
-	    view.forward(request, response);
-	    return;
+	     RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/error/errorUnknown.jsp");
+	     view.forward(request, response);
+	     return;
 	     */
 
 	}
@@ -193,8 +195,10 @@ public class RrsDoCoc extends HttpServlet {
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /** 
-     * Handles the HTTP <code>GET</code> method.
+    /**
+     * Handles the HTTP
+     * <code>GET</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      */
@@ -203,8 +207,10 @@ public class RrsDoCoc extends HttpServlet {
 	processRequest(request, response);
     }
 
-    /** 
-     * Handles the HTTP <code>POST</code> method.
+    /**
+     * Handles the HTTP
+     * <code>POST</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      */
@@ -213,7 +219,7 @@ public class RrsDoCoc extends HttpServlet {
 	processRequest(request, response);
     }
 
-    /** 
+    /**
      * Returns a short description of the servlet.
      */
     public String getServletInfo() {
