@@ -11,7 +11,7 @@
     <groupId>nl.mpi</groupId>
     <artifactId>rrs</artifactId>
     <packaging>war</packaging>
-    <version>1.5.1</version>
+    <version>1.5.1-STAGING</version>
     <name>Resource Request System</name>
     <url>https://trac.mpi.nl/wiki/ResourceRequestSystem</url>
     <description>Resource Request System for the language archive</description>
