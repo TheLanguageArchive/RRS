@@ -22,7 +22,7 @@ public class RrsConstants {
     public final static String DOBES_COC_LICENSE_NAME_ATTRIBUTE = RRS_PREFIX + "dobesCocLicenseName";
     public final static String CORPUS_DB_CONNECTION_ATTRIBUTE = RRS_PREFIX + "corpusDbConnection";
     public final static String CORPUS_SERVER_DB_JNDI_NAME_ATTRIBUTE = RRS_PREFIX + "corpusServerDb.jndiName";
-    public final static String OPEN_PATH_PREFIX_ATTRIBUTE = RRS_PREFIX + "openPathPrefix";
+    public final static String OPEN_PATH_PREFIX_ATTRIBUTE = MPI_PREFIX + "imdibrowserOpenPathPrefix";
     public final static String AMS_INTERFACE_LINK_ATTRIBUTE = RRS_PREFIX + "amsInterfaceLink";
     public final static String REGISTRATION_STATIC_PAGE_ATTRIBUTE = RRS_PREFIX + "registrationStaticPage";
     public final static String REGIS_FILE_IO = RRS_PREFIX + "regisFileIO";

@@ -39,10 +39,10 @@ EMAIL_HOST -> nl.mpi.smtpHost
 EMAIL_ADDRESS_CORPMAN -> nl.mpi.emailAddressCorpman 
 AMS_INTERFACE_LINK -> nl.mpi.rrs.amsInterfaceLink
 REGISTRATION_FILENAME -> nl.mpi.rrs.registrationFile 
-OPENPATH_PREFIX -> nl.mpi.rrs.openPathPrefix 
 DOBES_COC_LINK -> nl.mpi.rrs.dobesCocLink (semantics have changed!) 
 DOBES_COC_LICENSE_NAME -> nl.mpi.rrs.dobesCocLicenseName
 ARCHIVE_USERS_IDP_NAME -> nl.mpi.rrs.archiveUsersIdpName
+OPENPATH_PREFIX -> nl.mpi.imdibrowserOpenPathPrefix
 
 Please compare your configuration to the parameters mentioned in INSTALL.txt to
 see which parameters are missing!!
