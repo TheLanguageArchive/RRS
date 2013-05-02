@@ -53,6 +53,8 @@ public class RrsIndex2 extends HttpServlet {
 	CorpusStructureDB corpusDbConnection = (CorpusStructureDB) this.getServletContext().getAttribute(RrsConstants.CORPUS_DB_CONNECTION_ATTRIBUTE);
 
 	List<String> nodeIds = RrsIndex.getNodeIds(request);
+	RrsIndex.createRegistrationURL(request, nodeIds);
+
 	if (RrsIndex.createNodesTable(request, response, corpusDbConnection, errorsRequest, nodeIds, htmlSelectedNodesTable)) {
 	    RrsIndex.createCalendarDropdowns(request);
 	}
