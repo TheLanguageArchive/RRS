@@ -44,15 +44,9 @@
             </shibheader>
         </composition>
 
-        <!-- pages that require log in 
-        <location  target="/*" />
-        <location  target="/RrsIndex" />
-        <location  target="/index_2.jsp" />
-        <location  target="/view/page/index_2.jsp" />
-        <location  target="/WEB-INF/view/page/index_2.jsp" />
-        -->
+        <!-- pages that require log in -->
         <authorization>
-            <location  target="/RrsIndex2" />
+            <location  target="/RrsIndexAuth" />
             <location  target="/RrsLogin" />
         </authorization>
 

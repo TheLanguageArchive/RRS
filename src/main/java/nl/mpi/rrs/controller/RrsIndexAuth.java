@@ -1,5 +1,5 @@
 /*
- * RrsIndex2.java
+ * RrsIndexAuth.java
  *
  * Created on March 7, 2007, 12:17 PM
  */
@@ -23,9 +23,9 @@ import org.apache.commons.logging.LogFactory;
  * @author kees
  * @version
  */
-public class RrsIndex2 extends HttpServlet {
+public class RrsIndexAuth extends HttpServlet {
 
-    private final static Log logger = LogFactory.getLog(RrsIndex2.class);
+    private final static Log logger = LogFactory.getLog(RrsIndexAuth.class);
 
     /** Processes requests for both HTTP
      * <code>GET</code> and
@@ -36,7 +36,7 @@ public class RrsIndex2 extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
 	    throws ServletException, IOException {
-	logger.debug("RrsIndex2: *************** start *****************");
+	logger.debug("RrsIndexAuth: *************** start *****************");
 	logger.debug("getContextPath :" + request.getContextPath());
 	logger.debug("getPathInfo :" + request.getPathInfo());
 	logger.debug("getPathTranslated :" + request.getPathTranslated());

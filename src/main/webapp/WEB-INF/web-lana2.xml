@@ -72,8 +72,8 @@
 	<servlet-class>nl.mpi.rrs.controller.RrsIndex</servlet-class>
     </servlet>
     <servlet>
-	<servlet-name>RrsIndex2</servlet-name>
-	<servlet-class>nl.mpi.rrs.controller.RrsIndex2</servlet-class>
+	<servlet-name>RrsIndexAuth</servlet-name>
+	<servlet-class>nl.mpi.rrs.controller.RrsIndexAuth</servlet-class>
     </servlet>
     <servlet>
 	<servlet-name>RrsRegis</servlet-name>
@@ -108,8 +108,8 @@
 	<url-pattern>/RrsIndex</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-	<servlet-name>RrsIndex2</servlet-name>
-	<url-pattern>/RrsIndex2</url-pattern>
+	<servlet-name>RrsIndexAuth</servlet-name>
+	<url-pattern>/RrsIndexAuth</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
 	<servlet-name>RrsRegis</servlet-name>

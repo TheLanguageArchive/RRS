@@ -21,7 +21,7 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
         <%@include file="/WEB-INF/include/headerTextRequest.jspf" %>
         <hr />
 
-        <form id="resource_request_form_0" method="post" action="RrsIndex2">
+        <form id="resource_request_form_0" method="post" action="RrsIndexAuth">
 
             <c:if test="${htmlSelectedNodesTable ne ''}">
                 <p class="strong">Your selected Nodes:</p>

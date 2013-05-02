@@ -80,7 +80,7 @@ public class RrsIndex extends HttpServlet {
 
     static boolean createNodesTable(HttpServletRequest request, HttpServletResponse response, CorpusStructureDB corpusDbConnection,
 	    ErrorsRequest errorsRequest, List<String> nodeIds, String htmlSelectedNodesTable) throws IOException, ServletException {
-	logger.debug("RrsIndex2 Context: htmlSelectedNodesTable:" + htmlSelectedNodesTable);
+	logger.debug("RrsIndex Context: htmlSelectedNodesTable:" + htmlSelectedNodesTable);
 	if (htmlSelectedNodesTable == null) {
 	    htmlSelectedNodesTable = "";
 	}
@@ -202,9 +202,9 @@ public class RrsIndex extends HttpServlet {
 	    }
 
 	    if (loggedIn && ug.isExistingUserName(authProvider.getLoggedInUser(request))) {
-		logger.debug("RrsIndex: call index_2.jsp");
+		logger.debug("RrsIndex: call index_auth.jsp");
 
-		RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/page/index_2.jsp");
+		RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/page/index_auth.jsp");
 		view.forward(request, response);
 	    } else {
 		logger.debug("RrsIndex: call index.jsp");
