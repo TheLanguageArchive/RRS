@@ -1,4 +1,4 @@
-INSTRCUTIONS FOR UPGRADING THE RESOURCE REQUEST SYSTEM
+INSTRUCTIONS FOR UPGRADING THE RESOURCE REQUEST SYSTEM
 
 Below are instructions for upgrading from one version of RRS to another. The
 history is kept with the more recent versions coming first. Each section has a
