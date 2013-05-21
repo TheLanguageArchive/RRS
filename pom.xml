@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <parent>
-		<groupId>nl.mpi</groupId>
-		<artifactId>parent</artifactId>
-		<version>1.4</version>
+	<groupId>nl.mpi</groupId>
+	<artifactId>parent</artifactId>
+	<version>1.6.4</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <groupId>nl.mpi</groupId>
@@ -16,7 +16,7 @@
     <url>https://trac.mpi.nl/wiki/ResourceRequestSystem</url>
     <description>Resource Request System for the language archive</description>
 
-	<!-- -= BUILD =- *********************************************************-->
+    <!-- -= BUILD =- *********************************************************-->
     <build>
 	<plugins>
 	    <plugin>
@@ -27,7 +27,7 @@
 		    <target>1.5</target>
 		</configuration>
 	    </plugin>
-			<!-- war file -->
+	    <!-- war file -->
 	    <plugin>
 		<groupId>org.apache.maven.plugins</groupId>
 		<artifactId>maven-war-plugin</artifactId>
@@ -64,9 +64,9 @@
 			    <goal>single</goal>
 			</goals>
 			<configuration>
-				<finalName>${project.artifactId}-${project.version}-r${buildNumber}</finalName>
+			    <finalName>${project.artifactId}-${project.version}-r${buildNumber}</finalName>
 			    <descriptorRefs>
-					<descriptorRef>mpi-deploy</descriptorRef>
+				<descriptorRef>mpi-deploy</descriptorRef>
 			    </descriptorRefs>
 			</configuration>
 		    </execution>
@@ -75,7 +75,7 @@
 	    
 	</plugins>
 
-		<!--** testing ***** -->
+	<!--** testing ***** -->
 	<testSourceDirectory>src/test/java</testSourceDirectory>
 	<testResources>
 	    <testResource>
@@ -89,13 +89,13 @@
 
     </build>
 
-	<!-- -= DEPENDENCIES =- **************************************************-->
+    <!-- -= DEPENDENCIES =- **************************************************-->
     <dependencies>
-		<!-- ** mpi :: lat ***** -->
+	<!-- ** mpi :: lat ***** -->
 	<dependency>
 	    <groupId>nl.mpi</groupId>
 	    <artifactId>corpusstructure-api</artifactId>
-	    <version>1.7.5</version>
+	    <version>1.7.9</version>
 	    <scope>compile</scope>
 	    <exclusions>
 		<exclusion>
@@ -130,14 +130,14 @@
 	    <scope>compile</scope>
 	</dependency>
 
-		<!-- ** spring 2.0 ***** -->
+	<!-- ** spring 2.0 ***** -->
 	<dependency>
 	    <groupId>org.springframework</groupId>
 	    <artifactId>spring</artifactId>
 	    <version>2.5.6</version>
 	    <scope>compile</scope>
 	</dependency>
-		<!-- dbms :: postgres 8 -->
+	<!-- dbms :: postgres 8 -->
 	<dependency>
 	    <groupId>postgresql</groupId>
 	    <artifactId>postgresql</artifactId>
@@ -146,7 +146,7 @@
 	</dependency>
 
 
-		<!-- ** mpi :: lat :: damlr - from delaman ***** -->
+	<!-- ** mpi :: lat :: damlr - from delaman ***** -->
 	<dependency>
 	    <groupId>org.delaman</groupId>
 	    <artifactId>damlr</artifactId>
@@ -159,7 +159,7 @@
 	    <version>2.0</version>
 	</dependency>
 
-		<!-- hibernate -->
+	<!-- hibernate -->
 	<dependency>
 	    <groupId>org.hibernate</groupId>
 	    <artifactId>hibernate</artifactId>
@@ -182,7 +182,7 @@
 	</dependency>
 
 
-		<!-- ** commons, jstl etc... ***** -->
+	<!-- ** commons, jstl etc... ***** -->
 	<dependency>
 	    <groupId>commons-codec</groupId>
 	    <artifactId>commons-codec</artifactId>
@@ -254,9 +254,9 @@
 	    <artifactId>xmlrpc-server</artifactId>
 	    <version>3.1.2</version>
 	</dependency>
-		<!-- collection should be already in tomcat/common/lib... -->
+	<!-- collection should be already in tomcat/common/lib... -->
 
-		<!-- shibboleth -->
+	<!-- shibboleth -->
 	<dependency>
 	    <groupId>de.mpg.mpgaai</groupId>
 	    <artifactId>mpgaai-jaas</artifactId>
@@ -298,10 +298,16 @@
 	    <groupId>${project.groupId}</groupId>
 	    <artifactId>ams2</artifactId>
 	    <version>1.4.9.1</version>
+	    <exclusions>
+		<exclusion>
+		    <artifactId>mpgaai-shhaa</artifactId>
+		    <groupId>de.mpg.mpgaai</groupId>
+		</exclusion>
+	    </exclusions>
 	</dependency>
     </dependencies>
 
-	<!-- -= REPORTING =- *********************************************************-->
+    <!-- -= REPORTING =- *********************************************************-->
 
     <reporting>
 	<plugins>
