@@ -298,6 +298,12 @@
 	    <groupId>${project.groupId}</groupId>
 	    <artifactId>ams2</artifactId>
 	    <version>1.4.9.1</version>
+	    <exclusions>
+		<exclusion>
+		    <artifactId>mpgaai-shhaa</artifactId>
+		    <groupId>de.mpg.mpgaai</groupId>
+		</exclusion>
+	    </exclusions>
 	</dependency>
     </dependencies>
 
