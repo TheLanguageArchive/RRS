@@ -111,16 +111,11 @@
 	    <scope>compile</scope>
 	</dependency>
 
+	<!-- AMS2, also drags in the required Shibboleth dependencies -->
 	<dependency>
 	    <groupId>${project.groupId}</groupId>
 	    <artifactId>ams2</artifactId>
-	    <version>1.4.9.1</version>
-	    <exclusions>
-		<exclusion>
-		    <artifactId>mpgaai-shhaa</artifactId>
-		    <groupId>de.mpg.mpgaai</groupId>
-		</exclusion>
-	    </exclusions>
+	    <version>1.4.9.2</version>
 	</dependency>
 	
 	<dependency>
@@ -160,19 +155,6 @@
 	    <scope>compile</scope>
 	</dependency>
 
-	<!-- shibboleth -->
-	<dependency>
-	    <groupId>de.mpg.mpgaai</groupId>
-	    <artifactId>mpgaai-jaas</artifactId>
-	    <version>1.3.2</version>
-	</dependency>
-
-	<dependency>
-	    <groupId>de.mpg.mpgaai</groupId>
-	    <artifactId>mpgaai-shhaa</artifactId>
-	    <version>1.0.3</version>
-	</dependency>
-	<!-- Findbugs annotations -->
 	<dependency>
 	    <groupId>org.springframework</groupId>
 	    <artifactId>spring-test</artifactId>
