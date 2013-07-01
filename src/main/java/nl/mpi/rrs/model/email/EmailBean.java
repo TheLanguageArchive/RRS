@@ -101,7 +101,7 @@ public class EmailBean {
 	    Transport.send(mailMsg);
 
 	} catch (Exception exc) {
-	    logger.error("Address exption from: " + from + " cc: " + cc);
+	    logger.error("Address exception from: " + from + " cc: " + cc);
 
 	    throw exc;
 

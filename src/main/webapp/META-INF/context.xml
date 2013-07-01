@@ -29,7 +29,7 @@
 	description="REQUIRED - Absolute path to a file for saving pending registrations data (needs read/write access)" />
 	
     <Parameter name="nl.mpi.rrs.archiveUsersIdpName"
-	value="'MPI Nijmegen' from the 'Damlr federation'"
+	value="MPI Nijmegen"
 	description="Name of IdP to be shown to users that have registered unauthenticated. Leave empty to have none shown (e.g. if there is only one or non-shibboleth mode)." />
 
 <!--
@@ -54,7 +54,9 @@
 	value="http://corpus1.mpi.nl/am/ams2/pages/welcome.face" 
 	description="URL AMS lat access management system, will be the destination of the link in the 'Thank you' page at the end of the registration process"  />
 	
-    <Parameter name="nl.mpi.rrs.openPathPrefix" 
+    <!-- Global (non-RRS specific) parameters -->
+	
+    <Parameter name="nl.mpi.imdibrowserOpenPathPrefix" 
 	value="http://corpus1.mpi.nl/ds/imdi_browser?openpath=" 
 	description="Prefix for http link to nodeId e.g.: /corpus1.mpi.nl/ds/imdi_browser?openpath=MPI177915%23" />
 </Context>

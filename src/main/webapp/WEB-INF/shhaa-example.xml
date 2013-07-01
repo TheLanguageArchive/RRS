@@ -11,7 +11,8 @@
         <!-- shib param you don't need to change -->
         <authentication>
             <shibheader>
-                <username>eduPersonPrincipalName</username>
+                <username>oid:eduPersonPrincipalName</username>
+                <username>mace:eduPersonPrincipalName</username>
                 <session>Shib-Session-ID</session>
                 <idp>Shib-Identity-Provider</idp>
                 <timestamp>Shib-Authentication-Instant</timestamp>

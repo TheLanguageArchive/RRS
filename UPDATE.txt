@@ -1,4 +1,4 @@
-INSTRCUTIONS FOR UPGRADING THE RESOURCE REQUEST SYSTEM
+INSTRUCTIONS FOR UPGRADING THE RESOURCE REQUEST SYSTEM
 
 Below are instructions for upgrading from one version of RRS to another. The
 history is kept with the more recent versions coming first. Each section has a
@@ -24,7 +24,7 @@ In the case of a Shibboleth environment, you should also copy your existing
 shhaa.xml file to the new WEB-INF and apply all changes that have been made
 to the example file (shhaa-example.xml) to it.
 
-= Upgrading to 1.5.33877 or higher =
+= Upgrading from 1.4.x or lower to 1.5.x r35953 or higher =
 
 - Most configuration options have changed. See INSTALL.txt for details on how to
 configure web.xml and (in the case of a shibboleth environment) shhaa.xml in the
@@ -39,10 +39,10 @@ EMAIL_HOST -> nl.mpi.smtpHost
 EMAIL_ADDRESS_CORPMAN -> nl.mpi.emailAddressCorpman 
 AMS_INTERFACE_LINK -> nl.mpi.rrs.amsInterfaceLink
 REGISTRATION_FILENAME -> nl.mpi.rrs.registrationFile 
-OPENPATH_PREFIX -> nl.mpi.rrs.openPathPrefix 
 DOBES_COC_LINK -> nl.mpi.rrs.dobesCocLink (semantics have changed!) 
 DOBES_COC_LICENSE_NAME -> nl.mpi.rrs.dobesCocLicenseName
 ARCHIVE_USERS_IDP_NAME -> nl.mpi.rrs.archiveUsersIdpName
+OPENPATH_PREFIX -> nl.mpi.imdibrowserOpenPathPrefix
 
 Please compare your configuration to the parameters mentioned in INSTALL.txt to
 see which parameters are missing!!
@@ -55,3 +55,7 @@ CSDB).
 - Be aware that RRS 1.5 depends on AMS2 version 1.4.9.1. It supplies the package
 but depends on a compatible database structure.
 
+= Upgrading from 1.5.x r33877 or lower to 1.5.x r35953 or higher =
+
+The context parameter nl.mpi.rrs.openPathPrefix has been replaced by
+nl.mpi.imdibrowserOpenPathPrefix

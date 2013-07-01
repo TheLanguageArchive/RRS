@@ -1,0 +1,11 @@
+Change history of Resource Request System (since version 1.5)
+
+1.5.1
+* Fixed error message on failed attempt to send e-mail
+* Fixed issue with registration link on RrsIndex2 page
+* Upgraded to SHHAA filter version 1.0.3
+
+1.5.0
+* Federated shibboleth support
+* Better configuration through context.xml
+* Many minor fixes
