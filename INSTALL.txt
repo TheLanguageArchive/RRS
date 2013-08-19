@@ -60,7 +60,7 @@ Setting up the
 === Context parameters ===
 
 Apart from authentication settings, RRS is configured through context parameters. All RRS-specific
-paramaters are prefixed with 'nl.mpi.rrs' to prevent collisions. This prefix must always be included
+parameters are prefixed with 'nl.mpi.rrs' to prevent collisions. This prefix must always be included
 in the name of the context parameter, e.g.:
 
 	    <Parameter name="nl.mpi.rrs.allowNewInternalUsers" value="true" />
