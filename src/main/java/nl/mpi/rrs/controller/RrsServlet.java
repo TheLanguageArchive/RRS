@@ -351,6 +351,7 @@ public class RrsServlet extends HttpServlet {
 	emailer.setSmtpHost(emailHost);
 	logger.debug("From: " + corpmanEmail);
 	try {
+	    logger.info("Sending access request e-mail by user " + rrsRequest.getUser().getUserName());
 	    emailer.sendMessage();
 	} catch (javax.mail.SendFailedException e) {
 	    ErrorRequest errorRequest = new ErrorRequest();
