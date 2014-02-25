@@ -1,10 +1,6 @@
-<!-- 
-validateRegis.js
-requires functions.js
--->
+//validateRegis.js
+//requires functions.js
 
-<script type="text/javascript">
-<!--
 
 requiredFieldsUser = new Array("paramUserNewUserName",
     "paramUserNewFirstName",
@@ -62,5 +58,3 @@ function validateForm ( form )
     
     return true;
 }
-// -->
-</script>

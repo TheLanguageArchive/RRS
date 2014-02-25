@@ -8,8 +8,13 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
 <html <%@include file="/WEB-INF/include/xhtmlNamespaceAttr.jspf" %>>
 
     <head>
-        <%@include file="/WEB-INF/javascript/functions.js" %>
-        <%@include file="/WEB-INF/javascript/validateRegis.js" %>
+        <script type="text/javascript">
+<!--
+
+            <%@include file="/WEB-INF/javascript/functions.js" %>
+            <%@include file="/WEB-INF/javascript/validateRegis.js" %>
+-->
+        </script>
         <title>ResourceRequest Registration</title>
         <%@include file="/WEB-INF/include/headMeta.jspf" %>
         <link rel="stylesheet" type="text/css" href="css/request.css" />
@@ -31,7 +36,7 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
         <h2 class="error">${rrsRegisErrorMessage} &nbsp;</h2>
 
 
-        <form id="resource_request_registration_form" method="post" action="RrsRegis.do" onsubmit="return validateForm( this )">
+        <form id="resource_request_registration_form" method="post" action="RrsRegis.do" onsubmit="return validateForm(this)">
             <table id="regis">
                 <tr> 
                     <td colspan="2">
@@ -48,16 +53,16 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
                             Your user details will not be used for any purpose other than granting  you access to archived material.<br />
                         </p>
                         <hr />
-			<p>
-			    <strong>
-				In order to request a user account, please send an e-mail to the 
-				<a href="mailto:${corpmanEmail}?subject=[RRS]%20Request%20to%20create%20user%20account%20for%20the%20archive&body=Name:%20%0D%0AE-mail:%20%0D%0AOrganization:%20%0D%0ARemarks:%20%0d%0A"/>archive manager</a>
-				in which you provide the following information:<br /><br />
-				- Full name<br />
-				- E-mail address<br />
-				- Organization<br />
-			    </strong>
-			</p>
+                        <p>
+                            <strong>
+                                In order to request a user account, please send an e-mail to the 
+                                <a href="mailto:${corpmanEmail}?subject=[RRS]%20Request%20to%20create%20user%20account%20for%20the%20archive&body=Name:%20%0D%0AE-mail:%20%0D%0AOrganization:%20%0D%0ARemarks:%20%0d%0A"/>archive manager</a>
+                                in which you provide the following information:<br /><br />
+                                - Full name<br />
+                                - E-mail address<br />
+                                - Organization<br />
+                            </strong>
+                        </p>
                     </td>
                 </tr>
             </table>

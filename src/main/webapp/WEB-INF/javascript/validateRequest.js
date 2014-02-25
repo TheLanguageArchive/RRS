@@ -1,9 +1,6 @@
-<!-- 
-validateRequest.js
--->
+//validateRequest.js
 
-<script type="text/javascript">
-<!-- 
+
 
      requiredFields = new Array( "paramRequestResearchProject",
                                  "paramRequestPublicationAim");
@@ -61,6 +58,3 @@ validateRequest.js
     
     return true;
     }
-
-    // -->
-</script>

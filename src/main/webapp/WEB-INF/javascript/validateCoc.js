@@ -1,9 +1,4 @@
-<!-- 
-coc.js
--->
-
-<script type="text/javascript">
-<!-- 
+//coc.js
 
 function validateForm ( form )
 {
@@ -13,6 +8,3 @@ function validateForm ( form )
         return false;
     }  
 }
-
-//-->
-</script>
