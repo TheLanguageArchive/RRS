@@ -108,7 +108,7 @@ public class RegistrationUser extends User {
 		String arr[] = tmp.split("-");
 		for (int i = 0; i < arr.length; i++) {
 		    try {
-			int charVal = Integer.valueOf(arr[i]) - 1000 - i;
+			int charVal = Integer.parseInt(arr[i]) - 1000 - i;
 			char ch = (char) charVal;
 			result += ch;
 		    } catch (NumberFormatException e) {

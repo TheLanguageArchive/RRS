@@ -219,7 +219,7 @@ public class RrsDate {
     }
     
     public void setYearInt(int yearInt) {
-        this.year = new Integer(year).toString();
+        this.year = Integer.valueOf(year);
         this.yearInt = yearInt;
     }
     

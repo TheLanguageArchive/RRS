@@ -60,7 +60,7 @@ public class RrsDoRegisEmailCheck extends HttpServlet {
 	String userName = request.getParameter("RrsRegisUserName");
 	String userRegisIdStr = request.getParameter("RrsRegisId");
 
-	int userRegisId = new Integer(userRegisIdStr).intValue();
+	int userRegisId = Integer.parseInt(userRegisIdStr);
 
 	request.setAttribute("RrsRegisUserName", userName);
 	request.setAttribute("RrsRegisId", userRegisId);
