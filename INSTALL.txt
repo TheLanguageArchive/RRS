@@ -105,7 +105,7 @@ See META-INF/context.xml for examples.
 	page at the end of the registration process.
 	Example: http://corpus1.mpi.nl/am/ams2/pages/welcome.face
 
-- nl.mpi.rrs.openPathPrefix				(URL)
+- nl.mpi.imdibrowserOpenPathPrefix		(URL)
 	Prefix for http link to nodeId in the IMDI browser. 
 	Example: http://corpus1.mpi.nl/ds/imdi_browser?openpath=
 
