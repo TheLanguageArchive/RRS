@@ -20,8 +20,8 @@
             <fallback>
                 <username>anonymous</username>
             </fallback>
-            <sso action="lI">http://lux16.mpi.nl/Shibboleth.sso/DS</sso>
-            <slo action="lO">http://lux16.mpi.nl/Shibboleth.sso/Logout</slo>
+            <sso action="lI">https://lux16.mpi.nl/Shibboleth.sso/DS</sso>
+            <slo action="lO">https://lux16.mpi.nl/Shibboleth.sso/Logout</slo>
         </authentication>
 
         <composition action="rF">
