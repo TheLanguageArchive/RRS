@@ -11,7 +11,11 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
 <html <%@include file="/WEB-INF/include/xhtmlNamespaceAttr.jspf" %> >
     
     <head>
-    <%@include file="/WEB-INF/javascript/validateRequest.js" %>
+    <script type="text/javascript">
+<!--
+        <%@include file="/WEB-INF/javascript/validateRequest.js" %>
+-->
+    </script>
     <%@include file="/WEB-INF/include/headMeta.jspf" %>
     <link rel="stylesheet" type="text/css" href="css/request.css" />
     <title>ResourceRequest V1</title>

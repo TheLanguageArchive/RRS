@@ -12,7 +12,8 @@
         <script type="text/javascript">
 <!--
             <%@include file="/WEB-INF/javascript/validateCoc.js" %>
-            -- >        </script>
+-- >        
+        </script>
         <%@include file="/WEB-INF/include/headMeta.jspf" %>
         <link rel="stylesheet" type="text/css" href="css/request.css" />
         <c:choose>
