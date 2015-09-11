@@ -175,6 +175,7 @@ public class RrsDoRegis extends HttpServlet {
 	    logger.info("User ID is already taken: " + userId);
 	    return request.getRequestDispatcher("/WEB-INF/view/page/regis2.jsp");
 	} else {
+            regisFileIO.removeOldRegistrationsFromFile(RrsConstants.REGISTRATION_EXPIRATION_DAYS);
 	    if (regisFileIO.isRegistrationInFile(userInfo)) {
 		request.setAttribute("rrsRegisErrorMessage", "This User ID is already reserved, please use a different one!");
 

@@ -11,8 +11,8 @@
         <!-- shib param you don't need to change -->
         <authentication>
             <shibheader>
-                <username>oid:eduPersonPrincipalName</username>
-                <username>mace:eduPersonPrincipalName</username>
+                <username>eduPersonPrincipalName</username>
+                <username>eduPersonTargetedID</username>
                 <session>Shib-Session-ID</session>
                 <idp>Shib-Identity-Provider</idp>
                 <timestamp>Shib-Authentication-Instant</timestamp>
@@ -20,7 +20,7 @@
             <fallback>
                 <username>anonymous</username>
             </fallback>
-            <sso action="lI">https://lux16.mpi.nl/Shibboleth.sso/DS</sso>
+            <sso action="lI">https://lux16.mpi.nl/Shibboleth.sso/Login</sso>
             <slo action="lO">https://lux16.mpi.nl/Shibboleth.sso/Logout</slo>
         </authentication>
 

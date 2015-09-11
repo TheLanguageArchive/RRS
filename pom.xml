@@ -44,6 +44,7 @@
                             <filtering>true</filtering>
                         </resource>
                     </webResources>
+                    <packagingExcludes>WEB-INF/web.xml</packagingExcludes>
                 </configuration>
             </plugin>
             <plugin>
@@ -115,7 +116,7 @@
 	<dependency>
 	    <groupId>${project.groupId}</groupId>
 	    <artifactId>ams2</artifactId>
-	    <version>1.4.9.2</version>
+	    <version>1.5.1</version>
 	</dependency>
 
         <!-- Logging binding -->

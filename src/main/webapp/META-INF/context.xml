@@ -11,7 +11,7 @@
     <!-- Email configuration -->
     
     <Parameter name="nl.mpi.smtpHost" 
-	value="mailhost.mpi.nl"
+	value="smtphost.mpi.nl"
 	description="SMTP server for sending e-mails to user and corpman" />
 	
     <Parameter name="nl.mpi.emailAddressCorpman" 

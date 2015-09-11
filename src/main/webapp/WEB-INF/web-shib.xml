@@ -56,7 +56,25 @@
 	<description>Context listener</description>
 	<listener-class>nl.mpi.rrs.RrsContextListener</listener-class>
     </listener>
-
+    
+    <!-- Force UTF-8 encoding -->
+    <filter>
+        <filter-name>SetCharacterEncodingFilter</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF8</param-value>
+        </init-param>
+        <init-param>
+            <param-name>forceEncoding</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>SetCharacterEncodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    
     <servlet>
 	<servlet-name>RRSServlet</servlet-name>
 	<servlet-class>nl.mpi.rrs.controller.RrsServlet</servlet-class>
@@ -154,4 +172,11 @@
 	<exception-type>java.lang.Throwable</exception-type>
 	<location>/view/error/errorUnknown.jsp</location>
     </error-page>
+    
+    <jsp-config>
+        <jsp-property-group>
+            <url-pattern>*.jsp</url-pattern>
+            <page-encoding>UTF-8</page-encoding>
+        </jsp-property-group>
+    </jsp-config>
 </web-app>

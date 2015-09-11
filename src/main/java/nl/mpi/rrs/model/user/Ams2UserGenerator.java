@@ -113,7 +113,7 @@ public class Ams2UserGenerator implements UserGenerator {
                 result = true;
             }
         } catch (DataSourceException ex) {
-            _log.error("User not found: " + userName);
+            _log.info("User not found: " + userName);
             return false;
         }
 
