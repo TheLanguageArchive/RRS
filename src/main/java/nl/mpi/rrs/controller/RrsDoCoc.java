@@ -34,7 +34,6 @@ import org.apache.commons.logging.LogFactory;
 public class RrsDoCoc extends HttpServlet {
 
     private static Log logger = LogFactory.getLog(RrsDoCoc.class);
-    public final int REGISTRATION_EXPIRATION_DAYS = 30;
 
     /**
      * Processes requests for both HTTP
@@ -100,7 +99,7 @@ public class RrsDoCoc extends HttpServlet {
 	    checkEmailLinkBase.append("/");
 	}
 
-	regisFileIO.removeOldRegistrationsFromFile(REGISTRATION_EXPIRATION_DAYS);
+	regisFileIO.removeOldRegistrationsFromFile(RrsConstants.REGISTRATION_EXPIRATION_DAYS);
 
 	RrsRegistration rrsRegistration = new RrsRegistration();
 	rrsRegistration.setUser(userInfo);
