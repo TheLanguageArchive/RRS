@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Serializable;
+import java.io.Writer;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -24,7 +25,7 @@ import org.apache.commons.logging.LogFactory;
 public class RegisFileIO implements Serializable {
 
     public RegisFileIO(String registrationFilename) {
-	this.setRegistrationFilename(registrationFilename);
+        this.setRegistrationFilename(registrationFilename);
     }
     // sequence of fields in delimited file
     private final int USER_ID = 0;
@@ -47,375 +48,377 @@ public class RegisFileIO implements Serializable {
      * set field CocSigned to true in user record
      *
      * @param userInfo User object
-     * @return true if sucessful
+     * @return true if successful
      */
     public synchronized boolean updateCocSigned(RegistrationUser userInfo) {
-	boolean success = false;
+        try {
+            return updateRegisFile(userInfo);
+        } catch (FileNotFoundException e) {
+            _log.error("Error file not found: " + e.getMessage());
+        } catch (IOException e) {
+            _log.error("Error file processing: " + e.getMessage());
+        }
+        return false;
+    }
 
-	String newLine = "\n";
+    private boolean updateRegisFile(RegistrationUser userInfo) throws IOException {
+        boolean success = false;
+        final String newLine = "\n";
+        final String backupFilename = registrationFilename + ".tmp";
+        final String cmd = "mv " + backupFilename + " " + registrationFilename;
 
-	synchronized (this) {
+        final BufferedReader reader = newReader();
+        try {
+            final Writer writer = newWriter(backupFilename);
+            try {
+                String line;
+                while (((line = reader.readLine()) != null)) {
+                    String fields[] = line.split(delim);
 
-	    String backupFilename = registrationFilename + ".tmp";
-	    String cmd = "mv " + backupFilename + " " + registrationFilename;
+                    if (fields.length == FIELDS_COUNT) {
+                        String userId = fields[USER_ID];
 
-	    FileWriter writer;
-	    try {
+                        if (userInfo.getUserName().equalsIgnoreCase(userId)) {
+                            userInfo.setDobesCocSigned(true);
+                            String userRecord = userInfo.createUserRecordAsString(newLine, delim, nodeIdDelim);
+                            writer.write(userRecord);
+                            success = true;
+                        } else {
+                            writer.write(line + newLine);
+                        }
 
-		writer = new FileWriter(backupFilename);
+                    }
 
-		BufferedReader buffReader = new BufferedReader(new FileReader(getRegistrationFilename()));
+                }
+            } finally {
+                writer.close();
+            }
+        } finally {
+            reader.close();
+        }
 
-		String line;
-		while (((line = buffReader.readLine()) != null)) {
-		    String fields[] = line.split(delim);
+        if (success) {
+            success = RrsUtil.execCommand(cmd);
+            if (success) {
+                _log.debug("Successful execute of cmd: " + cmd);
+            } else {
+                _log.error("Can't execute cmd: " + cmd);
+            }
+        }
 
-		    if (fields.length == FIELDS_COUNT) {
-			String userId = fields[USER_ID];
+        return success;
+    }
 
-			if (userInfo.getUserName().equalsIgnoreCase(userId)) {
-			    userInfo.setDobesCocSigned(true);
-			    String userRecord = userInfo.createUserRecordAsString(newLine, delim, nodeIdDelim);
-			    writer.write(userRecord);
-			    success = true;
-			} else {
-			    writer.write(line + newLine);
-			}
+    private BufferedReader newReader() throws FileNotFoundException {
+        return new BufferedReader(new FileReader(getRegistrationFilename()));
+    }
 
+    private Writer newWriter(final String fileName) throws IOException {
+        return new FileWriter(fileName);
+    }
 
-		    }
-
-		}
-
-		writer.close();
-		buffReader.close();
-
-		if (success) {
-		    success = RrsUtil.execCommand(cmd);
-		    if (success) {
-			_log.debug("Successful execute of cmd: " + cmd);
-		    } else {
-			_log.error("Can't execute cmd: " + cmd);
-		    }
-		}
-
-
-	    } catch (FileNotFoundException e) {
-		success = false;
-		_log.error("Error file not found: " + e.getMessage());
-	    } catch (IOException e) {
-		success = false;
-		_log.error("Error file processing: " + e.getMessage());
-	    }
-
-
-	}
-
-	return success;
+    private Writer newAppendWriter(final String fileName) throws IOException {
+        return new FileWriter(fileName, true);
     }
 
     public synchronized boolean removeRegistrationFromFile(RegistrationUser userInfo) {
-	boolean success = false;
+        boolean success = false;
 
-	String newLine = "\n";
+        String newLine = "\n";
 
-	synchronized (this) {
+        synchronized (this) {
 
-	    String backupFilename = registrationFilename + ".tmp";
-	    String cmd = "mv " + backupFilename + " " + registrationFilename;
+            String backupFilename = registrationFilename + ".tmp";
+            String cmd = "mv " + backupFilename + " " + registrationFilename;
 
-	    FileWriter writer;
-	    try {
+            try {
 
-		writer = new FileWriter(backupFilename);
+                final BufferedReader buffReader = newReader();
+                try {
+                    final Writer writer = newWriter(backupFilename);
+                    try {
+                        String line;
+                        while (((line = buffReader.readLine()) != null)) {
+                            String fields[] = line.split(delim);
 
-		BufferedReader buffReader = new BufferedReader(new FileReader(getRegistrationFilename()));
+                            if (fields.length == FIELDS_COUNT) {
+                                String userId = fields[USER_ID];
 
-		String line;
-		while (((line = buffReader.readLine()) != null)) {
-		    String fields[] = line.split(delim);
+                                if (userInfo.getUserName().contentEquals(userId)) {
+                                    success = true;
+                                } else {
+                                    writer.write(line + newLine);
+                                }
 
-		    if (fields.length == FIELDS_COUNT) {
-			String userId = fields[USER_ID];
+                            }
 
-			if (userInfo.getUserName().contentEquals(userId)) {
-			    success = true;
-			} else {
-			    writer.write(line + newLine);
-			}
+                        }
+                    } finally {
+                        writer.close();
+                    }
+                } finally {
+                    buffReader.close();
+                }
 
+                if (success) {
+                    success = RrsUtil.execCommand(cmd);
+                    if (success) {
+                        _log.debug("Successful execute of cmd: " + cmd);
+                    } else {
+                        _log.error("Can't execute cmd: " + cmd);
+                    }
+                }
 
-		    }
+            } catch (FileNotFoundException e) {
+                success = false;
+                _log.error("Error file not found: " + e.getMessage());
+            } catch (IOException e) {
+                success = false;
+                _log.error("Error file processing: " + e.getMessage());
+            }
 
-		}
+        }
 
-		writer.close();
-		buffReader.close();
-
-		if (success) {
-		    success = RrsUtil.execCommand(cmd);
-		    if (success) {
-			_log.debug("Successful execute of cmd: " + cmd);
-		    } else {
-			_log.error("Can't execute cmd: " + cmd);
-		    }
-		}
-
-
-	    } catch (FileNotFoundException e) {
-		success = false;
-		_log.error("Error file not found: " + e.getMessage());
-	    } catch (IOException e) {
-		success = false;
-		_log.error("Error file processing: " + e.getMessage());
-	    }
-
-
-	}
-
-	return success;
+        return success;
     }
 
     public synchronized int removeOldRegistrationsFromFile(int ageInDays) {
-	int recordsRemoved = 0;
-	boolean success = false;
+        int recordsRemoved = 0;
+        boolean success = false;
 
-	String newLine = "\n";
+        String newLine = "\n";
 
-	synchronized (this) {
+        synchronized (this) {
 
-	    String backupFilename = registrationFilename + ".tmp";
-	    String cmd = "mv " + backupFilename + " " + registrationFilename;
+            String backupFilename = registrationFilename + ".tmp";
+            String cmd = "mv " + backupFilename + " " + registrationFilename;
 
-	    FileWriter writer;
-	    try {
+            try {
 
-		writer = new FileWriter(backupFilename);
+                final BufferedReader buffReader = newReader();
+                try {
+                    final Writer writer = newWriter(backupFilename);
+                    try {
 
-		BufferedReader buffReader = new BufferedReader(new FileReader(getRegistrationFilename()));
+                        String line;
+                        while (((line = buffReader.readLine()) != null)) {
+                            String fields[] = line.split(delim);
 
-		String line;
-		while (((line = buffReader.readLine()) != null)) {
-		    String fields[] = line.split(delim);
+                            if (fields.length == FIELDS_COUNT) {
+                                String userCreation = fields[USER_CREATION];
 
-		    if (fields.length == FIELDS_COUNT) {
-			String userCreation = fields[USER_CREATION];
+                                Date userCreationDate = new Date();
 
-			Date userCreationDate = new Date();
+                                try {
+                                    userCreationDate = new SimpleDateFormat("MMM dd, yyyy").parse(userCreation);
+                                } catch (ParseException e) {
+                                    _log.error("Invalid date: " + userCreation + " : " + e.getMessage());
+                                }
 
-			try {
-			    userCreationDate = new SimpleDateFormat("MMM dd, yyyy").parse(userCreation);
-			} catch (ParseException e) {
-			    _log.error("Invalid date: " + userCreation + " : " + e.getMessage());
-			}
+                                if (RrsUtil.dateDiffFromToday(userCreationDate) > ageInDays) {
+                                    recordsRemoved++;
+                                    success = true;
+                                } else {
+                                    writer.write(line + newLine);
+                                }
 
-			if (RrsUtil.dateDiffFromToday(userCreationDate) > ageInDays) {
-			    recordsRemoved++;
-			    success = true;
-			} else {
-			    writer.write(line + newLine);
-			}
+                            }
 
+                        }
+                    } finally {
+                        writer.close();
+                    }
+                } finally {
+                    buffReader.close();
+                }
 
-		    }
+                if (success) {
+                    success = RrsUtil.execCommand(cmd);
+                    if (success) {
+                        _log.debug("Successful execute of cmd: " + cmd);
+                    } else {
+                        _log.error("Can't execute cmd: " + cmd);
+                    }
+                }
 
-		}
+            } catch (FileNotFoundException e) {
+                success = false;
+                _log.error("Error file not found: " + e.getMessage());
+            } catch (IOException e) {
+                success = false;
+                _log.error("Error file processing: " + e.getMessage());
+            }
 
-		writer.close();
-		buffReader.close();
+        }
 
-		if (success) {
-		    success = RrsUtil.execCommand(cmd);
-		    if (success) {
-			_log.debug("Successful execute of cmd: " + cmd);
-		    } else {
-			_log.error("Can't execute cmd: " + cmd);
-		    }
-		}
+        _log.debug(recordsRemoved + " records removed from registration file.");
 
-
-	    } catch (FileNotFoundException e) {
-		success = false;
-		_log.error("Error file not found: " + e.getMessage());
-	    } catch (IOException e) {
-		success = false;
-		_log.error("Error file processing: " + e.getMessage());
-	    }
-
-
-	}
-
-	_log.debug(recordsRemoved + " records removed from registration file.");
-
-	return recordsRemoved;
+        return recordsRemoved;
     }
 
     public synchronized boolean writeRegistrationToFile(RegistrationUser userInfo) {
-	boolean success = true;
-	boolean append = true;
+        boolean success = true;
 
-	synchronized (this) {
-	    FileWriter writer;
+        synchronized (this) {
+            try {
+                final Writer writer = newAppendWriter(getRegistrationFilename());
+                try {
+                    String newLine = "\n";
 
-	    try {
-		writer = new FileWriter(getRegistrationFilename(), append);
-		String newLine = "\n";
+                    String userRecord = userInfo.createUserRecordAsString(newLine, delim, nodeIdDelim);
+                    writer.write(userRecord);
+                } finally {
+                    writer.close();
+                }
+            } catch (FileNotFoundException e) {
+                success = false;
+                _log.error("message: " + e.getMessage());
+                _log.error("Can't write to file: " + getRegistrationFilename());
+            } catch (IOException e) {
+                success = false;
+                _log.error("Error file processing: " + getRegistrationFilename());
+            }
 
-		String userRecord = userInfo.createUserRecordAsString(newLine, delim, nodeIdDelim);
-		writer.write(userRecord);
+        }
 
-		writer.close();
-
-
-	    } catch (FileNotFoundException e) {
-		success = false;
-		_log.error("message: " + e.getMessage());
-		_log.error("Can't write to file: " + getRegistrationFilename());
-	    } catch (IOException e) {
-		success = false;
-		_log.error("Error file processing: " + getRegistrationFilename());
-	    }
-
-	}
-
-	return success;
+        return success;
 
     }
 
     public boolean isRegistrationInFile(RegistrationUser userInfo) {
 
-	boolean success = false;
+        boolean success = false;
 
-	synchronized (this) {
-	    try {
-		BufferedReader buffReader = new BufferedReader(new FileReader(getRegistrationFilename()));
+        synchronized (this) {
+            try {
+                BufferedReader buffReader = newReader();
+                try {
 
-		String line;
-		while (((line = buffReader.readLine()) != null) && (!success)) {
-		    String fields[] = line.split(delim);
+                    String line;
+                    while (((line = buffReader.readLine()) != null) && (!success)) {
+                        String fields[] = line.split(delim);
 
-		    if (fields.length == FIELDS_COUNT) {
-			String userId = fields[USER_ID];
-			String userFirstName = fields[USER_FIRST_NAME];
-			String userLastName = fields[USER_LAST_NAME];
-			String userEmail = fields[USER_EMAIL];
-			String userOrganization = fields[USER_ORGANIZATION];
-			String userPassword = fields[USER_PASSWORD];
-			String userDobesCocSigned = fields[USER_DOBES_COC_SIGNED];
-			String userNodeIds = fields[USER_NODE_IDS];
-			String userCreation = fields[USER_CREATION];
+                        if (fields.length == FIELDS_COUNT) {
+                            String userId = fields[USER_ID];
+                            String userFirstName = fields[USER_FIRST_NAME];
+                            String userLastName = fields[USER_LAST_NAME];
+                            String userEmail = fields[USER_EMAIL];
+                            String userOrganization = fields[USER_ORGANIZATION];
+                            String userPassword = fields[USER_PASSWORD];
+                            String userDobesCocSigned = fields[USER_DOBES_COC_SIGNED];
+                            String userNodeIds = fields[USER_NODE_IDS];
+                            String userCreation = fields[USER_CREATION];
 
+                            if (userInfo.getUserName().equalsIgnoreCase(userId)) {
+                                _log.debug("Found registrated user:");
+                                _log.debug("userId: " + userId);
+                                _log.debug("userFirstName: " + userFirstName);
+                                _log.debug("userLastName: " + userLastName);
+                                _log.debug("userEmail: " + userEmail);
+                                _log.debug("userOrganization: " + userOrganization);
+                                _log.debug("userPassword: " + userPassword);
+                                _log.debug("userDobesCocSigned: " + userDobesCocSigned);
+                                _log.debug("userNodeIds: " + userNodeIds);
+                                _log.debug("userCreation: " + userCreation);
+                                success = true;
+                            }
+                        }
+                    }
+                } finally {
+                    buffReader.close();
+                }
 
-			if (userInfo.getUserName().equalsIgnoreCase(userId)) {
-			    _log.debug("Found registrated user:");
-			    _log.debug("userId: " + userId);
-			    _log.debug("userFirstName: " + userFirstName);
-			    _log.debug("userLastName: " + userLastName);
-			    _log.debug("userEmail: " + userEmail);
-			    _log.debug("userOrganization: " + userOrganization);
-			    _log.debug("userPassword: " + userPassword);
-			    _log.debug("userDobesCocSigned: " + userDobesCocSigned);
-			    _log.debug("userNodeIds: " + userNodeIds);
-			    _log.debug("userCreation: " + userCreation);
-			    success = true;
-			}
-		    }
-		}
+            } catch (FileNotFoundException e) {
+                success = false;
+                _log.error("message: " + e.getMessage());
+                _log.error("Can't find file: " + getRegistrationFilename());
+            } catch (IOException e) {
+                success = false;
+                _log.error("Error file processing: " + getRegistrationFilename());
+            }
+        }
 
-
-		buffReader.close();
-
-	    } catch (FileNotFoundException e) {
-		success = false;
-		_log.error("message: " + e.getMessage());
-		_log.error("Can't find file: " + getRegistrationFilename());
-	    } catch (IOException e) {
-		success = false;
-		_log.error("Error file processing: " + getRegistrationFilename());
-	    }
-	}
-
-	return success;
+        return success;
 
     }
 
     public RegistrationUser getRegistrationFromFile(String userName) {
-	RegistrationUser userInfo = new RegistrationUser();
+        RegistrationUser userInfo = new RegistrationUser();
 
-	synchronized (this) {
-	    try {
-		BufferedReader buffReader = new BufferedReader(new FileReader(getRegistrationFilename()));
+        synchronized (this) {
+            try {
+                BufferedReader buffReader = newReader();
+                try {
+                    String line;
+                    boolean found = false;
+                    while (((line = buffReader.readLine()) != null) && (!found)) {
+                        String fields[] = line.split(delim);
 
-		String line;
-		boolean found = false;
-		while (((line = buffReader.readLine()) != null) && (!found)) {
-		    String fields[] = line.split(delim);
+                        if (fields.length == FIELDS_COUNT) {
+                            String userId = fields[USER_ID];
+                            String userFirstName = fields[USER_FIRST_NAME];
+                            String userLastName = fields[USER_LAST_NAME];
+                            String userEmail = fields[USER_EMAIL];
+                            String userOrganization = fields[USER_ORGANIZATION];
+                            String userPassword = RegistrationUser.decodePassword(fields[USER_PASSWORD]);
+                            String userDobesCocSigned = fields[USER_DOBES_COC_SIGNED];
+                            String userNodeIds = fields[USER_NODE_IDS];
+                            String userCreation = fields[USER_CREATION];
 
-		    if (fields.length == FIELDS_COUNT) {
-			String userId = fields[USER_ID];
-			String userFirstName = fields[USER_FIRST_NAME];
-			String userLastName = fields[USER_LAST_NAME];
-			String userEmail = fields[USER_EMAIL];
-			String userOrganization = fields[USER_ORGANIZATION];
-			String userPassword = RegistrationUser.decodePassword(fields[USER_PASSWORD]);
-			String userDobesCocSigned = fields[USER_DOBES_COC_SIGNED];
-			String userNodeIds = fields[USER_NODE_IDS];
-			String userCreation = fields[USER_CREATION];
+                            if (userName.equalsIgnoreCase(userId)) {
+                                userInfo.setUserName(userId);
+                                userInfo.setFirstName(userFirstName);
+                                userInfo.setLastName(userLastName);
+                                userInfo.setEmail(userEmail);
+                                userInfo.setOrganization(userOrganization);
+                                userInfo.setPassword(userPassword);
+                                userInfo.setDobesCocSigned(Boolean.valueOf(userDobesCocSigned));
+                                userInfo.setNodeIds(nodeIdsStringToList(userNodeIds));
+                                userInfo.setCreation_ts(userCreation);
 
-			if (userName.equalsIgnoreCase(userId)) {
-			    userInfo.setUserName(userId);
-			    userInfo.setFirstName(userFirstName);
-			    userInfo.setLastName(userLastName);
-			    userInfo.setEmail(userEmail);
-			    userInfo.setOrganization(userOrganization);
-			    userInfo.setPassword(userPassword);
-			    userInfo.setDobesCocSigned(Boolean.valueOf(userDobesCocSigned));
-			    userInfo.setNodeIds(nodeIdsStringToList(userNodeIds));
-			    userInfo.setCreation_ts(userCreation);
+                                _log.debug("Found registrated user:");
+                                _log.debug("userId: " + userId);
+                                _log.debug("userFirstName: " + userFirstName);
+                                _log.debug("userLastName: " + userLastName);
+                                _log.debug("userEmail: " + userEmail);
+                                _log.debug("userOrganization: " + userOrganization);
+                                //_log.info("userPassword: " + userPassword);
+                                _log.debug("userDobesCocSigned: " + userDobesCocSigned);
+                                _log.debug("userNodeIds: " + userNodeIds);
+                                _log.debug("userCreation: " + userCreation);
+                                found = true;
+                            }
+                        }
+                    }
+                } finally {
+                    buffReader.close();
+                }
 
-			    _log.debug("Found registrated user:");
-			    _log.debug("userId: " + userId);
-			    _log.debug("userFirstName: " + userFirstName);
-			    _log.debug("userLastName: " + userLastName);
-			    _log.debug("userEmail: " + userEmail);
-			    _log.debug("userOrganization: " + userOrganization);
-			    //_log.info("userPassword: " + userPassword);
-			    _log.debug("userDobesCocSigned: " + userDobesCocSigned);
-			    _log.debug("userNodeIds: " + userNodeIds);
-			    _log.debug("userCreation: " + userCreation);
-			    found = true;
-			}
-		    }
-		}
+            } catch (FileNotFoundException e) {
+                _log.error("message: " + e.getMessage());
+                _log.error("Can't find file: " + getRegistrationFilename());
+            } catch (IOException e) {
+                _log.error("Error file processing: " + getRegistrationFilename());
+            }
+        }
 
-
-		buffReader.close();
-
-	    } catch (FileNotFoundException e) {
-		_log.error("message: " + e.getMessage());
-		_log.error("Can't find file: " + getRegistrationFilename());
-	    } catch (IOException e) {
-		_log.error("Error file processing: " + getRegistrationFilename());
-	    }
-	}
-
-	return userInfo;
+        return userInfo;
 
     }
 
     private List<String> nodeIdsStringToList(String userNodeIds) {
-	if (userNodeIds.trim().equalsIgnoreCase(EMPTY_NODE_IDS_LIST)) {
-	    return Collections.emptyList();
-	} else {
-	    return Arrays.asList(userNodeIds.split(nodeIdDelim));
-	}
+        if (userNodeIds.trim().equalsIgnoreCase(EMPTY_NODE_IDS_LIST)) {
+            return Collections.emptyList();
+        } else {
+            return Arrays.asList(userNodeIds.split(nodeIdDelim));
+        }
     }
 
     public final synchronized String getRegistrationFilename() {
-	return registrationFilename;
+        return registrationFilename;
     }
 
     public final synchronized void setRegistrationFilename(String registrationFilename) {
-	this.registrationFilename = registrationFilename;
+        this.registrationFilename = registrationFilename;
     }
 }
