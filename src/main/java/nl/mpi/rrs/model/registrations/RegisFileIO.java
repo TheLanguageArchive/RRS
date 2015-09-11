@@ -1,6 +1,7 @@
 package nl.mpi.rrs.model.registrations;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -45,6 +46,7 @@ public class RegisFileIO implements Serializable {
     private final String nodeIdDelim = ",";
     public static final String EMPTY_NODE_IDS_LIST = "-";
     public static final String FILE_ENCODING = "UTF-8";
+    public static final String TMP_PREFIX = ".tmp";
     private static Log _log = LogFactory.getLog(RegisFileIO.class);
 
     /**
@@ -67,8 +69,7 @@ public class RegisFileIO implements Serializable {
     private boolean updateRegisFile(RegistrationUser userInfo) throws IOException {
         boolean success = false;
         final String newLine = "\n";
-        final String backupFilename = registrationFilename + ".tmp";
-        final String cmd = "mv " + backupFilename + " " + registrationFilename;
+        final String backupFilename = registrationFilename + TMP_PREFIX;
 
         final BufferedReader reader = newReader(getRegistrationFilename());
         try {
@@ -101,12 +102,17 @@ public class RegisFileIO implements Serializable {
         }
 
         if (success) {
+            final String cmd = getMoveCommand(backupFilename, getRegistrationFilename());
             success = RrsUtil.execCommand(cmd);
             if (success) {
                 _log.debug("Successful execute of cmd: " + cmd);
+                setSafePermissions(getRegistrationFilename());
             } else {
                 _log.error("Can't execute cmd: " + cmd);
             }
+        } else {
+            //remove backup file
+            removeBackupFile(backupFilename);
         }
 
         return success;
@@ -119,8 +125,7 @@ public class RegisFileIO implements Serializable {
 
         synchronized (this) {
 
-            String backupFilename = registrationFilename + ".tmp";
-            String cmd = "mv " + backupFilename + " " + registrationFilename;
+            final String backupFilename = registrationFilename + TMP_PREFIX;
 
             try {
 
@@ -152,12 +157,17 @@ public class RegisFileIO implements Serializable {
                 }
 
                 if (success) {
+                    final String cmd = getMoveCommand(backupFilename, getRegistrationFilename());
                     success = RrsUtil.execCommand(cmd);
                     if (success) {
                         _log.debug("Successful execute of cmd: " + cmd);
+                        setSafePermissions(getRegistrationFilename());
                     } else {
                         _log.error("Can't execute cmd: " + cmd);
                     }
+                } else {
+                    //remove backup file
+                    removeBackupFile(backupFilename);
                 }
 
             } catch (FileNotFoundException e) {
@@ -181,8 +191,7 @@ public class RegisFileIO implements Serializable {
 
         synchronized (this) {
 
-            String backupFilename = registrationFilename + ".tmp";
-            String cmd = "mv " + backupFilename + " " + registrationFilename;
+            final String backupFilename = registrationFilename + TMP_PREFIX;
 
             try {
 
@@ -224,12 +233,17 @@ public class RegisFileIO implements Serializable {
                 }
 
                 if (success) {
+                    final String cmd = getMoveCommand(backupFilename, getRegistrationFilename());
                     success = RrsUtil.execCommand(cmd);
                     if (success) {
                         _log.debug("Successful execute of cmd: " + cmd);
+                        setSafePermissions(getRegistrationFilename());
                     } else {
                         _log.error("Can't execute cmd: " + cmd);
                     }
+                } else {
+                    //remove backup file
+                    removeBackupFile(backupFilename);
                 }
 
             } catch (FileNotFoundException e) {
@@ -272,8 +286,9 @@ public class RegisFileIO implements Serializable {
 
         }
 
-        return success;
+        setSafePermissions(getRegistrationFilename());
 
+        return success;
     }
 
     public boolean isRegistrationInFile(RegistrationUser userInfo) {
@@ -406,7 +421,7 @@ public class RegisFileIO implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return Reader for the specified file with correct encoding set
      */
     private BufferedReader newReader(final String fileName) throws FileNotFoundException {
@@ -421,7 +436,7 @@ public class RegisFileIO implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return File writer for the specified file with correct encoding set
      */
     private Writer newWriter(final String fileName) throws IOException {
@@ -429,11 +444,36 @@ public class RegisFileIO implements Serializable {
     }
 
     /**
-     * 
-     * @return Appending file writer for the specified file with correct encoding set
+     *
+     * @return Appending file writer for the specified file with correct
+     * encoding set
      */
     private Writer newAppendWriter(final String fileName) throws IOException {
         return new FileWriterWithEncoding(fileName, FILE_ENCODING, true);
+    }
+
+    /**
+     * Sets file permissions to readable by owner only
+     *
+     * @param fileName
+     */
+    private void setSafePermissions(final String fileName) {
+        if (new File(fileName).exists()) {
+            final String cmd = String.format("/bin/chmod 600 %s", fileName);
+            if (!RrsUtil.execCommand(cmd)) {
+                _log.warn("Could not execute " + cmd);
+            }
+        }
+    }
+
+    private String getMoveCommand(final String src, final String target) {
+        return String.format("/bin/mv %s %s", src, target);
+    }
+    
+    private void removeBackupFile(final String backupFilename) {
+        if (!new File(backupFilename).delete()) {
+            _log.warn("Failed to delete temporary registration file " + backupFilename);
+        }
     }
 
     public final synchronized String getRegistrationFilename() {
