@@ -1,6 +1,5 @@
 package nl.mpi.rrs.model.registrations;
 
-import edu.emory.mathcs.backport.java.util.Collections;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -10,6 +9,7 @@ import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import nl.mpi.rrs.model.user.RegistrationUser;
