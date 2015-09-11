@@ -1,11 +1,12 @@
 package nl.mpi.rrs.model.registrations;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -15,6 +16,7 @@ import java.util.Date;
 import java.util.List;
 import nl.mpi.rrs.model.user.RegistrationUser;
 import nl.mpi.rrs.model.utilities.RrsUtil;
+import org.apache.commons.io.output.FileWriterWithEncoding;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -42,6 +44,7 @@ public class RegisFileIO implements Serializable {
     private final String delim = "\t";
     private final String nodeIdDelim = ",";
     public static final String EMPTY_NODE_IDS_LIST = "-";
+    public static final String FILE_ENCODING = "UTF-8";
     private static Log _log = LogFactory.getLog(RegisFileIO.class);
 
     /**
@@ -67,7 +70,7 @@ public class RegisFileIO implements Serializable {
         final String backupFilename = registrationFilename + ".tmp";
         final String cmd = "mv " + backupFilename + " " + registrationFilename;
 
-        final BufferedReader reader = newReader();
+        final BufferedReader reader = newReader(getRegistrationFilename());
         try {
             final Writer writer = newWriter(backupFilename);
             try {
@@ -109,18 +112,6 @@ public class RegisFileIO implements Serializable {
         return success;
     }
 
-    private BufferedReader newReader() throws FileNotFoundException {
-        return new BufferedReader(new FileReader(getRegistrationFilename()));
-    }
-
-    private Writer newWriter(final String fileName) throws IOException {
-        return new FileWriter(fileName);
-    }
-
-    private Writer newAppendWriter(final String fileName) throws IOException {
-        return new FileWriter(fileName, true);
-    }
-
     public synchronized boolean removeRegistrationFromFile(RegistrationUser userInfo) {
         boolean success = false;
 
@@ -133,7 +124,7 @@ public class RegisFileIO implements Serializable {
 
             try {
 
-                final BufferedReader buffReader = newReader();
+                final BufferedReader buffReader = newReader(getRegistrationFilename());
                 try {
                     final Writer writer = newWriter(backupFilename);
                     try {
@@ -195,7 +186,7 @@ public class RegisFileIO implements Serializable {
 
             try {
 
-                final BufferedReader buffReader = newReader();
+                final BufferedReader buffReader = newReader(getRegistrationFilename());
                 try {
                     final Writer writer = newWriter(backupFilename);
                     try {
@@ -291,7 +282,7 @@ public class RegisFileIO implements Serializable {
 
         synchronized (this) {
             try {
-                BufferedReader buffReader = newReader();
+                BufferedReader buffReader = newReader(getRegistrationFilename());
                 try {
 
                     String line;
@@ -347,7 +338,7 @@ public class RegisFileIO implements Serializable {
 
         synchronized (this) {
             try {
-                BufferedReader buffReader = newReader();
+                BufferedReader buffReader = newReader(getRegistrationFilename());
                 try {
                     String line;
                     boolean found = false;
@@ -412,6 +403,37 @@ public class RegisFileIO implements Serializable {
         } else {
             return Arrays.asList(userNodeIds.split(nodeIdDelim));
         }
+    }
+
+    /**
+     * 
+     * @return Reader for the specified file with correct encoding set
+     */
+    private BufferedReader newReader(final String fileName) throws FileNotFoundException {
+        try {
+            final FileInputStream inputStream = new FileInputStream(fileName);
+            // read with correct encoding
+            final InputStreamReader reader = new InputStreamReader(inputStream, FILE_ENCODING);
+            return new BufferedReader(reader);
+        } catch (UnsupportedEncodingException ex) {
+            throw new RuntimeException(FILE_ENCODING + " not supported");
+        }
+    }
+
+    /**
+     * 
+     * @return File writer for the specified file with correct encoding set
+     */
+    private Writer newWriter(final String fileName) throws IOException {
+        return new FileWriterWithEncoding(fileName, FILE_ENCODING);
+    }
+
+    /**
+     * 
+     * @return Appending file writer for the specified file with correct encoding set
+     */
+    private Writer newAppendWriter(final String fileName) throws IOException {
+        return new FileWriterWithEncoding(fileName, FILE_ENCODING, true);
     }
 
     public final synchronized String getRegistrationFilename() {
