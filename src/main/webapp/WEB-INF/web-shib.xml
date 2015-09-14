@@ -3,6 +3,25 @@
     <description>Resource Request System Version 1 (Shibboleth authentication)</description>
     <display-name>RRS</display-name>
     
+    <!-- Force UTF-8 encoding -->
+    <filter>
+        <filter-name>SetCharacterEncodingFilter</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF8</param-value>
+        </init-param>
+        <init-param>
+            <param-name>forceEncoding</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>SetCharacterEncodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    
+    
     <!-- Begin SHHAA authentication filter -->
     <context-param>
 	<description>Location shhaa.xml for SHIB</description>
@@ -56,24 +75,6 @@
 	<description>Context listener</description>
 	<listener-class>nl.mpi.rrs.RrsContextListener</listener-class>
     </listener>
-    
-    <!-- Force UTF-8 encoding -->
-    <filter>
-        <filter-name>SetCharacterEncodingFilter</filter-name>
-        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
-        <init-param>
-            <param-name>encoding</param-name>
-            <param-value>UTF8</param-value>
-        </init-param>
-        <init-param>
-            <param-name>forceEncoding</param-name>
-            <param-value>true</param-value>
-        </init-param>
-    </filter>
-    <filter-mapping>
-        <filter-name>SetCharacterEncodingFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
     
     <servlet>
 	<servlet-name>RRSServlet</servlet-name>
