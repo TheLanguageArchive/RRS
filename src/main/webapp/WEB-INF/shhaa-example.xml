@@ -13,6 +13,8 @@
             <shibheader>
                 <username>eduPersonPrincipalName</username>
                 <username>eduPersonTargetedID</username>
+                <username>oid:eduPersonPrincipalName</username>
+                <username>mace:eduPersonPrincipalName</username>
                 <session>Shib-Session-ID</session>
                 <idp>Shib-Identity-Provider</idp>
                 <timestamp>Shib-Authentication-Instant</timestamp>
