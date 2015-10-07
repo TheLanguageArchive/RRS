@@ -371,7 +371,7 @@ public class RegisFileIO implements Serializable {
                             String userNodeIds = fields[USER_NODE_IDS];
                             String userCreation = fields[USER_CREATION];
 
-                            if (userName.equalsIgnoreCase(userId)) {
+                            if (userName.equals(userId)) {
                                 userInfo.setUserName(userId);
                                 userInfo.setFirstName(userFirstName);
                                 userInfo.setLastName(userLastName);

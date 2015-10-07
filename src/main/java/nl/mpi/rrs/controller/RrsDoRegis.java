@@ -112,12 +112,14 @@ public class RrsDoRegis extends HttpServlet {
 
 	RegistrationUser userInfo = new RegistrationUser();
 	if (authenticationProvider.isUserLoggedIn(request)) {
-	    String uid = authenticationProvider.getLoggedInUser(request);
+	    final String uid = authenticationProvider.getLoggedInUser(request);
 	    userInfo.setUserName(uid);
 	    request.setAttribute("uid", uid);
 	} else {
 	    if (allowNewInternalUser) {
-		userInfo.setUserName(request.getParameter("paramUserNewUserName"));
+                final String uid = request.getParameter("paramUserNewUserName");
+                // internal user names should be lower case
+		userInfo.setUserName(uid.toLowerCase());
 	    } else {
 		logger.error("Illegal request: unauthenticated user registration requested but new internal users not allowed!");
 		userInfo.setUserName(null);
