@@ -57,7 +57,7 @@ public class Ams2UserGenerator implements UserGenerator {
             LatUser latUser = this.getPcplSrv().getUser(uid);
 
             // TODO: transcribe latUser to rrsUser
-            result.setUserName(userName);
+            result.setUserName(latUser.getUid());
             result.setEmail(latUser.getEmail());
             result.setAddress(latUser.getAddress());
             result.setOrganization(latUser.getOrganisation());

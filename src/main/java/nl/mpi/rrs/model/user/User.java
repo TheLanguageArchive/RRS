@@ -52,7 +52,7 @@ public class User {
 
     public void setUserName(String userName) {
         if (RrsUtil.isNotEmpty(userName)) {
-            this.userName = userName.toLowerCase();
+            this.userName = userName; //userName.toLowerCase();
         } else {
             this.userName = null;
         }
