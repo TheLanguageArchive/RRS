@@ -149,6 +149,11 @@ For information on how to configure the filter, see
 <https://aai2.rzg.mpg.de/>. Do not modifiy the composition, authorization,
 and handler settings.
 
+==== AMS library ====
+Make sure that the right AMS library is in place and that it is configured
+properly. In the case of the non-hybrid ('classic IMDI') archive use
+replace 'ams2-1.5.1.jar' with 'ams2-1.5.1-lux17-imdi.jar'.
+
 ==== Configuration for Lana2 ====
 
 In WEB-INF/web.xml, make sure that the values in the init-param elements for
