@@ -93,26 +93,8 @@
     <!-- -= DEPENDENCIES =- **************************************************-->
     <dependencies>
         <!-- ** mpi :: lat ***** -->
-        <dependency>
-            <groupId>nl.mpi</groupId>
-            <artifactId>corpusstructure-api</artifactId>
-            <version>1.8.2</version>
-            <scope>compile</scope>
-            <exclusions>
-                <exclusion>
-                    <artifactId>xalan</artifactId>
-                    <groupId>xalan</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-	<dependency>
-	    <groupId>nl.mpi</groupId>
-	    <artifactId>mpi-util</artifactId>
-	    <version>1.2.3</version>
-	    <scope>compile</scope>
-	</dependency>
 
-	<!-- AMS2, also drags in the required Shibboleth dependencies -->
+	<!-- AMS2, also drags in the required Shibboleth dependencies, corpus structure and MPI utils -->
 	<dependency>
 	    <groupId>${project.groupId}</groupId>
 	    <artifactId>ams2</artifactId>
@@ -129,7 +111,7 @@
         <dependency>
             <groupId>javax.mail</groupId>
             <artifactId>mail</artifactId>
-            <version>1.4</version>
+            <version>1.4.7</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
