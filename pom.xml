@@ -11,10 +11,25 @@
     <groupId>nl.mpi</groupId>
     <artifactId>rrs</artifactId>
     <packaging>war</packaging>
-    <version>1.6.0-testing-SNAPSHOT</version>
+    <version>1.6.0-testing</version>
     <name>Resource Request System</name>
     <url>https://trac.mpi.nl/wiki/ResourceRequestSystem</url>
     <description>Resource Request System for the language archive</description>
+    
+    <properties>
+        <ams-classifier></ams-classifier>
+    </properties>
+    
+    <!-- Build 'IMDI' profile to ensure that an "IMDI archive" compatible AMS jar is included! -->
+    
+    <profiles>
+        <profile>
+            <id>imdi</id>  
+            <properties>
+                <ams-classifier>imdi</ams-classifier>
+            </properties>
+        </profile>
+    </profiles>
 
     <!-- -= BUILD =- *********************************************************-->
     <build>
@@ -94,12 +109,13 @@
     <dependencies>
         <!-- ** mpi :: lat ***** -->
 
-	<!-- AMS2, also drags in the required Shibboleth dependencies, corpus structure and MPI utils -->
-	<dependency>
-	    <groupId>${project.groupId}</groupId>
-	    <artifactId>ams2</artifactId>
-	    <version>1.5.1</version>
-	</dependency>
+        <!-- AMS2, also drags in the required Shibboleth dependencies, corpus structure and MPI utils -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>ams2</artifactId>
+            <version>1.5.1</version>
+            <classifier>${ams-classifier}</classifier>
+        </dependency>
 
         <!-- Logging binding -->
         <dependency>
