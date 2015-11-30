@@ -18,12 +18,10 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * Verify user registration form
- * Show Dobes Code of Conduct license
+ * Verify user registration form Show Dobes Code of Conduct license
  *
- * Point in registration workflow:
- * User registration ->
- * Show Dobes Code of Conduct
+ * Point in registration workflow: User registration -> Show Dobes Code of
+ * Conduct
  *
  *
  * @author kees
@@ -35,223 +33,227 @@ public class RrsDoRegis extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-	super.init();
-	// Get authentication utility from servlet context. It is put there through
-	// spring configuration in spring-rrs-auth(-test).xml
-	authenticationProvider = (AuthenticationProvider) getServletContext().getAttribute(RrsConstants.AUTHENTICATION_PROVIDER_ATTRIBUTE);
+        super.init();
+        // Get authentication utility from servlet context. It is put there through
+        // spring configuration in spring-rrs-auth(-test).xml
+        authenticationProvider = (AuthenticationProvider) getServletContext().getAttribute(RrsConstants.AUTHENTICATION_PROVIDER_ATTRIBUTE);
     }
 
     /**
-     * Processes requests for both HTTP
-     * <code>GET</code> and
-     * <code>POST</code> methods.
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
      *
      * @param request servlet request
      * @param response servlet response
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-	    throws ServletException, IOException {
+            throws ServletException, IOException {
 
-	ErrorsRequest errorsRequest = new ErrorsRequest();
-	RegisFileIO regisFileIO = initRegisFileIO();
-	RegistrationUser userInfo = initUserInfo(request, errorsRequest);
+        ErrorsRequest errorsRequest = new ErrorsRequest();
+        RegisFileIO regisFileIO = initRegisFileIO();
+        RegistrationUser userInfo = initUserInfo(request, errorsRequest);
 
-	request.setAttribute("federated", authenticationProvider.isFederated());
-	request.setAttribute("newInternalUser", this.getServletContext().getAttribute(RrsConstants.ALLOW_NEW_INTERNAL_USERS_ATTRIBUTE));
-	request.setAttribute("corpmanEmail", this.getServletContext().getAttribute(RrsConstants.EMAIL_ADDRESS_CORPMAN_ATTRIBUTE));
+        request.setAttribute("federated", authenticationProvider.isFederated());
+        request.setAttribute("newInternalUser", this.getServletContext().getAttribute(RrsConstants.ALLOW_NEW_INTERNAL_USERS_ATTRIBUTE));
+        request.setAttribute("corpmanEmail", this.getServletContext().getAttribute(RrsConstants.EMAIL_ADDRESS_CORPMAN_ATTRIBUTE));
 
-	if (userInfo.validate() && isValidUsername(userInfo, request)) {
-	    RequestDispatcher view = doRegistration(request, response, regisFileIO, userInfo, errorsRequest);
-	    view.forward(request, response);
-	} else {
-	    request.setAttribute("rrsRegisErrorMessage", "One or more values are incorrect or missing from the registration form");
+        if (userInfo.validate() && isValidUsername(userInfo, request)) {
+            RequestDispatcher view = doRegistration(request, response, regisFileIO, userInfo, errorsRequest);
+            view.forward(request, response);
+        } else {
+            final String error;
+            if (!userInfo.validate()) {
+                error = "One or more values are incorrect or missing from the registration form";
+            } else if (!isValidUsername(userInfo, request)) {
+                error = "The supplied username is invalid";
+            } else {
+                error = "An unknown error has occurred";
+            }
+            request.setAttribute("rrsRegisErrorMessage", error);
 
-	    ErrorRequest errorRequest = new ErrorRequest();
+            ErrorRequest errorRequest = new ErrorRequest();
 
-	    errorRequest.setErrorFormFieldLabel("");
-	    errorRequest.setErrorMessage("One or more values are missing from the registration form");
-	    errorRequest.setErrorValue("");
-	    errorRequest.setErrorException(null);
-	    errorRequest.setErrorType("FORM_DATA_INVALID");
-	    errorRequest.setErrorRecoverable(true);
+            errorRequest.setErrorFormFieldLabel("");
+            errorRequest.setErrorMessage(error);
+            errorRequest.setErrorValue("");
+            errorRequest.setErrorException(null);
+            errorRequest.setErrorType("FORM_DATA_INVALID");
+            errorRequest.setErrorRecoverable(true);
 
-	    errorsRequest.addError(errorRequest);
+            errorsRequest.addError(errorRequest);
 
-	    logger.debug("UserInfo invalid");
-	    RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/page/regis2.jsp");
-	    view.forward(request, response);
-	}
+            logger.debug("UserInfo invalid");
+            RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/page/regis2.jsp");
+            view.forward(request, response);
+        }
     }
 
     private boolean isValidUsername(RegistrationUser userInfo, HttpServletRequest request) {
-	// if authenticated, accept the username provided by the auth provider. If custom, check the constraints.
-	return userInfo.isCustomUsernameValid() || authenticationProvider.isUserLoggedIn(request);
+        // if authenticated, accept the username provided by the auth provider. If custom, check the constraints.
+        return userInfo.isCustomUsernameValid() || authenticationProvider.isUserLoggedIn(request);
     }
 
     private RegisFileIO initRegisFileIO() {
-	// ams2 : using defaults : user-data provider and authentication service
-	RegisFileIO regisFileIO = (RegisFileIO) this.getServletContext().getAttribute(RrsConstants.REGIS_FILE_IO);
-	if (regisFileIO == null) {
-	    logger.fatal("RegisFileIO is NOT initialized during deploy.");
-	    throw new RuntimeException("RegisFileIO is NOT initialized during deploy");
-	}
-	return regisFileIO;
+        // ams2 : using defaults : user-data provider and authentication service
+        RegisFileIO regisFileIO = (RegisFileIO) this.getServletContext().getAttribute(RrsConstants.REGIS_FILE_IO);
+        if (regisFileIO == null) {
+            logger.fatal("RegisFileIO is NOT initialized during deploy.");
+            throw new RuntimeException("RegisFileIO is NOT initialized during deploy");
+        }
+        return regisFileIO;
     }
 
     private List<String> getSessionNodeIds(HttpServletRequest request) {
-	final Object nodeIdsObject = request.getSession().getAttribute(RrsConstants.SESSION_NODE_IDS);
-	if (nodeIdsObject instanceof List) {
-	    return (List<String>) nodeIdsObject;
-	} else {
-	    return null;
-	}
+        final Object nodeIdsObject = request.getSession().getAttribute(RrsConstants.SESSION_NODE_IDS);
+        if (nodeIdsObject instanceof List) {
+            return (List<String>) nodeIdsObject;
+        } else {
+            return null;
+        }
     }
 
     private RegistrationUser initUserInfo(HttpServletRequest request, ErrorsRequest errorsRequest) {
-	boolean allowNewInternalUser = (Boolean) getServletContext().getAttribute(RrsConstants.ALLOW_NEW_INTERNAL_USERS_ATTRIBUTE);
+        boolean allowNewInternalUser = (Boolean) getServletContext().getAttribute(RrsConstants.ALLOW_NEW_INTERNAL_USERS_ATTRIBUTE);
 
-	RegistrationUser userInfo = new RegistrationUser();
-	if (authenticationProvider.isUserLoggedIn(request)) {
-	    final String uid = authenticationProvider.getLoggedInUser(request);
-	    userInfo.setUserName(uid);
-	    request.setAttribute("uid", uid);
-	} else {
-	    if (allowNewInternalUser) {
+        RegistrationUser userInfo = new RegistrationUser();
+        if (authenticationProvider.isUserLoggedIn(request)) {
+            final String uid = authenticationProvider.getLoggedInUser(request);
+            userInfo.setUserName(uid);
+            request.setAttribute("uid", uid);
+        } else {
+            if (allowNewInternalUser) {
                 final String uid = request.getParameter("paramUserNewUserName");
                 // internal user names should be lower case
-		userInfo.setUserName(uid.toLowerCase());
-	    } else {
-		logger.error("Illegal request: unauthenticated user registration requested but new internal users not allowed!");
-		userInfo.setUserName(null);
+                userInfo.setUserName(uid.toLowerCase());
+            } else {
+                logger.error("Illegal request: unauthenticated user registration requested but new internal users not allowed!");
+                userInfo.setUserName(null);
 
-		ErrorRequest errorRequest = new ErrorRequest();
+                ErrorRequest errorRequest = new ErrorRequest();
 
-		errorRequest.setErrorFormFieldLabel("");
-		errorRequest.setErrorMessage("Unauthenticated user registration requested but new internal users not allowed");
-		errorRequest.setErrorValue("");
-		errorRequest.setErrorException(null);
-		errorRequest.setErrorType("ILLEGAL_REQUEST");
-		errorRequest.setErrorRecoverable(true);
+                errorRequest.setErrorFormFieldLabel("");
+                errorRequest.setErrorMessage("Unauthenticated user registration requested but new internal users not allowed");
+                errorRequest.setErrorValue("");
+                errorRequest.setErrorException(null);
+                errorRequest.setErrorType("ILLEGAL_REQUEST");
+                errorRequest.setErrorRecoverable(true);
 
-		errorsRequest.addError(errorRequest);
+                errorsRequest.addError(errorRequest);
 
-		return userInfo;
-	    }
-	}
-	userInfo.setFirstName(request.getParameter("paramUserNewFirstName"));
-	userInfo.setLastName(request.getParameter("paramUserNewLastName"));
-	userInfo.setEmail(request.getParameter("paramUserNewEmail"));
-	userInfo.setOrganization(request.getParameter("paramUserNewOrganization"));
-	userInfo.setPassword(request.getParameter("paramUserNewPassword_1"));
-	userInfo.setNodeIds(getSessionNodeIds(request));
-	userInfo.setCreation_ts();
+                return userInfo;
+            }
+        }
+        userInfo.setFirstName(request.getParameter("paramUserNewFirstName"));
+        userInfo.setLastName(request.getParameter("paramUserNewLastName"));
+        userInfo.setEmail(request.getParameter("paramUserNewEmail"));
+        userInfo.setOrganization(request.getParameter("paramUserNewOrganization"));
+        userInfo.setPassword(request.getParameter("paramUserNewPassword_1"));
+        userInfo.setNodeIds(getSessionNodeIds(request));
+        userInfo.setCreation_ts();
 
-
-	request.setAttribute("paramUserNewUserName", userInfo.getUserName());
-	request.setAttribute("paramUserNewFirstName", userInfo.getFirstName());
-	request.setAttribute("paramUserNewLastName", userInfo.getLastName());
-	request.setAttribute("paramUserNewEmail", userInfo.getEmail());
-	request.setAttribute("paramUserNewOrganization", userInfo.getOrganization());
-	return userInfo;
+        request.setAttribute("paramUserNewUserName", userInfo.getUserName());
+        request.setAttribute("paramUserNewFirstName", userInfo.getFirstName());
+        request.setAttribute("paramUserNewLastName", userInfo.getLastName());
+        request.setAttribute("paramUserNewEmail", userInfo.getEmail());
+        request.setAttribute("paramUserNewOrganization", userInfo.getOrganization());
+        return userInfo;
     }
 
     private RequestDispatcher doRegistration(HttpServletRequest request, HttpServletResponse response, RegisFileIO regisFileIO, RegistrationUser userInfo, ErrorsRequest errorsRequest) throws IOException, ServletException {
-	String userId = userInfo.getUserName();
+        String userId = userInfo.getUserName();
 
-	UserGenerator ug = (UserGenerator) this.getServletContext().getAttribute(RrsConstants.AMS2_DB_CONNECTION_ATTRIBUTE);
-	if (ug.isExistingUserName(userId)) {
+        UserGenerator ug = (UserGenerator) this.getServletContext().getAttribute(RrsConstants.AMS2_DB_CONNECTION_ATTRIBUTE);
+        if (ug.isExistingUserName(userId)) {
 
-	    request.setAttribute("rrsRegisErrorMessage", "This User ID is already taken, please use a different one!");
+            request.setAttribute("rrsRegisErrorMessage", "This User ID is already taken, please use a different one!");
 
-	    ErrorRequest errorRequest = new ErrorRequest();
+            ErrorRequest errorRequest = new ErrorRequest();
 
-	    errorRequest.setErrorFormFieldLabel("Form field: UserID");
-	    errorRequest.setErrorMessage("This User ID is already taken, please use a different one!");
-	    errorRequest.setErrorValue("UserID: " + userId);
-	    errorRequest.setErrorException(null);
-	    errorRequest.setErrorType("EXISTING_USER_ID");
-	    errorRequest.setErrorRecoverable(true);
+            errorRequest.setErrorFormFieldLabel("Form field: UserID");
+            errorRequest.setErrorMessage("This User ID is already taken, please use a different one!");
+            errorRequest.setErrorValue("UserID: " + userId);
+            errorRequest.setErrorException(null);
+            errorRequest.setErrorType("EXISTING_USER_ID");
+            errorRequest.setErrorRecoverable(true);
 
-	    errorsRequest.addError(errorRequest);
+            errorsRequest.addError(errorRequest);
 
-	    logger.info("User ID is already taken: " + userId);
-	    return request.getRequestDispatcher("/WEB-INF/view/page/regis2.jsp");
-	} else {
+            logger.info("User ID is already taken: " + userId);
+            return request.getRequestDispatcher("/WEB-INF/view/page/regis2.jsp");
+        } else {
             regisFileIO.removeOldRegistrationsFromFile(RrsConstants.REGISTRATION_EXPIRATION_DAYS);
-	    if (regisFileIO.isRegistrationInFile(userInfo)) {
-		request.setAttribute("rrsRegisErrorMessage", "This User ID is already reserved, please use a different one!");
+            if (regisFileIO.isRegistrationInFile(userInfo)) {
+                request.setAttribute("rrsRegisErrorMessage", "This User ID is already reserved, please use a different one!");
 
-		ErrorRequest errorRequest = new ErrorRequest();
+                ErrorRequest errorRequest = new ErrorRequest();
 
-		errorRequest.setErrorFormFieldLabel("Form field: UserID");
-		errorRequest.setErrorMessage("This User ID is already reserved, please use a different one!");
-		errorRequest.setErrorValue("UserID: " + userId);
-		errorRequest.setErrorException(null);
-		errorRequest.setErrorType("EXISTING_USER_ID");
-		errorRequest.setErrorRecoverable(true);
+                errorRequest.setErrorFormFieldLabel("Form field: UserID");
+                errorRequest.setErrorMessage("This User ID is already reserved, please use a different one!");
+                errorRequest.setErrorValue("UserID: " + userId);
+                errorRequest.setErrorException(null);
+                errorRequest.setErrorType("EXISTING_USER_ID");
+                errorRequest.setErrorRecoverable(true);
 
-		errorsRequest.addError(errorRequest);
+                errorsRequest.addError(errorRequest);
 
-		logger.info("User ID is already reserved: " + userId);
-		return request.getRequestDispatcher("/WEB-INF/view/page/regis2.jsp");
-	    } else {
-		request.setAttribute("user", userInfo);
+                logger.info("User ID is already reserved: " + userId);
+                return request.getRequestDispatcher("/WEB-INF/view/page/regis2.jsp");
+            } else {
+                request.setAttribute("user", userInfo);
 
-		request.setAttribute("rrsRegisErrorMessage", "");
+                request.setAttribute("rrsRegisErrorMessage", "");
 
-		boolean success = regisFileIO.writeRegistrationToFile(userInfo);
+                boolean success = regisFileIO.writeRegistrationToFile(userInfo);
 
-		if (!success) {
-		    logger.error("Error adding  user to registration file: " + regisFileIO.getRegistrationFilename());
-		    request.setAttribute("rrsRegisErrorMessage", "Error adding  user to registration file: " + regisFileIO.getRegistrationFilename());
-		    return request.getRequestDispatcher("/WEB-INF/view/page/regis2.jsp");
-		} else {
-		    String urlRrsDobesCoc = (String) this.getServletContext().getAttribute(RrsConstants.DOBES_COC_LINK_ATTRIBUTE);
+                if (!success) {
+                    logger.error("Error adding  user to registration file: " + regisFileIO.getRegistrationFilename());
+                    request.setAttribute("rrsRegisErrorMessage", "Error adding  user to registration file: " + regisFileIO.getRegistrationFilename());
+                    return request.getRequestDispatcher("/WEB-INF/view/page/regis2.jsp");
+                } else {
+                    String urlRrsDobesCoc = (String) this.getServletContext().getAttribute(RrsConstants.DOBES_COC_LINK_ATTRIBUTE);
 
-		    if (urlRrsDobesCoc.contentEquals("default")) {
-			urlRrsDobesCoc = request.getContextPath() + "/dobes_coc_v2.html";
-			request.setAttribute("urlRrsDobesCoc", urlRrsDobesCoc);
-		    } else if (urlRrsDobesCoc.contentEquals("none")) {
-			request.setAttribute("urlRrsDobesCoc", null);
-		    } else {
-			request.setAttribute("urlRrsDobesCoc", urlRrsDobesCoc);
-		    }
-		    return request.getRequestDispatcher("/WEB-INF/view/page/dobesCoc.jsp");
-		}
-	    }
-	}
+                    if (urlRrsDobesCoc.contentEquals("default")) {
+                        urlRrsDobesCoc = request.getContextPath() + "/dobes_coc_v2.html";
+                        request.setAttribute("urlRrsDobesCoc", urlRrsDobesCoc);
+                    } else if (urlRrsDobesCoc.contentEquals("none")) {
+                        request.setAttribute("urlRrsDobesCoc", null);
+                    } else {
+                        request.setAttribute("urlRrsDobesCoc", urlRrsDobesCoc);
+                    }
+                    return request.getRequestDispatcher("/WEB-INF/view/page/dobesCoc.jsp");
+                }
+            }
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
-     * Handles the HTTP
-     * <code>GET</code> method.
+     * Handles the HTTP <code>GET</code> method.
      *
      * @param request servlet request
      * @param response servlet response
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-	    throws ServletException, IOException {
-	processRequest(request, response);
+            throws ServletException, IOException {
+        processRequest(request, response);
     }
 
     /**
-     * Handles the HTTP
-     * <code>POST</code> method.
+     * Handles the HTTP <code>POST</code> method.
      *
      * @param request servlet request
      * @param response servlet response
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-	    throws ServletException, IOException {
-	processRequest(request, response);
+            throws ServletException, IOException {
+        processRequest(request, response);
     }
 
     /**
      * Returns a short description of the servlet.
      */
     public String getServletInfo() {
-	return "Short description";
+        return "Short description";
     }
     // </editor-fold>
 }

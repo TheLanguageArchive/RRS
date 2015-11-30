@@ -15,6 +15,21 @@
     <name>Resource Request System</name>
     <url>https://trac.mpi.nl/wiki/ResourceRequestSystem</url>
     <description>Resource Request System for the language archive</description>
+    
+    <properties>
+        <ams-classifier></ams-classifier>
+    </properties>
+    
+    <!-- Build 'IMDI' profile to ensure that an "IMDI archive" compatible AMS jar is included! -->
+    
+    <profiles>
+        <profile>
+            <id>imdi</id>  
+            <properties>
+                <ams-classifier>imdi</ams-classifier>
+            </properties>
+        </profile>
+    </profiles>
 
     <!-- -= BUILD =- *********************************************************-->
     <build>
@@ -93,31 +108,14 @@
     <!-- -= DEPENDENCIES =- **************************************************-->
     <dependencies>
         <!-- ** mpi :: lat ***** -->
-        <dependency>
-            <groupId>nl.mpi</groupId>
-            <artifactId>corpusstructure-api</artifactId>
-            <version>1.8.2</version>
-            <scope>compile</scope>
-            <exclusions>
-                <exclusion>
-                    <artifactId>xalan</artifactId>
-                    <groupId>xalan</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-	<dependency>
-	    <groupId>nl.mpi</groupId>
-	    <artifactId>mpi-util</artifactId>
-	    <version>1.2.3</version>
-	    <scope>compile</scope>
-	</dependency>
 
-	<!-- AMS2, also drags in the required Shibboleth dependencies -->
-	<dependency>
-	    <groupId>${project.groupId}</groupId>
-	    <artifactId>ams2</artifactId>
-	    <version>1.5.1</version>
-	</dependency>
+        <!-- AMS2, also drags in the required Shibboleth dependencies, corpus structure and MPI utils -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>ams2</artifactId>
+            <version>1.5.1</version>
+            <classifier>${ams-classifier}</classifier>
+        </dependency>
 
         <!-- Logging binding -->
         <dependency>
@@ -129,7 +127,7 @@
         <dependency>
             <groupId>javax.mail</groupId>
             <artifactId>mail</artifactId>
-            <version>1.4</version>
+            <version>1.4.7</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
