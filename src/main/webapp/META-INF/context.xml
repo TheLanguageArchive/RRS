@@ -37,6 +37,15 @@
 	value="/WEB-INF/view/page/registrationStatic.jsp"
 	description="If set to a non-empty value, this page will be shown INSTEAD of the user registration form (useful if AMS2 link is not available)"/>
 -->
+    	
+    <Parameter name="nl.mpi.rrs.checkEmailSubject"
+	value="Max Planck Institute registration check"
+	description="Subject of the mail with the verification link" />
+	
+    <Parameter name="nl.mpi.rrs.confirmationEmailSubject"
+	value="Max Planck Institute registration"
+	description="Subject of the mail that confirms the registration" />
+
 
     <!-- Code of conduct -->
 	

@@ -49,6 +49,8 @@ public class RrsContextListener implements ServletContextListener {
 	setAttributeFromContextParam(sc, RrsConstants.DOBES_COC_LICENSE_NAME_ATTRIBUTE);
 	setAttributeFromContextParam(sc, RrsConstants.OPEN_PATH_PREFIX_ATTRIBUTE);
 	setAttributeFromContextParam(sc, RrsConstants.REGISTRATION_STATIC_PAGE_ATTRIBUTE);
+        setAttributeFromContextParam(sc, RrsConstants.CHECK_EMAIL_SUBJECT_ATTRIBUTE);
+        setAttributeFromContextParam(sc, RrsConstants.CONFIRM_EMAIL_SUBJECT_ATTRIBUTE);
 	setBooleanAttributeFromContextParam(sc, RrsConstants.ALLOW_NEW_INTERNAL_USERS_ATTRIBUTE);
 
 	logger.debug("RrsContextListener contextInitialized");

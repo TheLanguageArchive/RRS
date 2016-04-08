@@ -117,7 +117,7 @@ public class RrsDoCoc extends HttpServlet {
 
 	rrsRegistration.setEmailAddressCheckContent();
 
-	emailer.setSubject("Max Planck Institute registration check");
+	emailer.setSubject((String) this.getServletContext().getAttribute(RrsConstants.CHECK_EMAIL_SUBJECT_ATTRIBUTE));
 
 	emailer.setContent(rrsRegistration.getEmailAddressCheckContent());
 

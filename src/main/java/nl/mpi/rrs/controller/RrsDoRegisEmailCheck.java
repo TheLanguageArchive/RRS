@@ -230,7 +230,7 @@ public class RrsDoRegisEmailCheck extends HttpServlet {
 	EmailBean emailer = new EmailBean();
 	rrsRegistration.setEmailAccountDetailsContent();
 
-	emailer.setSubject("Max Planck Institute registration");
+	emailer.setSubject((String) this.getServletContext().getAttribute(RrsConstants.CONFIRM_EMAIL_SUBJECT_ATTRIBUTE));
 	emailer.setContent(rrsRegistration.getEmailAccountDetailsContent());
 	emailer.setTo(corpmanEmail);
 	emailer.setCc(userEmail);
