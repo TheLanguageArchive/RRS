@@ -120,6 +120,12 @@ See META-INF/context.xml for examples.
 	(useful if AMS2 link is not available). Location should be relative to the application's root
 	location (e.g. /WEB-INF/view/page/registrationStatic.jsp).
 
+- nl.mpi.rrs.checkEmailSubject
+        Subject for verification e-mail. Defaults to "Max Planck Institute registration check".
+
+- nl.mpi.rrs.confirmationEmailSubject
+        Subject for registration confirmation e-mail. Defaults to "Max Planck Institute registration".
+
 === Authentication configuration ===
 
 ==== Configuration for Shibboleth ====

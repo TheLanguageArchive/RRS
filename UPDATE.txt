@@ -55,7 +55,7 @@ CSDB).
 - Be aware that RRS 1.5 depends on AMS2 version 1.4.9.1. It supplies the package
 but depends on a compatible database structure.
 
-= Upgrading from 1.6.0 or lower to 1.6.1 or higher =
+= Upgrading from 1.6.0b or lower to 1.6.1 or higher =
 
 The following OPTIONAL context parameters 
 
