@@ -25,6 +25,8 @@ public class RrsConstants {
     public final static String OPEN_PATH_PREFIX_ATTRIBUTE = MPI_PREFIX + "imdibrowserOpenPathPrefix";
     public final static String AMS_INTERFACE_LINK_ATTRIBUTE = RRS_PREFIX + "amsInterfaceLink";
     public final static String REGISTRATION_STATIC_PAGE_ATTRIBUTE = RRS_PREFIX + "registrationStaticPage";
+    public final static String CHECK_EMAIL_SUBJECT_ATTRIBUTE = RRS_PREFIX + "checkEmailSubject";
+    public final static String CONFIRM_EMAIL_SUBJECT_ATTRIBUTE = RRS_PREFIX + "confirmationEmailSubject";
     public final static String REGIS_FILE_IO = RRS_PREFIX + "regisFileIO";
     public final static String SESSION_NODE_IDS = RRS_PREFIX + "nodeIds";
     public final static int REGISTRATION_EXPIRATION_DAYS = 30;

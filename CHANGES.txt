@@ -1,5 +1,8 @@
 Change history of Resource Request System (since version 1.5)
 
+1.6.1
+* Added context parameters to override default e-mail subjects
+
 1.6.0b
 * Build profile for deployment in a non-hybrid archive context
 
