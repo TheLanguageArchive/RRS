@@ -340,9 +340,9 @@ public class RrsServlet extends HttpServlet {
         String corpmanEmail = (String) this.getServletContext().getAttribute(RrsConstants.EMAIL_ADDRESS_CORPMAN_ATTRIBUTE);
         String emailHost = (String) this.getServletContext().getAttribute(RrsConstants.SMTP_HOST_ATTRIBUTE);
         String userEmail = rrsRequest.getUser().getEmail();
+        request.setAttribute("emailAddressCorpman", corpmanEmail);
+        request.setAttribute("emailHost", emailHost);
         try {
-            request.setAttribute("emailAddressCorpman", corpmanEmail);
-            request.setAttribute("emailHost", emailHost);
             try {
                 emailer.setTo(corpmanEmail);
                 emailer.setCc(userEmail);
