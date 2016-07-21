@@ -108,7 +108,11 @@ public class EmailBean {
 
     }//sendMessage
 
+    /**
+     * @throws IllegalArgumentException
+     */
     public void setSmtpHost(String host) {
+        logger.debug("SMTP host: " + String.valueOf(host));
         if (RrsUtil.isNotEmpty(host)) {
             this.smtpHost = host;
         } else {
@@ -116,7 +120,11 @@ public class EmailBean {
         }
     }//setTo
 
+    /**
+     * @throws IllegalArgumentException
+     */
     public void setTo(String to) {
+        logger.debug("To: " + String.valueOf(to));
         if (RrsUtil.isNotEmpty(to)) {
             this.to = to;
         } else {
@@ -124,7 +132,11 @@ public class EmailBean {
         }
     }//setTo
 
+    /**
+     * @throws IllegalArgumentException
+     */
     public void setFrom(String from) {
+        logger.debug("From: " + String.valueOf(from));
         if (RrsUtil.isNotEmpty(from)) {
             this.from = from;
         } else {
@@ -132,7 +144,11 @@ public class EmailBean {
         }
     }//setFrom
 
+    /**
+     * @throws IllegalArgumentException
+     */
     public void setContent(String content) {
+        logger.debug("Content: " + String.valueOf(content));
         if (RrsUtil.isNotEmpty(content)) {
             this.content = content;
         } else {
@@ -140,7 +156,11 @@ public class EmailBean {
         }
     }//setContent
 
+    /**
+     * @throws IllegalArgumentException
+     */
     public void setSubject(String subject) {
+        logger.debug("Subject: " + String.valueOf(subject));
         if (RrsUtil.isNotEmpty(subject)) {
             this.subject = subject;
         } else {
@@ -153,6 +173,7 @@ public class EmailBean {
     }
 
     public void setCc(String cc) {
+        logger.debug("CC: " + String.valueOf(cc));
         if (RrsUtil.isNotEmpty(cc)) {
             this.cc = cc;
         } else {

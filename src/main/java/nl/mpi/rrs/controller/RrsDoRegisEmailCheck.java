@@ -1,6 +1,7 @@
 package nl.mpi.rrs.controller;
 
 import java.io.IOException;
+import javax.mail.SendFailedException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -226,17 +227,22 @@ public class RrsDoRegisEmailCheck extends HttpServlet {
 
         EmailBean emailer = new EmailBean();
         rrsRegistration.setEmailAccountDetailsContent();
-
-        emailer.setSubject((String) this.getServletContext().getAttribute(RrsConstants.CONFIRM_EMAIL_SUBJECT_ATTRIBUTE));
-        emailer.setContent(rrsRegistration.getEmailAccountDetailsContent());
-        emailer.setTo(corpmanEmail);
-        emailer.setCc(userEmail);
-        emailer.setFrom(corpmanEmail);
-        emailer.setSmtpHost(emailHost);
-
+        
         try {
-            emailer.sendMessage();
-            return true;
+            try {
+                emailer.setTo(corpmanEmail);
+                emailer.setCc(userEmail);
+                emailer.setFrom(corpmanEmail);
+                emailer.setSmtpHost(emailHost);
+                
+                emailer.setSubject((String) this.getServletContext().getAttribute(RrsConstants.CONFIRM_EMAIL_SUBJECT_ATTRIBUTE));
+                emailer.setContent(rrsRegistration.getEmailAccountDetailsContent());
+
+                emailer.sendMessage();
+                return true;
+            } catch (IllegalArgumentException ex) {
+                throw new SendFailedException("Error while preparing to send e-mail", ex);
+            }
         } catch (javax.mail.SendFailedException e) {
             ErrorRequest errorRequest = new ErrorRequest();
             errorRequest.setErrorFormFieldLabel("Form field: Email");

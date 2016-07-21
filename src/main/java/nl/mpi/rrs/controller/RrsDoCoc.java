@@ -5,6 +5,7 @@
 package nl.mpi.rrs.controller;
 
 import java.io.IOException;
+import javax.mail.SendFailedException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -113,23 +114,25 @@ public class RrsDoCoc extends HttpServlet {
         EmailBean emailer = new EmailBean();
 
         rrsRegistration.setEmailAddressCheckContent();
-
-        emailer.setSubject((String) this.getServletContext().getAttribute(RrsConstants.CHECK_EMAIL_SUBJECT_ATTRIBUTE));
-
-        emailer.setContent(rrsRegistration.getEmailAddressCheckContent());
-
         String corpmanEmail = (String) this.getServletContext().getAttribute(RrsConstants.EMAIL_ADDRESS_CORPMAN_ATTRIBUTE);
         String emailHost = (String) this.getServletContext().getAttribute(RrsConstants.SMTP_HOST_ATTRIBUTE);
         String userEmail = rrsRegistration.getUser().getEmail();
 
-        emailer.setTo(userEmail);
-        emailer.setCc(corpmanEmail);
-        emailer.setFrom(corpmanEmail);
-        emailer.setSmtpHost(emailHost);
-
         try {
-            emailer.sendMessage();
-            logger.info("Verification e-mail sent to " + userEmail);
+            try {
+                emailer.setTo(userEmail);
+                emailer.setCc(corpmanEmail);
+                emailer.setFrom(corpmanEmail);
+                emailer.setSmtpHost(emailHost);
+
+                emailer.setSubject((String) this.getServletContext().getAttribute(RrsConstants.CHECK_EMAIL_SUBJECT_ATTRIBUTE));
+                emailer.setContent(rrsRegistration.getEmailAddressCheckContent());
+
+                emailer.sendMessage();
+                logger.info("Verification e-mail sent to " + userEmail);
+            } catch (IllegalArgumentException ex) {
+                throw new SendFailedException("Error while preparing to send e-mail", ex);
+            }
         } catch (javax.mail.SendFailedException e) {
             ErrorRequest errorRequest = new ErrorRequest();
 

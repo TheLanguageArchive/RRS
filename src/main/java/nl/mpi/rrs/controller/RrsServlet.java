@@ -6,6 +6,7 @@
 package nl.mpi.rrs.controller;
 
 import java.io.IOException;
+import javax.mail.SendFailedException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -324,7 +325,6 @@ public class RrsServlet extends HttpServlet {
                 view = request.getRequestDispatcher("/WEB-INF/view/error/errorUnknown.jsp");
             }
             view.forward(request, response);
-            return;
         } else if (sendMail(rrsRequest, request, errorsRequest, response)) {
             logger.debug("RrsServlet: No Exception");
             RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/view/page/result.jsp");
@@ -335,21 +335,27 @@ public class RrsServlet extends HttpServlet {
     private boolean sendMail(RrsRequest rrsRequest, HttpServletRequest request, ErrorsRequest errorsRequest, HttpServletResponse response) throws ServletException, IOException {
         EmailBean emailer = new EmailBean();
         rrsRequest.setEmailContent();
-        emailer.setSubject("Resource Request System");
-        emailer.setContent(rrsRequest.getEmailContent());
         String corpmanEmail = (String) this.getServletContext().getAttribute(RrsConstants.EMAIL_ADDRESS_CORPMAN_ATTRIBUTE);
         String emailHost = (String) this.getServletContext().getAttribute(RrsConstants.SMTP_HOST_ATTRIBUTE);
         String userEmail = rrsRequest.getUser().getEmail();
         request.setAttribute("emailAddressCorpman", corpmanEmail);
         request.setAttribute("emailHost", emailHost);
-        emailer.setTo(corpmanEmail);
-        emailer.setCc(userEmail);
-        emailer.setFrom(corpmanEmail);
-        emailer.setSmtpHost(emailHost);
-        logger.debug("From: " + corpmanEmail);
         try {
-            logger.info("Sending access request e-mail by user " + rrsRequest.getUser().getUserName());
-            emailer.sendMessage();
+            try {
+                emailer.setTo(corpmanEmail);
+                emailer.setCc(userEmail);
+                emailer.setFrom(corpmanEmail);
+                emailer.setSmtpHost(emailHost);
+
+                emailer.setSubject("Resource Request System");
+                emailer.setContent(rrsRequest.getEmailContent());
+
+                logger.info("Sending access request e-mail by user " + rrsRequest.getUser().getUserName());
+                emailer.sendMessage();
+                logger.debug("Message sent successfully");
+            } catch (IllegalArgumentException ex) {
+                throw new SendFailedException("Error while preparing to send e-mail", ex);
+            }
         } catch (javax.mail.SendFailedException e) {
             ErrorRequest errorRequest = new ErrorRequest();
             errorRequest.setErrorFormFieldLabel("Form field: Email");
