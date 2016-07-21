@@ -114,10 +114,6 @@ public class RrsDoCoc extends HttpServlet {
         EmailBean emailer = new EmailBean();
 
         rrsRegistration.setEmailAddressCheckContent();
-
-        emailer.setSubject((String) this.getServletContext().getAttribute(RrsConstants.CHECK_EMAIL_SUBJECT_ATTRIBUTE));
-        emailer.setContent(rrsRegistration.getEmailAddressCheckContent());
-
         String corpmanEmail = (String) this.getServletContext().getAttribute(RrsConstants.EMAIL_ADDRESS_CORPMAN_ATTRIBUTE);
         String emailHost = (String) this.getServletContext().getAttribute(RrsConstants.SMTP_HOST_ATTRIBUTE);
         String userEmail = rrsRegistration.getUser().getEmail();
@@ -128,6 +124,10 @@ public class RrsDoCoc extends HttpServlet {
                 emailer.setCc(corpmanEmail);
                 emailer.setFrom(corpmanEmail);
                 emailer.setSmtpHost(emailHost);
+
+                emailer.setSubject((String) this.getServletContext().getAttribute(RrsConstants.CHECK_EMAIL_SUBJECT_ATTRIBUTE));
+                emailer.setContent(rrsRegistration.getEmailAddressCheckContent());
+
                 emailer.sendMessage();
                 logger.info("Verification e-mail sent to " + userEmail);
             } catch (IllegalArgumentException ex) {

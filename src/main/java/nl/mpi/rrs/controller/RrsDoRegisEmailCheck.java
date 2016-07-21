@@ -230,12 +230,13 @@ public class RrsDoRegisEmailCheck extends HttpServlet {
         
         try {
             try {
-                emailer.setSubject((String) this.getServletContext().getAttribute(RrsConstants.CONFIRM_EMAIL_SUBJECT_ATTRIBUTE));
-                emailer.setContent(rrsRegistration.getEmailAccountDetailsContent());
                 emailer.setTo(corpmanEmail);
                 emailer.setCc(userEmail);
                 emailer.setFrom(corpmanEmail);
                 emailer.setSmtpHost(emailHost);
+                
+                emailer.setSubject((String) this.getServletContext().getAttribute(RrsConstants.CONFIRM_EMAIL_SUBJECT_ATTRIBUTE));
+                emailer.setContent(rrsRegistration.getEmailAccountDetailsContent());
 
                 emailer.sendMessage();
                 return true;

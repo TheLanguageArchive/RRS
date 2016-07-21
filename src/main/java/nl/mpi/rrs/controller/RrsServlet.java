@@ -335,8 +335,6 @@ public class RrsServlet extends HttpServlet {
     private boolean sendMail(RrsRequest rrsRequest, HttpServletRequest request, ErrorsRequest errorsRequest, HttpServletResponse response) throws ServletException, IOException {
         EmailBean emailer = new EmailBean();
         rrsRequest.setEmailContent();
-        emailer.setSubject("Resource Request System");
-        emailer.setContent(rrsRequest.getEmailContent());
         String corpmanEmail = (String) this.getServletContext().getAttribute(RrsConstants.EMAIL_ADDRESS_CORPMAN_ATTRIBUTE);
         String emailHost = (String) this.getServletContext().getAttribute(RrsConstants.SMTP_HOST_ATTRIBUTE);
         String userEmail = rrsRequest.getUser().getEmail();
@@ -348,6 +346,9 @@ public class RrsServlet extends HttpServlet {
                 emailer.setCc(userEmail);
                 emailer.setFrom(corpmanEmail);
                 emailer.setSmtpHost(emailHost);
+
+                emailer.setSubject("Resource Request System");
+                emailer.setContent(rrsRequest.getEmailContent());
 
                 logger.info("Sending access request e-mail by user " + rrsRequest.getUser().getUserName());
                 emailer.sendMessage();
