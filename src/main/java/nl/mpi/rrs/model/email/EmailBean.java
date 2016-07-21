@@ -26,93 +26,90 @@ public class EmailBean {
 
     public void sendMessage() throws Exception {
 
-        Properties properties = System.getProperties();
+	Properties properties = System.getProperties();
 
-        //populate the 'Properties' object with the mail
-        //server address, so that the default 'Session'
-        //instance can use it.
-        properties.put("mail.smtp.host", smtpHost);
+	//populate the 'Properties' object with the mail
+	//server address, so that the default 'Session'
+	//instance can use it.
+	properties.put("mail.smtp.host", smtpHost);
 
-        Session session = Session.getDefaultInstance(properties);
+	Session session = Session.getDefaultInstance(properties);
 
-        Message mailMsg = new MimeMessage(session);//a new email message
+	Message mailMsg = new MimeMessage(session);//a new email message
 
-        InternetAddress[] addresses = null;
+	InternetAddress[] addresses = null;
 
-        try {
+	try {
 
-            if (to != null) {
 
-                //throws 'AddressException' if the 'to' email address
-                //violates RFC822 syntax
-                addresses = InternetAddress.parse(to, false);
+	    if (to != null) {
 
-                mailMsg.setRecipients(Message.RecipientType.TO, addresses);
+		//throws 'AddressException' if the 'to' email address
+		//violates RFC822 syntax
+		addresses = InternetAddress.parse(to, false);
 
-                logger.debug("EmailBean.sendMessage to: " + to);
+		mailMsg.setRecipients(Message.RecipientType.TO, addresses);
 
-            } else {
+		logger.debug("EmailBean.sendMessage to: " + to);
 
-                throw new MessagingException(
-                        "The mail message requires a 'To' address.");
+	    } else {
 
-            }
+		throw new MessagingException(
+			"The mail message requires a 'To' address.");
 
-            if (cc != null) {
+	    }
 
-                //throws 'AddressException' if the 'to' email address
-                //violates RFC822 syntax
-                addresses = InternetAddress.parse(cc, false);
+	    if (cc != null) {
 
-                mailMsg.setRecipients(Message.RecipientType.CC, addresses);
+		//throws 'AddressException' if the 'to' email address
+		//violates RFC822 syntax
+		addresses = InternetAddress.parse(cc, false);
 
-                logger.debug("EmailBean.sendMessage cc: " + cc);
+		mailMsg.setRecipients(Message.RecipientType.CC, addresses);
 
-            } else {
+		logger.debug("EmailBean.sendMessage cc: " + cc);
 
-                logger.error("The mail message has no 'Cc' address.");
+	    } else {
 
-            }
+		logger.error("The mail message has no 'Cc' address.");
 
-            if (from != null) {
+	    }
 
-                mailMsg.setFrom(new InternetAddress(from));
-                logger.debug("EmailBean.sendMessage from: " + from);
+	    if (from != null) {
 
-            } else {
+		mailMsg.setFrom(new InternetAddress(from));
+		logger.debug("EmailBean.sendMessage from: " + from);
 
-                throw new MessagingException(
-                        "The mail message requires a valid 'From' address.");
+	    } else {
 
-            }
+		throw new MessagingException(
+			"The mail message requires a valid 'From' address.");
 
-            if (subject != null) {
-                mailMsg.setSubject(subject);
-            }
+	    }
 
-            if (content != null) {
-                mailMsg.setText(content);
-            }
+	    if (subject != null) {
+		mailMsg.setSubject(subject);
+	    }
 
-            //Finally, send the mail message; throws a 'SendFailedException',
-            // com.sun.mail.smtp.SMTPAddressFailedException
-            //if any of the message's recipients have an invalid address
-            Transport.send(mailMsg);
+	    if (content != null) {
+		mailMsg.setText(content);
+	    }
 
-        } catch (Exception exc) {
-            logger.error("Address exception from: " + from + " cc: " + cc);
+	    //Finally, send the mail message; throws a 'SendFailedException',
+	    // com.sun.mail.smtp.SMTPAddressFailedException
+	    //if any of the message's recipients have an invalid address
+	    Transport.send(mailMsg);
 
-            throw exc;
+	} catch (Exception exc) {
+	    logger.error("Address exception from: " + from + " cc: " + cc);
 
-        }
+	    throw exc;
+
+	}
 
     }//sendMessage
 
-    /**
-     * @throws IllegalArgumentException
-     */
     public void setSmtpHost(String host) {
-        logger.debug("SMTP host: " + String.valueOf(host));
         if (RrsUtil.isNotEmpty(host)) {
             this.smtpHost = host;
         } else {
@@ -120,11 +117,7 @@ public class EmailBean {
         }
     }//setTo
 
-    /**
-     * @throws IllegalArgumentException
-     */
     public void setTo(String to) {
-        logger.debug("To: " + String.valueOf(to));
         if (RrsUtil.isNotEmpty(to)) {
             this.to = to;
         } else {
@@ -132,11 +125,7 @@ public class EmailBean {
         }
     }//setTo
 
-    /**
-     * @throws IllegalArgumentException
-     */
     public void setFrom(String from) {
-        logger.debug("From: " + String.valueOf(from));
         if (RrsUtil.isNotEmpty(from)) {
             this.from = from;
         } else {
@@ -144,11 +133,7 @@ public class EmailBean {
         }
     }//setFrom
 
-    /**
-     * @throws IllegalArgumentException
-     */
     public void setContent(String content) {
-        logger.debug("Content: " + String.valueOf(content));
         if (RrsUtil.isNotEmpty(content)) {
             this.content = content;
         } else {
@@ -156,11 +141,7 @@ public class EmailBean {
         }
     }//setContent
 
-    /**
-     * @throws IllegalArgumentException
-     */
     public void setSubject(String subject) {
-        logger.debug("Subject: " + String.valueOf(subject));
         if (RrsUtil.isNotEmpty(subject)) {
             this.subject = subject;
         } else {
@@ -169,11 +150,10 @@ public class EmailBean {
     }//setSubject
 
     public String getCc() {
-        return cc;
+	return cc;
     }
 
     public void setCc(String cc) {
-        logger.debug("CC: " + String.valueOf(cc));
         if (RrsUtil.isNotEmpty(cc)) {
             this.cc = cc;
         } else {
